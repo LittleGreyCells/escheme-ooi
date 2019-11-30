@@ -1,0 +1,80 @@
+C++ = g++
+
+APP    = escheme4
+
+CWD = $(shell pwd)
+SRCLOC = $(CWD)/src
+INCLUDES = -I$(SRCLOC)
+
+SRCS	= \
+	$(SRCLOC)/Char.cxx \
+	$(SRCLOC)/Fixnum.cxx \
+	$(SRCLOC)/Flonum.cxx \
+	$(SRCLOC)/List.cxx \
+	$(SRCLOC)/Memory.cxx \
+	$(SRCLOC)/Nil.cxx \
+	$(SRCLOC)/Node.cxx \
+	$(SRCLOC)/Str.cxx \
+	$(SRCLOC)/Symbol.cxx \
+	$(SRCLOC)/Vector.cxx \
+	$(SRCLOC)/SymbolTable.cxx \
+	$(SRCLOC)/PortIO.cxx \
+	$(SRCLOC)/FilePort.cxx \
+	$(SRCLOC)/StringPort.cxx \
+	$(SRCLOC)/TerminalPort.cxx \
+	$(SRCLOC)/Transcript.cxx \
+	$(SRCLOC)/Reader.cxx \
+	$(SRCLOC)/Eval.cxx \
+	$(SRCLOC)/Env.cxx \
+	$(SRCLOC)/Prim.cxx \
+	$(SRCLOC)/Primitives.cxx \
+	$(SRCLOC)/Primitives_List.cxx \
+	$(SRCLOC)/Primitives_Vector.cxx \
+	$(SRCLOC)/Primitives_Math.cxx \
+	$(SRCLOC)/Primitives_String.cxx \
+	$(SRCLOC)/Primitives_Char.cxx \
+	$(SRCLOC)/Primitives_Symbol.cxx \
+	$(SRCLOC)/Equality.cxx \
+	$(SRCLOC)/Primitives_Equality.cxx \
+	$(SRCLOC)/Primitives_IO.cxx \
+	$(SRCLOC)/Primitives_Env.cxx \
+	$(SRCLOC)/Primitives_Unix.cxx \
+	$(SRCLOC)/Closure.cxx \
+	$(SRCLOC)/ByteVector.cxx \
+	$(SRCLOC)/Continuation.cxx \
+	$(SRCLOC)/Promise.cxx \
+	$(SRCLOC)/Scheme.cxx \
+	$(SRCLOC)/intstack.cxx \
+	$(SRCLOC)/regstack.cxx \
+	$(SRCLOC)/argstack.cxx \
+
+OBJS	= $(SRCS:.cxx=.o)
+
+# optimizations
+#   -O
+#   -O1 -- Optimize
+#   -O2 -- All w/o space/speed trade-off
+#   -O3 -- Includes inlining
+
+#DEBUG_FLAGS = -O3
+#DEBUG_FLAGS = -O2
+#DEBUG_FLAGS = -O1
+DEBUG_FLAGS = -g
+#DEBUG_FLAGS = -O
+
+CFLAGS = $(DEBUG_FLAGS) -pedantic -std=c++14
+LFLAGS = $(DEBUG_FLAGS) -v -lm
+
+$(APP)	: $(OBJS)
+	$(C++) -o $@ $(OBJS) $(LFLAGS)
+	ln -sf $(APP) escheme
+
+%.o	: %.cxx
+	$(C++) $(DEFINES) $(INCLUDES) -c $(CFLAGS) $< -o $@
+
+clean :
+	find . -name "*.o" -delete
+	find . -name "*~" -delete
+	rm -f escheme
+
+
