@@ -54,10 +54,9 @@ namespace scheme
 
       void marker()
       {
-         printf( "marking symbol table: " );
+         // printf( "mark symbol table\n" );
          for ( auto& x : table )
             Memory::mark( x.second );
-         printf( "done.\n" );
       }
       
       void initialize()

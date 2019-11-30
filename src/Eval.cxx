@@ -1178,33 +1178,14 @@ namespace scheme
 
       void marker()
       {
-         printf( "marking argstack: " );
+         // printf( "mark eval\n" );
          Memory::mark( argstack );
-         printf( "done.\n");
-         
-         printf( "marking regstack: " );
          Memory::mark( regstack );
-         printf( "done.\n");
-         
-         printf( "marking env: " );
          Memory::mark( env );
-         printf( "done.\n");
-         
-         printf( "marking exp: " );
          Memory::mark( exp );
-         printf( "done.\n");
-         
-         printf( "marking val: " );
          Memory::mark( val );
-         printf( "done.\n");
-         
-         printf( "marking unev: " );
          Memory::mark( unev );
-         printf( "done.\n");
-         
-         printf( "marking the_global_env: " );
          Memory::mark( the_global_env );
-         printf( "done.\n");
       }
 
       void initialize()

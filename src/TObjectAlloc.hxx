@@ -4,17 +4,20 @@
 #include <array>
 #include <list>
 
+#include <cstdio>
+
 #include "TObjectPool.hxx"
 
 template <typename T, typename P>
 
 class TObjectAlloc
 {
+   const char* name;
    P& pool;
    void (*gc)();
    
 public:
-   TObjectAlloc( P& pool, void (*gc)() ) : pool(pool), gc(gc) {}
+   TObjectAlloc( const char* name, P& pool, void (*gc)() ) : name(name), pool(pool), gc(gc) {}
 
    T* operator() ()
    {
@@ -24,6 +27,7 @@ public:
       }
       else
       {
+         printf( "allocator: %s\n", name );
          gc();
          return pool.get( true );
       }

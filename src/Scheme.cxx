@@ -38,7 +38,7 @@ namespace scheme
         (if port
           (let ((sexpr (read port)))
             (while (not (eof-object? sexpr))
-              (if noisily (begin (display ">> ") (print sexpr) (newline)))
+              (if noisily (begin (display ">> ") (print sexpr)))
 	      (eval sexpr)
 	      (set! sexpr (read port)))
             (close-port port)))

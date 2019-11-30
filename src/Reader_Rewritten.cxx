@@ -11,64 +11,20 @@ namespace scheme
    
    const std::string Reader::delimeter = "();[]";
 
-   inline bool anyp( Node* n ) { return n != nil; }
+   inline void push( Node* s) { regstack.push(s); }
+   inline Node* pop() { return regstack.pop(); }
+   inline Node*& top() { return regstack.top(); }
 
-   Node* Reader::read( Port* inport )
-   {
-      return readExpr( inport );
-   }
-  
-   bool Reader::eofObjectp( Node* n ) 
-   { 
-      return n == eofObject; 
-   }
-   
-   Node* Reader::readExpr( Port* inport )
-   {
-      while ( true )
-      {
-	 const int ch = nextNonws( inport );
-	 
-	 if ( ch == EOF )
-	    return eofObject;
-	 
-	 switch ( ch )
-	 {
-	    case ';':
-	       readComment( inport );
-	       break;
-	       
-	    case '#':
-	       return readSpecial( inport );
-	       
-	    case '(':
-	       return readList( inport, ')' );
-	       
-	    case '[':
-	       return readList( inport, ']' );
-	       
-	    case ')':
-	    case ']':
-	       throw ParseException( "misplaced right paren/bracket" );
-	       
-	    case '\"':
-	       return readString( inport );
-	       
-	    case '\'':
-	       return readQuote( inport, symbol_quote );
-	       
-	    case '`':
-	       return readQuote( inport, symbol_quasiquote );
-	       
-	    case ',':
-	       return readComma( inport );
-	       
-	    default:
-	       PortIO::unget( inport, ch );
-	       return readSymbol( inport );
-	 }
-      }
-   }
+   //
+   // predicates
+   //
+
+   bool Reader::eofObjectp( Node* n ) { return n == eofObject; }
+   bool anyp( Node* n ) { return n != nil; }
+
+   //
+   // reader
+   //
    
    int Reader::nextNonws( Port* inport )
    {
@@ -97,25 +53,11 @@ namespace scheme
       }
    }
 
-   Node* Reader::readString( Port* inport )
-   {
-      std::string sb;
-      int ch;
-      while ( ((ch = PortIO::get(inport)) != EOF) && (ch != '"') )
-      {
-	 if ( ch == '\\' )
-	    ch = PortIO::get( inport );
-	 if ( ch != EOF )
-	    sb.push_back( (char)ch );
-      }
-      return Memory::string( sb );
-   }
-   
    Node* Reader::readList( Port* inport, int terminator )
    {
       Node* list = nil;
       Node* last = nil;
-      
+
       while ( true )
       {
 	 int ch = nextNonws( inport );
@@ -132,12 +74,12 @@ namespace scheme
 	    case ')':
 	       if ( terminator != ch )
 		  throw ParseException( "expecting ] list terminator" );
-	       return anyp(list) ? regstack.pop() : nil;
+	       return anyp(list) ? pop(): nil;
 	       
 	    case ']':
 	       if ( terminator != ch )
 		  throw ParseException( "expecting ) list terminator" );
-	       return anyp(list) ? regstack.pop() : nil;
+	       return anyp(list) ? pop(): nil;
 	       
 	    default:
 	    {
@@ -167,21 +109,21 @@ namespace scheme
 		     if ( terminator == ')' )
 			throw ParseException( "expecting ) list terminator" );
 		  }
-                  return anyp(list) ? regstack.pop() : nil;
+		  return list;
 	       }
 	       else if ( list->nullp() )
 	       {
-                  regstack.push( n );
-                  regstack.top() = Memory::cons( n, nil );
-                  last = list = regstack.top();
+                  push( n );
+                  top() = Memory::cons( n, nil );
+                  last = list = top();
 	       }
 	       else
 	       {
-                  regstack.push( n );
+                  push( n );
                   n = Memory::cons( n, nil );
-                  regstack.pop();
+                  pop();
                   last->setcdr( n );
-                  last = n;               
+                  last = n;
 	       }
 	    }
 	 }
@@ -199,22 +141,6 @@ namespace scheme
       return n;
    }
    
-   Node* Reader::readVector( Port* inport, int terminator )
-   {
-      Node* s = readList( inport, terminator );
-      const int n = listLength(s);
-
-      regstack.push( s );
-      Vector* v = Memory::vector(n);
-      regstack.pop();
-      
-      for ( int i = 0; i < n; ++i, s = s->getcdr() )
-      {
-	 v->data[i] = s->getcar();
-      }
-      return v;
-   }
-  
    bool Reader::isSym( int ch )
    {
       if ( isspace( ch ) )
@@ -230,6 +156,70 @@ namespace scheme
       }
    }
 
+   Node* Reader::number( std::string str )
+   {
+      // C++'s atof and atol require 'a priori' what type of number
+      //  should be the desired result.
+      //
+      //  Thus, this function scans the string and determines whether
+      //  it is double, long or neither.
+      //
+      //  Let <d> = 0|1|...|9
+      //      [<foo>] = <foo> is optional
+      //      {<foo>} = zero or more repetitions of <foo>
+      //
+      //  Fixnums
+      //    These are easy to identify:
+      //       fixnum ::= [-|+]<d>{<d>}
+      //
+      //  Flonums
+      //    These are more difficult to identify:
+      //       flonum ::= [=|+]<d>{<d>}[[.]{<d>}][(e|E)[(-|+)]{<d>}
+      //
+      const char* p = str.c_str();
+      bool floating = false;
+      
+      // check for a sign
+      if (*p == '+' || *p == '-')
+	 p++;
+      
+      // check for a string of digits
+      int n = 0;
+      while (isdigit(*p)) { p++; n++; }
+      
+      // check for a decimal point
+      int  m = 0;
+      if (*p == '.')
+      {
+	 floating = true;
+	 p++;
+	 while (isdigit(*p)) { p++; m++; }
+      }
+      
+      //* check for an exponent
+      if ((n || m) && toupper(*p) == 'E')
+      {
+	 floating = true;
+	 p++;
+	 // check for a sign
+	 if (*p == '+' || *p == '-')
+	    p++;
+	 
+	 // check for a string of digits
+	 while (isdigit(*p)) { p++; m++; }
+      }
+      
+      // make sure there was at least one digit
+      //   if not, return nil -- this is a symbol
+      if ((n == 0 && m == 0) || *p)
+	 return nil;
+
+      if ( floating )
+         return Memory::flonum( std::stod(str) );
+      else
+         return Memory::fixnum( std::stol(str) );
+   }
+   
    std::string Reader::getSymbolName( Port* inport )
    {
       std::string name;
@@ -255,6 +245,71 @@ namespace scheme
     	  Node* n = number(name);
     	  return n->nullp() ? SymbolTable::enter(name) : n;
       }
+   }
+   
+   Node* Reader::readString( Port* inport )
+   {
+      std::string sb;
+      int ch;
+      while ( ((ch = PortIO::get(inport)) != EOF) && (ch != '"') )
+      {
+	 if ( ch == '\\' )
+	    ch = PortIO::get( inport );
+	 if ( ch != EOF )
+	    sb.push_back( (char)ch );
+      }
+      return Memory::string( sb );
+   }
+   
+   Node* Reader::readVector( Port* inport, int terminator )
+   {
+      Node* s = readList( inport, terminator );
+      const int n = listLength(s);
+
+      push( s );
+      Vector* v = Memory::vector( n );
+      pop();
+      
+      for ( int i = 0; i < n; ++i, s = s->getcdr() )
+	 v->data[i] = s->getcar();
+
+      return v;
+   }
+  
+   bool Reader::isBaseDigit( int ch, int base )
+   {
+      switch ( base )
+      {
+      case  2: return '0' <= ch && ch <= '2';
+      case  4: return '0' <= ch && ch <= '3';
+      case  8: return '0' <= ch && ch <= '7';
+      case 10: return '0' <= ch && ch <= '9';
+      case 16: return '0' <= ch && ch <= '9' ||
+	              'a' <= ch && ch <= 'f';
+      default:
+    	  return false;
+      }
+   }
+
+   long Reader::toDigit( int ch )
+   {
+      return (ch <= '9') ? (ch - '0') : ((ch - 'a') + 10);
+   }
+
+   Node* Reader::readFixnum( Port* inport, int base )
+   {
+      long n = 0;
+      int ch;
+      while ( ((ch = PortIO::get(inport)) != EOF) && isSym(ch) ) 
+      {
+	 if ( isupper( ch ) ) 
+	    ch = tolower( ch );
+	 if ( !isBaseDigit( ch, base ) )
+	    throw ParseException( "invalid digit" );
+	 n = n * base + toDigit(ch);
+      }
+      PortIO::unget( inport, ch );
+      return Memory::fixnum(n);
    }
    
    Node* Reader::readSpecial( Port* inport )
@@ -342,11 +397,11 @@ namespace scheme
 
    Node* Reader::readQuote( Port* inport, Node* flavor )
    {
-      regstack.push( readExpr( inport ) );                      // <expr>
-      regstack.top() = Memory::cons( regstack.top(), nil );     // (<expr> . ())  == (<expr>)
-      regstack.top() = Memory::cons( flavor, regstack.top() );  // (<flavor> . (<expr> . ())) == (<flavor> <expr>)
-      return regstack.pop();
-  }
+      push( readExpr( inport ) );              // <expr>
+      top() = Memory::cons( top(), nil );      // (<expr> . ())  == (<expr>)
+      top() = Memory::cons( flavor, top() );   // (<flavor> . (<expr> . ())) == (<flavor> <expr>)
+      return pop();
+   }
 
    Node* Reader::readComma( Port* inport )
    {
@@ -361,105 +416,56 @@ namespace scheme
       }
    }
    
-   bool Reader::isBaseDigit( int ch, int base )
+   Node* Reader::read( Port* inport )
    {
-      switch ( base )
-      {
-      case  2: return '0' <= ch && ch <= '2';
-      case  4: return '0' <= ch && ch <= '3';
-      case  8: return '0' <= ch && ch <= '7';
-      case 10: return '0' <= ch && ch <= '9';
-      case 16: return '0' <= ch && ch <= '9' ||
-	              'a' <= ch && ch <= 'f';
-      default:
-    	  return false;
-      }
+      return readExpr( inport );
    }
-
-   long Reader::toDigit( int ch )
+  
+   Node* Reader::readExpr( Port* inport )
    {
-      return (ch <= '9') ? (ch - '0') : ((ch - 'a') + 10);
-   }
-
-   Node* Reader::readFixnum( Port* inport, int base )
-   {
-      long n = 0;
-      int ch;
-      while ( ((ch = PortIO::get(inport)) != EOF) && isSym(ch) ) 
+      while ( true )
       {
-	 if ( isupper( ch ) ) 
-	    ch = tolower( ch );
-	 if ( !isBaseDigit( ch, base ) )
-	    throw ParseException( "invalid digit" );
-	 n = n * base + toDigit(ch);
-      }
-      PortIO::unget( inport, ch );
-      return Memory::fixnum(n);
-   }
-   
-   Node* Reader::number( std::string str )
-   {
-      // C++'s atof and atol require 'a priori' what type of number
-      //  should be the desired result.
-      //
-      //  Thus, this function scans the string and determines whether
-      //  it is double, long or neither.
-      //
-      //  Let <d> = 0|1|...|9
-      //      [<foo>] = <foo> is optional
-      //      {<foo>} = zero or more repetitions of <foo>
-      //
-      //  Fixnums
-      //    These are easy to identify:
-      //       fixnum ::= [-|+]<d>{<d>}
-      //
-      //  Flonums
-      //    These are more difficult to identify:
-      //       flonum ::= [=|+]<d>{<d>}[[.]{<d>}][(e|E)[(-|+)]{<d>}
-      //
-      const char* p = str.c_str();
-      bool floating = false;
-      
-      // check for a sign
-      if (*p == '+' || *p == '-')
-	 p++;
-      
-      // check for a string of digits
-      int n = 0;
-      while (isdigit(*p)) { p++; n++; }
-      
-      // check for a decimal point
-      int  m = 0;
-      if (*p == '.')
-      {
-	 floating = true;
-	 p++;
-	 while (isdigit(*p)) { p++; m++; }
-      }
-      
-      //* check for an exponent
-      if ((n || m) && toupper(*p) == 'E')
-      {
-	 floating = true;
-	 p++;
-	 // check for a sign
-	 if (*p == '+' || *p == '-')
-	    p++;
+	 const int ch = nextNonws( inport );
 	 
-	 // check for a string of digits
-	 while (isdigit(*p)) { p++; m++; }
+	 if ( ch == EOF )
+	    return eofObject;
+	 
+	 switch ( ch )
+	 {
+	    case ';':
+	       readComment( inport );
+	       break;
+	       
+	    case '#':
+	       return readSpecial( inport );
+	       
+	    case '(':
+	       return readList( inport, ')' );
+	       
+	    case '[':
+	       return readList( inport, ']' );
+	       
+	    case ')':
+	    case ']':
+	       throw ParseException( "misplaced right paren/bracket" );
+	       
+	    case '\"':
+	       return readString( inport );
+	       
+	    case '\'':
+	       return readQuote( inport, symbol_quote );
+	       
+	    case '`':
+	       return readQuote( inport, symbol_quasiquote );
+	       
+	    case ',':
+	       return readComma( inport );
+	       
+	    default:
+	       PortIO::unget( inport, ch );
+	       return readSymbol( inport );
+	 }
       }
-      
-      // make sure there was at least one digit
-      //   if not, return nil -- this is a symbol
-      if ((n == 0 && m == 0) || *p)
-	 return nil;
-
-      if ( floating )
-         return Memory::flonum(std::stod(str));
-      else
-         return Memory::fixnum(std::stol(str));
    }
-   
 }
 

@@ -94,6 +94,13 @@ public:
 	    }
 	 }
       }
+
+      // printf( "size=%d, free=%d, size/4=%d, trigger=%d\n", size, free, size/4, (free < size/4) );
+
+      if ( free < size / 4 )
+      {
+         allocate_block();
+      }
    }
 };
 

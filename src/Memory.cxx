@@ -37,20 +37,20 @@ namespace scheme
 
       void gc();
 
-      TObjectAlloc< Symbol,       decltype(pool_symbol) > alloc_symbol( pool_symbol, gc );
-      TObjectAlloc< Fixnum,       decltype(pool_fixnum) > alloc_fixnum( pool_fixnum, gc );
-      TObjectAlloc< Flonum,       decltype(pool_flonum) > alloc_flonum( pool_flonum, gc );
-      TObjectAlloc< Str,          decltype(pool_string) > alloc_string( pool_string, gc );
-      TObjectAlloc< Char,         decltype(pool_char  ) > alloc_char  ( pool_char,   gc );
-      TObjectAlloc< Env,          decltype(pool_env   ) > alloc_env   ( pool_env,    gc );
-      TObjectAlloc< List,         decltype(pool_cons  ) > alloc_cons  ( pool_cons,   gc );
-      TObjectAlloc< Vector,       decltype(pool_vec   ) > alloc_vec   ( pool_vec,    gc );
-      TObjectAlloc< Closure,      decltype(pool_clo   ) > alloc_clo   ( pool_clo,    gc );
-      TObjectAlloc< FilePort,     decltype(pool_fport ) > alloc_fport ( pool_fport,  gc );
-      TObjectAlloc< StringPort,   decltype(pool_sport ) > alloc_sport ( pool_sport,  gc );
-      TObjectAlloc< ByteVector,   decltype(pool_bvec  ) > alloc_bvec  ( pool_bvec,   gc );
-      TObjectAlloc< Continuation, decltype(pool_cont  ) > alloc_cont  ( pool_cont,   gc );
-      TObjectAlloc< Promise,      decltype(pool_prom  ) > alloc_prom  ( pool_prom,   gc );
+      TObjectAlloc< Symbol,       decltype(pool_symbol) > alloc_symbol( "sym", pool_symbol, gc );
+      TObjectAlloc< Fixnum,       decltype(pool_fixnum) > alloc_fixnum( "fix", pool_fixnum, gc );
+      TObjectAlloc< Flonum,       decltype(pool_flonum) > alloc_flonum( "flo", pool_flonum, gc );
+      TObjectAlloc< Str,          decltype(pool_string) > alloc_string( "str", pool_string, gc );
+      TObjectAlloc< Char,         decltype(pool_char  ) > alloc_char  ( "chr", pool_char,   gc );
+      TObjectAlloc< Env,          decltype(pool_env   ) > alloc_env   ( "env", pool_env,    gc );
+      TObjectAlloc< List,         decltype(pool_cons  ) > alloc_cons  ( "cns", pool_cons,   gc );
+      TObjectAlloc< Vector,       decltype(pool_vec   ) > alloc_vec   ( "vec", pool_vec,    gc );
+      TObjectAlloc< Closure,      decltype(pool_clo   ) > alloc_clo   ( "clo", pool_clo,    gc );
+      TObjectAlloc< FilePort,     decltype(pool_fport ) > alloc_fport ( "fpt", pool_fport,  gc );
+      TObjectAlloc< StringPort,   decltype(pool_sport ) > alloc_sport ( "spt", pool_sport,  gc );
+      TObjectAlloc< ByteVector,   decltype(pool_bvec  ) > alloc_bvec  ( "bvc", pool_bvec,   gc );
+      TObjectAlloc< Continuation, decltype(pool_cont  ) > alloc_cont  ( "cnt", pool_cont,   gc );
+      TObjectAlloc< Promise,      decltype(pool_prom  ) > alloc_prom  ( "prm", pool_prom,   gc );
       
       void register_marker( Marker marker )
       {
@@ -185,7 +185,7 @@ namespace scheme
          collections += 1;
 
          // mark all
-         printf( "mark memory roots\n" );
+         printf( "gc( %ld )...\n", collections );
          mark( vector_null );         
          mark( string_null );         
          mark( listhead );
