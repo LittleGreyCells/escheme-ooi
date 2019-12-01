@@ -24,6 +24,7 @@ namespace scheme
    //   Port
    //     FilePort
    //     StringPort
+   //     TerminalPort
    //   Promise
    //
    
@@ -68,8 +69,6 @@ namespace scheme
       
       virtual bool falsep() { return false; }
 
-      //virtual bool lastp();
-      
       virtual Node* getcar();
       virtual Node* getcdr();
       virtual void setcar( Node* );
@@ -87,7 +86,6 @@ namespace scheme
       virtual double getflonum();
 
       virtual void mark() = 0;
-      virtual void free() {}
       virtual void print( Port* port, int style ) = 0;
 
       virtual void apply_dispatch();
@@ -156,8 +154,5 @@ namespace scheme
    inline T1 down_cast( T2 x ) { return (T1)(x); }
 #endif
 }
-
-// size: 320072 4:05 escheme4
-// size: 315928 4:43 escheme4
 
 #endif

@@ -20,7 +20,7 @@ namespace scheme
       Vector* vector_null;
       List* listhead;
       
-      TObjectPool< Symbol,      1000 > pool_symbol;
+      TObjectPool< Symbol,       500 > pool_symbol;
       TObjectPool< Fixnum,       500 > pool_fixnum;
       TObjectPool< Flonum,       100 > pool_flonum;
       TObjectPool< Str,         1000 > pool_string;
