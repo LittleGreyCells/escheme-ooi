@@ -39,7 +39,7 @@ namespace scheme
    {
       auto x = ::fopen( name.c_str(), "r" );
       if ( x == 0 )
-	 throw SevereException( "InputFile: open error" );
+	 throw SevereException( "InputFile: open error -- " + name );
       return Memory::fileport( x, pm_input );
    }
 
@@ -47,7 +47,7 @@ namespace scheme
    {
       auto x = ::fopen( name.c_str(), "w" );
       if ( x == 0 )
-	 throw SevereException( "OutputFile: open error" );
+	 throw SevereException( "OutputFile: open error -- " + name );
       return Memory::fileport( x, pm_output );
    }
    
@@ -55,7 +55,7 @@ namespace scheme
    {
       auto x = ::fopen( name.c_str(), "a" );
       if ( x == 0 )
-	 throw SevereException( "AppendFile: open error" );
+	 throw SevereException( "AppendFile: open error -- " + name );
       return Memory::fileport( x, pm_output );
    }
    
@@ -63,7 +63,7 @@ namespace scheme
    {
       auto x = ::fopen( name.c_str(), "a+" );
       if ( x == 0 )
-	 throw SevereException( "UpdateFile: open error" );
+	 throw SevereException( "UpdateFile: open error -- " + name );
       return Memory::fileport( x, pm_input | pm_output );
    }
    

@@ -8,7 +8,7 @@ namespace scheme
 
    void Prim::print( Port* port, int )
    {
-      PortIO::put( port, id( name ) );
+      PortIO::put( port, id( "prim-" + name ) );
    }
 
    void Prim::apply_dispatch() { Eval::apply_primitive( this ); }

@@ -19,21 +19,28 @@ namespace scheme
    {
       // toplevel read/eval/print loop
       
-      const std::string REP_LOOP = "*rep-loop*";
-      const std::string TOPLEVEL = "*toplevel*";
+      const char* SYSTEM_REPLOOP = "*system-rep-loop*";
+      const char* SYSTEM_LOADER  = "*system-loader*";
+      const char* SYSTEM_PATH    = "*system-path*";
+      const char* TOPLEVEL       = "*toplevel*";
       
-      const std::string SYSTEM = R"(
-
+      const std::string system = R"(
 (begin
-   (load "./boot/standard-functions.scm")
-   (load "./macros/macros.scm")
-   (load "./macros/qquote.scm")
-   (load "./boot/macro-definitions.scm")
-   (display "escheme-oops <intepreter>")
-   (newline)
-   (newline)
-   (call/cc (lambda (cc) (set! *toplevel* cc)))
-   (while #t
+   (define *version* "<interpreter>")
+   (let ((x 0))
+     (call/cc (lambda (cc) (set! *toplevel* cc)))
+     (if (= x 0)
+       (begin
+         (set! x 1)
+         (load (system-path "escheme.scm"))
+          )))
+     (display "escheme ")
+     (display *version*)
+     (newline)
+     (newline)
+     ;;(flush-output)
+     (call/cc (lambda (cc) (set! *toplevel* cc)))
+     (while #t
        (display "oops> ")
        (let ((sexpr (read *terminal*)))
          (print (eval sexpr)))))
@@ -51,21 +58,29 @@ namespace scheme
             (close-port port)))
         port)))
 
+(define (system-path file)
+  (let ((home (getenv "ESCHEME")))
+    (if (= (string-length home) 0)
+        file
+        (string-append home "/" file))))
 )";
+
+      //
+      // Define the system reploop, loader and path
+      //
       
       try
       {
-         Memory::GcSuspension defn("defn");
+         auto port = PortIO::openInputStringPort( system );
          
-         auto port = PortIO::openInputStringPort( SYSTEM );
+         Memory::GcSuspension gcs( "define-system" );
          
-         // read in the symbolic expressions for the read/eval/print loop
-         SymbolTable::enter(REP_LOOP)->setvalue( Reader::read(port) );
-         
-         // evaluate the loader define to create the closure
-         Eval::eval( Reader::read(port) );
-         
-         PortIO::close( port );
+         SymbolTable::enter(SYSTEM_REPLOOP)->setvalue( Reader::read(port) );
+         SymbolTable::enter(SYSTEM_LOADER)->setvalue( Reader::read(port) );
+         SymbolTable::enter(SYSTEM_PATH)->setvalue( Reader::read(port) );
+
+         Eval::eval( SymbolTable::enter(SYSTEM_LOADER)->getvalue() );
+         Eval::eval( SymbolTable::enter(SYSTEM_PATH)->getvalue() );
       }
       catch ( ... )
       {
@@ -73,7 +88,13 @@ namespace scheme
          return;
       }
 
-      auto exp = SymbolTable::enter(REP_LOOP)->getvalue();
+      //
+      // REP Loop
+      //   a single call into the interpreter.
+      //   exit on exceptions and evaluate the toplevel continuation.
+      //
+
+      auto exp = SymbolTable::enter(SYSTEM_REPLOOP)->getvalue();
       
       while ( true )
       {
@@ -85,11 +106,13 @@ namespace scheme
          catch ( SevereException& e )
          {
             printf( "%s\n", e.description.c_str() );
+            
             if ( e.object )
             {
                e.object->print( PortIO::stdout, 1 );
                printf( "\n" );
             }
+            
             exp = SymbolTable::enter(TOPLEVEL);
             
             if ( exp->getvalue()->contp() )
