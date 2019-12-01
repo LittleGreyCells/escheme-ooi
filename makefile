@@ -17,16 +17,21 @@ SRCS	= \
 	$(SRCLOC)/Str.cxx \
 	$(SRCLOC)/Symbol.cxx \
 	$(SRCLOC)/Vector.cxx \
-	$(SRCLOC)/SymbolTable.cxx \
-	$(SRCLOC)/PortIO.cxx \
 	$(SRCLOC)/FilePort.cxx \
 	$(SRCLOC)/StringPort.cxx \
 	$(SRCLOC)/TerminalPort.cxx \
-	$(SRCLOC)/Transcript.cxx \
-	$(SRCLOC)/Reader.cxx \
-	$(SRCLOC)/Eval.cxx \
 	$(SRCLOC)/Env.cxx \
 	$(SRCLOC)/Prim.cxx \
+	$(SRCLOC)/Closure.cxx \
+	$(SRCLOC)/ByteVector.cxx \
+	$(SRCLOC)/Continuation.cxx \
+	$(SRCLOC)/Promise.cxx \
+	$(SRCLOC)/SymbolTable.cxx \
+	$(SRCLOC)/Reader.cxx \
+	$(SRCLOC)/Eval.cxx \
+	$(SRCLOC)/PortIO.cxx \
+	$(SRCLOC)/Equality.cxx \
+	$(SRCLOC)/Transcript.cxx \
 	$(SRCLOC)/Primitives.cxx \
 	$(SRCLOC)/Primitives_List.cxx \
 	$(SRCLOC)/Primitives_Vector.cxx \
@@ -34,15 +39,10 @@ SRCS	= \
 	$(SRCLOC)/Primitives_String.cxx \
 	$(SRCLOC)/Primitives_Char.cxx \
 	$(SRCLOC)/Primitives_Symbol.cxx \
-	$(SRCLOC)/Equality.cxx \
 	$(SRCLOC)/Primitives_Equality.cxx \
 	$(SRCLOC)/Primitives_IO.cxx \
 	$(SRCLOC)/Primitives_Env.cxx \
 	$(SRCLOC)/Primitives_Unix.cxx \
-	$(SRCLOC)/Closure.cxx \
-	$(SRCLOC)/ByteVector.cxx \
-	$(SRCLOC)/Continuation.cxx \
-	$(SRCLOC)/Promise.cxx \
 	$(SRCLOC)/Scheme.cxx \
 	$(SRCLOC)/intstack.cxx \
 	$(SRCLOC)/regstack.cxx \
