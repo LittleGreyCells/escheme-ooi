@@ -25,6 +25,10 @@ namespace scheme
       const std::string SYSTEM = R"(
 
 (begin
+   (load "./boot/standard-functions.scm")
+   (load "./macros/macros.scm")
+   (load "./macros/qquote.scm")
+   (load "./boot/macro-definitions.scm")
    (call/cc (lambda (cc) (set! *toplevel* cc)))
    (while #t
        (display "oops> ")

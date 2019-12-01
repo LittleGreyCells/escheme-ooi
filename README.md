@@ -23,7 +23,7 @@ The first regression test suite passes! Wow! That was quick.
 
 After some initial performance tuning, here are some comparisons:
 
-* speed of the interpreter is 22% slower (than that of the original)
+* speed of the interpreter is approximately 20% slower (than that of the original)
 * executable size is 39% larger
 * SLOC is 23% smaller
 
