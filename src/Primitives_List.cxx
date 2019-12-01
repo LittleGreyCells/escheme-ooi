@@ -13,6 +13,17 @@ namespace scheme
       using Memory::nil;
       using Memory::anyp;
       
+      Node* cxr( const char* x )
+      {
+         ArgstackIterator iter;
+         Node* exp = iter.getlast();
+         
+         for ( int i = 0; x[i]; ++i )
+            exp = (x[i] == 'a') ? exp->getcar() : exp->getcdr();
+         
+         return exp;
+      }
+
       Node* cons()
       {
          ArgstackIterator iter;

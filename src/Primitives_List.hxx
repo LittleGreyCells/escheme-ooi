@@ -7,6 +7,8 @@ namespace scheme
 {
    namespace Primitives
    {
+      Node* cxr( const char* s );
+
       Node* cons();
       Node* car();
       Node* cdr();
