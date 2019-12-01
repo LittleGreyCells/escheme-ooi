@@ -1,22 +1,25 @@
 escheme-oops
 ================
 
-The escheme interpreter is implemented using what might be considered object-oriented programming techniques -- classes, virtual functions, and templates.
+The escheme interpreter is implemented using object-oriented programming techniques -- classes, virtual functions, and templates.
 
 ## Introduction
 
 In this old project I answer the question whether it possible to implement escheme
-using a purely object-oriented approach.
+using a purely object-oriented approach. After some false starts, the escheme interpreter using conventional methods was transformed into
+a satisfyingly object-oriented implementation.
 
-## Implementation Constraints
+## Implementation Constraint(s)
 
-* No discriminated unions.
-* No analysis based on object type. Use instead dynamic dispatch.
+* No discriminated union
 
-## Under Construction
+## Post Construction
 
-Almost all of the original escheme system is completed with the exception of a handful of custom object access primtive.
+Almost all of the original escheme system is completed with the exception of a handful of custom object access primtives.
 
-Testing underway.
+## Performance
 
-Stay tuned.
+The first regression test suite passes!
+
+After some initial performance tuning, the speed of the interpreter is now only 20% slower than that of the original.
+
