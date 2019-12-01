@@ -185,7 +185,6 @@ namespace scheme
          collections += 1;
 
          // mark all
-         printf( "gc( %ld )...\n", collections );
          mark( vector_null );         
          mark( string_null );         
          mark( listhead );

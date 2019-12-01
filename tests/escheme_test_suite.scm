@@ -555,7 +555,7 @@
 )
 
 (define (test-ports)
-  (let ((pin (open-input-file "escheme.scm")))
+  (let ((pin (open-input-file "fact.scm")))
     (let ((x (read pin)))
       (while (not (eof-object? x))
 	(set! x (read pin))

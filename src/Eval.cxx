@@ -1178,7 +1178,6 @@ namespace scheme
 
       void marker()
       {
-         // printf( "mark eval\n" );
          Memory::mark( argstack );
          Memory::mark( regstack );
          Memory::mark( env );

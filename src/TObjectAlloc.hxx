@@ -27,7 +27,6 @@ public:
       }
       else
       {
-         printf( "allocator: %s\n", name );
          gc();
          return pool.get( true );
       }
