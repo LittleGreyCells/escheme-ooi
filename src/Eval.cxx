@@ -46,14 +46,10 @@ namespace scheme
       
       void restore_env( Env*& x )
       {
-#if 1
          auto n = regstack.pop();
          if ( !n->envp() )
             throw SevereException( "restore_env -- not an environment", n );
-         x = (Env*)n;
-#else
-         x = dynamic_cast<Env*>( guard(regstack.pop(), &Node::envp) );
-#endif
+         x = down_cast<Env*>( n );
       }
 
       Node* lookup( Node* var, Env* env )
@@ -62,7 +58,7 @@ namespace scheme
          {
             // note: env->vars is a proper list
             List* vars = env->vars;
-            for ( int i = 0; i < env->nslots; ++i, vars = dynamic_cast<List*>( vars->cdr ) )
+            for ( int i = 0; i < env->nslots; ++i, vars = down_cast<List*>( vars->cdr ) )
             {
                if ( var == vars->car )
                {
@@ -86,7 +82,7 @@ namespace scheme
          {
             // note: env->vars is a proper list
             List* vars = env->vars;
-            for ( int i = 0; i < env->nslots; ++i, vars = dynamic_cast<List*>( vars->cdr ) )
+            for ( int i = 0; i < env->nslots; ++i, vars = down_cast<List*>( vars->cdr ) )
             {
                if ( var == vars->car )
                {
@@ -216,7 +212,7 @@ namespace scheme
          ArgstackIterator iter;
          exp = iter.getarg();
          if ( iter.more() )
-            env = dynamic_cast<Env*>( guard(iter.getlast(), &Node::envp) );
+            env = down_cast<Env*>( guard(iter.getlast(), &Node::envp) );
          else
             env =  the_global_env;
          argstack.removeargc();
@@ -265,7 +261,7 @@ namespace scheme
       void apply_force()
       {
          ArgstackIterator iter;
-         auto promise = dynamic_cast<Promise*>( guard(iter.getlast(), &Node::promisep) );
+         auto promise = down_cast<Promise*>( guard(iter.getlast(), &Node::promisep) );
          argstack.removeargc();
          if ( nullp(promise->exp) )
          {
@@ -462,7 +458,7 @@ namespace scheme
                {
                   // cache and return the value
                   restore_reg( exp );
-                  auto promise = dynamic_cast<Promise*>( guard(exp, &Node::promisep) );
+                  auto promise = down_cast<Promise*>( guard(exp, &Node::promisep) );
                   promise->exp = nil;
                   promise->val = val;
                   restore_evs( cont );
@@ -711,7 +707,7 @@ namespace scheme
                   restore_reg( unev );                   // restore(<var>)
                   restore_reg( exp );                    // restore(eval(<env2>))
                   restore_evs( cont );
-                  auto exp_as_env = dynamic_cast<Env*>( guard(exp, &Node::envp ) );
+                  auto exp_as_env = down_cast<Env*>( guard(exp, &Node::envp ) );
                   set_variable_value( unev, val, exp_as_env );
                   next = cont;
                   break;
@@ -738,7 +734,7 @@ namespace scheme
                   restore_evs( cont );
                   restore_env( env );
                   restore_reg( unev );
-                  auto val_as_env = dynamic_cast<Env*>( guard(val, &Node::envp) );
+                  auto val_as_env = down_cast<Env*>( guard(val, &Node::envp) );
                   val = lookup( unev, val_as_env );   // unev=symbol, val=env
                   next = cont;
                   break;
@@ -1054,7 +1050,7 @@ namespace scheme
                   restore_int( frameindex );
                   if ( regstack.top()->envp() )
                   {
-                     auto letenv = dynamic_cast<Env*>( regstack.top() );
+                     auto letenv = down_cast<Env*>( regstack.top() );
                      letenv->slots[frameindex] = val;
                   }
                   frameindex += 1;
@@ -1068,7 +1064,7 @@ namespace scheme
                   restore_int( frameindex );
                   if ( regstack.top()->envp() )
                   {
-                     auto letenv = dynamic_cast<Env*>( regstack.top() );
+                     auto letenv = down_cast<Env*>( regstack.top() );
                      letenv->slots[frameindex] = val;
                   }
                   next = EV_LET_BODY;
@@ -1150,9 +1146,9 @@ namespace scheme
       {
          Vector* state = cc->state;
          
-         env = dynamic_cast<Env*>( guard(state->data[0], &Node::envp) );
+         env = down_cast<Env*>( guard(state->data[0], &Node::envp) );
          unev = state->data[1];
-         auto bv = dynamic_cast<ByteVector*>( guard(state->data[2], &Node::bvecp) );
+         auto bv = down_cast<ByteVector*>( guard(state->data[2], &Node::bvecp) );
          
          auto pint16 = reinterpret_cast<INT16*>( bv->data );
          

@@ -12,16 +12,15 @@ template <typename T, typename P>
 
 class TObjectAlloc
 {
-   const char* name;
    P& pool;
    void (*gc)();
    
 public:
-   TObjectAlloc( const char* name, P& pool, void (*gc)() ) : name(name), pool(pool), gc(gc) {}
+   TObjectAlloc( P& pool, void (*gc)() ) : pool(pool), gc(gc) {}
 
    T* operator() ()
    {
-      if ( auto p = pool.get() )
+      if ( auto p = pool.get( false ) )
       {
          return p;
       }

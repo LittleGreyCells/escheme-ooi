@@ -24,19 +24,19 @@ namespace scheme
       {
          if ( e1->fixnump() )
          {
-            return e2->fixnump() && dynamic_cast<Fixnum*>(e1)->data == dynamic_cast<Fixnum*>(e2)->data;
+            return e2->fixnump() && down_cast<Fixnum*>(e1)->data == down_cast<Fixnum*>(e2)->data;
          }
          else if ( e1->flonump() )
          {
-            return e2->flonump() && dynamic_cast<Flonum*>(e1)->data == dynamic_cast<Flonum*>(e2)->data;
+            return e2->flonump() && down_cast<Flonum*>(e1)->data == down_cast<Flonum*>(e2)->data;
          }
          else if ( e1->charp() )
          {
-            return e2->charp() && dynamic_cast<Char*>(e1)->data == dynamic_cast<Char*>(e2)->data;
+            return e2->charp() && down_cast<Char*>(e1)->data == down_cast<Char*>(e2)->data;
          }
          else if ( e1->stringp() )
          {
-            return e2->stringp() && dynamic_cast<Str*>(e1)->data->compare( *dynamic_cast<Str*>(e2)->data ) == 0;
+            return e2->stringp() && down_cast<Str*>(e1)->data->compare( *down_cast<Str*>(e2)->data ) == 0;
          }
       }
 
@@ -54,8 +54,8 @@ namespace scheme
          {
             if ( e2->vectorp() )
             {
-               auto v1 = dynamic_cast<Vector*>(e1);
-               auto v2 = dynamic_cast<Vector*>(e2);
+               auto v1 = down_cast<Vector*>(e1);
+               auto v2 = down_cast<Vector*>(e2);
                   
                if ( v1->length != v2->length )
                   return false;

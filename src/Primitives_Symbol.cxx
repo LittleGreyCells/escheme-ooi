@@ -43,11 +43,11 @@ namespace scheme
             auto arg = iter.getlast();
             
             if ( arg->symbolp() )
-               new_sym = *dynamic_cast<Symbol*>(arg)->name;
+               new_sym = *down_cast<Symbol*>(arg)->name;
             else if ( arg->stringp() )
-               new_sym = *dynamic_cast<Str*>(arg)->data;
+               new_sym = *down_cast<Str*>(arg)->data;
             else if ( arg->fixnump() )
-               gensym_number = static_cast<decltype(gensym_number)>( dynamic_cast<Fixnum*>(arg)->data );
+               gensym_number = static_cast<decltype(gensym_number)>( down_cast<Fixnum*>(arg)->data );
             else
                throw SevereException( "gensym requires [sym|str|fix]" );
          }
@@ -64,7 +64,7 @@ namespace scheme
       {
          // syntax: (symbol-value <sym-expr>)
          ArgstackIterator iter;
-         auto s = (Symbol*)guard( iter.getarg(), &Node::symbolp );
+         auto s = down_cast<Symbol*>( guard( iter.getarg(), &Node::symbolp ) );
          return s->value;
       }
       
@@ -72,7 +72,7 @@ namespace scheme
       {
          // syntax: (set-symbol-value! <sym-expr> <value>)
          ArgstackIterator iter;
-         auto s = (Symbol*)guard( iter.getarg(), &Node::symbolp );
+         auto s = down_cast<Symbol*>( guard( iter.getarg(), &Node::symbolp ) );
          auto v = iter.getlast();
          s->value = v;
          return v;
@@ -82,7 +82,7 @@ namespace scheme
       {
          // syntax: (symbol-plist <sym-expr>)
          ArgstackIterator iter;
-         auto s = (Symbol*)guard( iter.getarg(), &Node::symbolp );
+         auto s = down_cast<Symbol*>( guard( iter.getarg(), &Node::symbolp ) );
          return s->properties;
       }
       
@@ -90,7 +90,7 @@ namespace scheme
       {
          // syntax: (set-symbol-plist! <sym-expr> <plist>)
          ArgstackIterator iter;
-         auto s = (Symbol*)guard( iter.getarg(), &Node::symbolp );
+         auto s = down_cast<Symbol*>( guard( iter.getarg(), &Node::symbolp ) );
          auto p = iter.getlast();
          s->properties = p;
          return p;
@@ -100,8 +100,8 @@ namespace scheme
       {
          // syntax: (get <sym> <prop>)
          ArgstackIterator iter;
-         auto s = (Symbol*)guard( iter.getarg(), &Node::symbolp );
-         auto p = (Symbol*)guard( iter.getlast(), &Node::symbolp );
+         auto s = down_cast<Symbol*>( guard( iter.getarg(), &Node::symbolp ) );
+         auto p = down_cast<Symbol*>( guard( iter.getlast(), &Node::symbolp ) );
          
          auto plist = s->properties;
          
@@ -119,8 +119,8 @@ namespace scheme
       {
          // syntax: (put <sym> <prop> <value>)
          ArgstackIterator iter;
-         auto s = (Symbol*)guard(iter.getarg(), &Node::symbolp);
-         auto p = (Symbol*)guard(iter.getarg(), &Node::symbolp);
+         auto s = down_cast<Symbol*>( guard(iter.getarg(), &Node::symbolp) );
+         auto p = down_cast<Symbol*>( guard(iter.getarg(), &Node::symbolp) );
          auto v = iter.getlast();
          
          auto plist = s->properties;
@@ -129,7 +129,7 @@ namespace scheme
          {
             if ( eq( p, plist->getcar() ) )
             {
-               dynamic_cast<List*>( guard(plist->getcdr(), &Node::consp) )->car = v;
+               down_cast<List*>( guard(plist->getcdr(), &Node::consp) )->car = v;
                return p;
             }
             plist = plist->getcdr()->getcdr();

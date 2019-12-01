@@ -19,8 +19,8 @@ namespace scheme
       static Node* char_compare( RelOp op, int ci )
       {
          ArgstackIterator iter;
-         auto c1 = dynamic_cast<Char*>( guard(iter.getarg(), &Node::charp) )->data;
-         auto c2 = dynamic_cast<Char*>( guard(iter.getarg(), &Node::charp) )->data;
+         auto c1 = down_cast<Char*>( guard(iter.getarg(), &Node::charp) )->data;
+         auto c2 = down_cast<Char*>( guard(iter.getarg(), &Node::charp) )->data;
 
          if ( ci )
          {
@@ -55,7 +55,7 @@ namespace scheme
       {
          // syntax: (char-alphabetic? <char>) -> <boolean>
          ArgstackIterator iter;
-         auto ch = dynamic_cast<Char*>( guard(iter.getlast(), &Node::charp) );
+         auto ch = down_cast<Char*>( guard(iter.getlast(), &Node::charp) );
          return isalpha(ch->data) ? symbol_true : symbol_false;
       }
 
@@ -63,7 +63,7 @@ namespace scheme
       {
          // syntax: (char-numeric? <char>) -> <boolean>
          ArgstackIterator iter;
-         auto ch = dynamic_cast<Char*>( guard(iter.getlast(), &Node::charp) );
+         auto ch = down_cast<Char*>( guard(iter.getlast(), &Node::charp) );
          return isdigit(ch->data) ? symbol_true : symbol_false;
       }
 
@@ -71,7 +71,7 @@ namespace scheme
       {
          // syntax: (char-whitespace? <char>) -> <boolean>
          ArgstackIterator iter;
-         auto ch = dynamic_cast<Char*>( guard(iter.getlast(), &Node::charp) );
+         auto ch = down_cast<Char*>( guard(iter.getlast(), &Node::charp) );
          return isspace(ch->data) ? symbol_true : symbol_false;
       }
 
@@ -79,7 +79,7 @@ namespace scheme
       {
          // syntax: (char-upper-case? <char>) -> <boolean>
          ArgstackIterator iter;
-         auto ch = dynamic_cast<Char*>( guard(iter.getlast(), &Node::charp) );
+         auto ch = down_cast<Char*>( guard(iter.getlast(), &Node::charp) );
          return isupper(ch->data) ? symbol_true : symbol_false;
       }
 
@@ -87,7 +87,7 @@ namespace scheme
       {
          // syntax: (char-lower-case? <char>) -> <boolean>
          ArgstackIterator iter;
-         auto ch = dynamic_cast<Char*>( guard(iter.getlast(), &Node::charp) );
+         auto ch = down_cast<Char*>( guard(iter.getlast(), &Node::charp) );
          return islower(ch->data) ? symbol_true : symbol_false;
       }
 
@@ -95,7 +95,7 @@ namespace scheme
       {
          // syntax: (char-upcase <char>) -> <char>
          ArgstackIterator iter;
-         auto ch = dynamic_cast<Char*>( guard(iter.getlast(), &Node::charp) );
+         auto ch = down_cast<Char*>( guard(iter.getlast(), &Node::charp) );
          return Memory::character(toupper(ch->data));
       }
 
@@ -103,7 +103,7 @@ namespace scheme
       {
          // syntax: (char-downcase <char>) -> <char>
          ArgstackIterator iter;
-         auto ch = dynamic_cast<Char*>( guard(iter.getlast(), &Node::charp) );
+         auto ch = down_cast<Char*>( guard(iter.getlast(), &Node::charp) );
          return Memory::character(tolower(ch->data));
       }
 
@@ -111,7 +111,7 @@ namespace scheme
       {
          // syntax: (char->integer <char>) -> <fixnum>
          ArgstackIterator iter;
-         auto ch = dynamic_cast<Char*>( guard(iter.getlast(), &Node::charp) );
+         auto ch = down_cast<Char*>( guard(iter.getlast(), &Node::charp) );
          return Memory::fixnum( static_cast<long>(ch->data) );
       }
 
@@ -119,7 +119,7 @@ namespace scheme
       {
          // syntax: (integer->char <integer>) -> <char>
          ArgstackIterator iter;
-         auto num = dynamic_cast<Fixnum*>( guard(iter.getlast(), &Node::fixnump) );
+         auto num = down_cast<Fixnum*>( guard(iter.getlast(), &Node::fixnump) );
          return Memory::character( static_cast<char>( num->data ) );
       }
    }

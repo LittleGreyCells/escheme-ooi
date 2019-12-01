@@ -24,7 +24,7 @@ namespace scheme
       {
          // syntax: (system <string>) -> <fixnum>
          ArgstackIterator iter;
-         auto cmd = dynamic_cast<Str*>( guard(iter.getlast(), &Node::stringp) );
+         auto cmd = down_cast<Str*>( guard(iter.getlast(), &Node::stringp) );
          auto result = ::system( cmd->data->c_str() );
          return Memory::fixnum( result );
       }
@@ -47,7 +47,7 @@ namespace scheme
       {
          // syntax: (getenv <var>) -> <string-value>
          ArgstackIterator iter;
-         auto var = dynamic_cast<Str*>( guard(iter.getlast(), &Node::stringp) );
+         auto var = down_cast<Str*>( guard(iter.getlast(), &Node::stringp) );
          auto val = ::getenv( var->data->c_str() );    
          return ( val == nullptr ) ? Memory::string("") : Memory::string(val);
       }
@@ -56,11 +56,11 @@ namespace scheme
       {
          // syntax: (setenv <var> <val> <replace>) -> <fixnum>
          ArgstackIterator iter;
-         auto var = dynamic_cast<Str*>( guard(iter.getarg(), &Node::stringp) );
-         auto val = dynamic_cast<Str*>( guard(iter.getarg(), &Node::stringp) );
+         auto var = down_cast<Str*>( guard(iter.getarg(), &Node::stringp) );
+         auto val = down_cast<Str*>( guard(iter.getarg(), &Node::stringp) );
          auto replace = 1;
          if ( iter.more() )
-            replace = dynamic_cast<Fixnum*>( guard(iter.getlast(), &Node::fixnump) )->data; 
+            replace = down_cast<Fixnum*>( guard(iter.getlast(), &Node::fixnump) )->data; 
          auto result = ::setenv( var->data->c_str(), val->data->c_str(), replace );
          return Memory::fixnum( result );
       }
@@ -69,7 +69,7 @@ namespace scheme
       {
          // syntax: (unsetenv <var>) -> <fixnum>
          ArgstackIterator iter;
-         auto var = dynamic_cast<Str*>( guard(iter.getlast(), &Node::stringp) );
+         auto var = down_cast<Str*>( guard(iter.getlast(), &Node::stringp) );
          auto result = ::unsetenv( var->data->c_str() );
          return Memory::fixnum( result );
       }
@@ -95,7 +95,7 @@ namespace scheme
       {
          // syntax: (chdir <string>) -> <fixnum>
          ArgstackIterator iter;
-         auto path = dynamic_cast<Str*>( guard(iter.getlast(), &Node::stringp) );
+         auto path = down_cast<Str*>( guard(iter.getlast(), &Node::stringp) );
          auto result = ::chdir( path->data->c_str() );
          return Memory::fixnum( result );
       }

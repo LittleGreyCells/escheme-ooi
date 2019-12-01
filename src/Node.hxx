@@ -145,6 +145,19 @@ namespace scheme
    };
 
    struct Exit {};
+
+#if 0
+   template <typename T1,
+             typename T2>
+   inline T1 down_cast( T2 x ) { return dynamic_cast<T1>(x); }
+#else
+   template <typename T1,
+             typename T2>
+   inline T1 down_cast( T2 x ) { return (T1)(x); }
+#endif
 }
+
+// size: 320072 4:05 escheme4
+// size: 315928 4:43 escheme4
 
 #endif
