@@ -19,7 +19,14 @@ Almost all of the original escheme system is completed with the exception of a h
 
 ## Performance
 
-The first regression test suite passes!
+The first regression test suite passes! Wow! That was quick.
 
-After some initial performance tuning, the speed of the interpreter is now only 20% slower than that of the original.
+After some initial performance tuning, here are some comparisons:
+
+* speed of the interpreter is 20% slower (than that of the original)
+* executable size is 39% larger
+* SLOC is 23% smaller
+
+
+
 
