@@ -29,6 +29,9 @@ namespace scheme
    (load "./macros/macros.scm")
    (load "./macros/qquote.scm")
    (load "./boot/macro-definitions.scm")
+   (display "escheme-oops <intepreter>")
+   (newline)
+   (newline)
    (call/cc (lambda (cc) (set! *toplevel* cc)))
    (while #t
        (display "oops> ")
@@ -70,8 +73,6 @@ namespace scheme
          return;
       }
 
-      //Memory::GcSuspension debug("debug");
-      
       auto exp = SymbolTable::enter(REP_LOOP)->getvalue();
       
       while ( true )

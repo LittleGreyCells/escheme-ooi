@@ -1,0 +1,34 @@
+Building and Running
+
+Building
+
+In the root directory type 'make' to build the executable:
+
+   $ make
+
+
+Running
+
+To run the interpreter in the build directory invoke escheme. The banner is printed and the
+*terminal* prompt is displayed:
+
+   $ ./escheme
+   escheme-oops (interpreter)
+
+   oops>
+
+Load additional files using the 'load' function:
+
+   oops> (load <filename>)
+   
+
+To exit escheme, type ^D, ^C or exit function at the prompt:
+
+   oops> (exit)
+
+
+Installation and Removal
+
+There is no installation support at this time.
+
+[EOF]
