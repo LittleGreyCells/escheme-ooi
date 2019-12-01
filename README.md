@@ -1,12 +1,12 @@
 escheme-oops
 ================
 
-The escheme interpreter is implemented using object-oriented programming stylistic considerations and supporting language features.
+The escheme interpreter is implemented using what might be considered object-oriented programming techniques -- classes, virtual functions, and templates.
 
 ## Introduction
 
 In this old project I answer the question whether it possible to implement escheme
-using a purely object-oriented approach. Yes it is!
+using a purely object-oriented approach.
 
 ## Implementation Constraints
 
@@ -15,8 +15,8 @@ using a purely object-oriented approach. Yes it is!
 
 ## Under Construction
 
-Almost all of the original escheme system is completed with the exception of closure accessors and an environment constructor.
+Almost all of the original escheme system is completed with the exception of a handful of custom object access primtive.
 
-Test underway.
+Testing underway.
 
 Stay tuned.
