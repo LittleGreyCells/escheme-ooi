@@ -35,44 +35,48 @@ namespace scheme
       return port;
    }
 
-   Port* PortIO::openInputFile( const std::string& name )
+   Node* PortIO::openInputFile( const std::string& name )
    {
       auto x = ::fopen( name.c_str(), "r" );
       if ( x == 0 )
-	 throw SevereException( "InputFile: open error -- " + name );
-      return Memory::fileport( x, pm_input );
+         return Memory::nil;
+      else
+         return Memory::fileport( x, pm_input );
    }
 
-   Port* PortIO::openOutputFile( const std::string& name )
+   Node* PortIO::openOutputFile( const std::string& name )
    {
       auto x = ::fopen( name.c_str(), "w" );
       if ( x == 0 )
-	 throw SevereException( "OutputFile: open error -- " + name );
-      return Memory::fileport( x, pm_output );
+         return Memory::nil;
+      else
+         return Memory::fileport( x, pm_output );
    }
    
-   Port* PortIO::openAppendFile( const std::string& name )
+   Node* PortIO::openAppendFile( const std::string& name )
    {
       auto x = ::fopen( name.c_str(), "a" );
       if ( x == 0 )
-	 throw SevereException( "AppendFile: open error -- " + name );
-      return Memory::fileport( x, pm_output );
+         return Memory::nil;
+      else
+         return Memory::fileport( x, pm_output );
    }
    
-   Port* PortIO::openUpdateFile( const std::string& name )
+   Node* PortIO::openUpdateFile( const std::string& name )
    {
       auto x = ::fopen( name.c_str(), "a+" );
       if ( x == 0 )
-	 throw SevereException( "UpdateFile: open error -- " + name );
-      return Memory::fileport( x, pm_input | pm_output );
+         return Memory::nil;
+      else
+         return Memory::fileport( x, pm_input | pm_output );
    }
    
-   Port* PortIO::openInputStringPort( const std::string& s )
+   Node* PortIO::openInputStringPort( const std::string& s )
    {
       return Memory::stringport( s, pm_input );
    }
    
-   Port* PortIO::openOutputStringPort()
+   Node* PortIO::openOutputStringPort()
    {
       static std::string empty;
       return Memory::stringport( empty, pm_output );

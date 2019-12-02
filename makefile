@@ -77,4 +77,24 @@ clean :
 	find . -name "*~" -delete
 	rm -f escheme
 
+install : $(APP)
+	mkdir -p /usr/share/$(APP)
+	mkdir -p /usr/share/$(APP)/boot
+	mkdir -p /usr/share/$(APP)/macros
+	cp escheme.scm  /usr/share/$(APP)
+	cp boot/*.scm   /usr/share/$(APP)/boot
+	cp macros/*.scm /usr/share/$(APP)/macros
+	cp $(APP) /usr/local/bin/$(APP)_i
+	echo 'ESCHEME=/usr/share/$(APP) $(APP)_i $$@' > /usr/local/bin/$(APP)
+	chmod +x /usr/local/bin/$(APP)
+	ln -s /usr/local/bin/$(APP) /usr/local/bin/escheme
+
+uninstall :
+	if [ -d /usr/share/$(APP) ]; \
+	then \
+	   rm -rf /usr/share/$(APP); \
+	   rm -f /usr/local/bin/$(APP); \
+	   rm -f /usr/local/bin/$(APP)_i; \
+	   rm -f /usr/local/bin/escheme; \
+	fi
 

@@ -19,13 +19,13 @@ namespace scheme
       Port* makeOutputPort( const std::string& name, FILE* f );
       Port* makeTerminalPort( const std::string& name );
       
-      Port* openInputFile( const std::string& name );
-      Port* openOutputFile( const std::string& name );
-      Port* openAppendFile( const std::string& name );
-      Port* openUpdateFile( const std::string& name );
+      Node* openInputFile( const std::string& name );
+      Node* openOutputFile( const std::string& name );
+      Node* openAppendFile( const std::string& name );
+      Node* openUpdateFile( const std::string& name );
 
-      Port* openInputStringPort( const std::string& s );
-      Port* openOutputStringPort();
+      Node* openInputStringPort( const std::string& s );
+      Node* openOutputStringPort();
       
       void close( Port* port );
       void flush( Port* port );

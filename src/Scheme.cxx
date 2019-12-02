@@ -71,7 +71,7 @@ namespace scheme
       
       try
       {
-         auto port = PortIO::openInputStringPort( system );
+         auto port = dynamic_cast<StringPort*>( PortIO::openInputStringPort( system ) );
          
          Memory::GcSuspension gcs( "define-system" );
          

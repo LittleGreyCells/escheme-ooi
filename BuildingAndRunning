@@ -13,13 +13,13 @@ To run the interpreter in the build directory invoke escheme. The banner is prin
 *terminal* prompt is displayed:
 
    $ ./escheme
-   escheme-oops (interpreter)
+   escheme-oops <interpreter>
 
    oops>
 
-Load additional files using the 'load' function:
+Files can by loaded before the prompt if listed on the command line::
 
-   oops> (load <filename>)
+   $ ./escheme <file1> <file2> ... <filen>
    
 
 To exit escheme, type ^D, ^C or exit function at the prompt:
@@ -29,6 +29,17 @@ To exit escheme, type ^D, ^C or exit function at the prompt:
 
 Installation and Removal
 
-There is no installation support at this time.
+The scheme interpeter and its supporting files can be installed on Unix/Linux systems.
+
+   $ sudo make install
+
+The interpreter can now be invoked anywhere, not just off of the build directory, using the
+pathless executable name "escheme". The executable is installed in /usr/local/bin which
+should be included in the path definition, if not already.
+
+Lastly the interpreter can be uninstalled.
+
+   $ sudo make uninstall
+
 
 [EOF]

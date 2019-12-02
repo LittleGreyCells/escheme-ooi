@@ -11,7 +11,7 @@
   (display msg)
   (if object
       (begin (display " [") 
-             (display object)
+             (display (car object))
              (display "]")))
   (newline)
   (*toplevel*))
@@ -21,7 +21,7 @@
   (display msg)
   (if object
       (begin (display " [") 
-             (display object)
+             (display (car object))
              (display "]")))
   (newline)
   (exit))
