@@ -53,9 +53,6 @@ namespace scheme
 
       inline bool anyp( Node* n ) { return n != Memory::nil; }
 
-      void mark( Node* n );
-      void mark( TSTACK<Node*>& s );
-      
       void gc();
       void register_marker( Marker fn );
 

@@ -7,10 +7,13 @@
 namespace scheme
 {
    void List::mark() 
-   { 
-      setmark();
-      Memory::mark( car );
-      Memory::mark( cdr );
+   {
+      if ( !marked )
+      {
+         setmark();
+         car->mark();
+         cdr->mark();
+      }
    }
 
    unsigned List::length()

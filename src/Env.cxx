@@ -22,12 +22,15 @@ namespace scheme
    }
 
    void Env::mark() 
-   { 
-      setmark();
-      Memory::mark( vars );
-      for ( int i = 0; i < nslots; ++i )
-         Memory::mark( slots[i] );
-      Memory::mark( benv );
+   {
+      if ( !marked )
+      {
+         setmark();
+         vars->mark();
+         for ( int i = 0; i < nslots; ++i )
+            slots[i]->mark();
+         benv->mark();
+      }
    }
    
    void Env::print( Port* port, int )

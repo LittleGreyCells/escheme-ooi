@@ -3,8 +3,6 @@
 
 namespace scheme
 {
-   void Flonum::mark() { setmark(); }
-
    void Flonum::print( Port* port, int )
    {
       // (std::to_string() uses %f, not %g)

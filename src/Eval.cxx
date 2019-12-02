@@ -1172,15 +1172,22 @@ namespace scheme
          intstack.newtop( ints_depth );
       }
 
+      void mark( TSTACK<Node*>& stack )
+      {
+         const auto depth = stack.getdepth();
+         for ( int i = 0; i < depth; ++i )
+            stack[i]->mark();
+      }
+
       void marker()
       {
-         Memory::mark( argstack );
-         Memory::mark( regstack );
-         Memory::mark( env );
-         Memory::mark( exp );
-         Memory::mark( val );
-         Memory::mark( unev );
-         Memory::mark( the_global_env );
+         mark( argstack );
+         mark( regstack );
+         env->mark();
+         exp->mark();
+         val->mark();
+         unev->mark();
+         the_global_env->mark();
       }
 
       void initialize()

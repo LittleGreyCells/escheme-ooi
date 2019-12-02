@@ -12,7 +12,6 @@ namespace scheme
       delete data;
       data = nullptr;
    }
-   void Str::mark() { setmark(); }
 
    void Str::print( Port* port, int style )
    {

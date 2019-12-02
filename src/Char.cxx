@@ -3,8 +3,6 @@
 
 namespace scheme
 {
-   void Char::mark() { setmark(); }
-
    void Char::print( Port* port, int style )
    {
       char buffer[80];

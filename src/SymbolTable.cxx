@@ -55,7 +55,7 @@ namespace scheme
       void marker()
       {
          for ( auto& x : table )
-            Memory::mark( x.second );
+            x.second->mark();
       }
       
       void initialize()

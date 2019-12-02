@@ -2,8 +2,6 @@
 
 namespace scheme
 {
-   //bool  Node::lastp() { throw AccessException( "not a list" ); }
-
    Node* Node::getcar() { throw AccessException( "not a list" ); }
    Node* Node::getcdr() { throw AccessException( "not a list" ); }
    void  Node::setcar( Node* ) { throw AccessException( "not a list" ); }

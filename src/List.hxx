@@ -19,7 +19,6 @@ namespace scheme
       virtual bool consp() override { return true; }
       virtual bool atomp() override { return false; }
       virtual bool listp() override { return true; }
-      //virtual bool lastp() override { return cdr->nullp(); }
 
       virtual void mark() override;
 

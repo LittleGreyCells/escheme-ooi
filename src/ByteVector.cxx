@@ -17,8 +17,6 @@ namespace scheme
          data[i] = 0;
    }
       
-   void ByteVector::mark() { setmark(); }
-
    void ByteVector::print( Port* port, int )
    {
       PortIO::put( port, id("ByteVector") );

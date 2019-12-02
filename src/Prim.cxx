@@ -4,8 +4,6 @@
 
 namespace scheme
 {
-   void Prim::mark() { setmark(); }
-
    void Prim::print( Port* port, int )
    {
       PortIO::put( port, id( "prim-" + name ) );

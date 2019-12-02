@@ -3,8 +3,6 @@
 
 namespace scheme
 {
-   void Fixnum::mark() { setmark(); }
-
    void Fixnum::print( Port* port, int )
    {
       char buffer[80];

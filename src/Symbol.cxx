@@ -41,10 +41,13 @@ namespace scheme
    }
 
    void Symbol::mark()
-   { 
-      setmark();
-      Memory::mark( value );
-      Memory::mark( properties );
+   {
+      if ( !marked )
+      {
+         setmark();
+         value->mark();
+         properties->mark();
+      }
    }
 
    void Symbol::print( Port* port, int style )

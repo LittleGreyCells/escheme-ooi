@@ -18,7 +18,7 @@ namespace scheme
       virtual bool flonump() override { return true; }
       virtual bool numberp() override { return true; }
 
-      virtual void mark() override;
+      virtual void mark() override { setmark(); }
 
       virtual void print( Port* port, int style ) override;
       

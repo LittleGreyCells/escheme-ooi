@@ -161,22 +161,6 @@ namespace scheme
          return obj;
       }
       
-      void mark( Node* n )
-      {
-         if ( n == nullptr )
-            throw FatalException( "marking nullptr" );
-         
-         if ( !n->ismarked() )
-            n->mark();
-      }
-      
-      void mark( TSTACK<Node*>& stack )
-      {
-         const auto depth = stack.getdepth();
-         for ( int i = 0; i < depth; ++i )
-            mark( stack[i] );
-      }
-
       void gc()
       {
          if ( suspensions > 0 )
@@ -185,9 +169,9 @@ namespace scheme
          collections += 1;
 
          // mark all
-         mark( vector_null );         
-         mark( string_null );         
-         mark( listhead );
+         vector_null->mark();         
+         string_null->mark();         
+         listhead->mark();
          
          for ( auto marker : markers )
             marker();

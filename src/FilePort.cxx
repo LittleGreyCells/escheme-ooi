@@ -10,8 +10,6 @@ namespace scheme
       close();
    }
    
-   void FilePort::mark() { setmark(); }
-   
    void FilePort::print( Port* port, int )
    {
       PortIO::put( port, id("Port") );

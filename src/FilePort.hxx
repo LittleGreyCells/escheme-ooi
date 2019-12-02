@@ -19,7 +19,7 @@ namespace scheme
       FilePort( FILE *f, byte mode ) : Port(mode), f(f), open(true), ungot(false) {}
       ~FilePort();
 
-      virtual void mark() override;
+      virtual void mark() override { setmark(); }
 
       virtual void print( Port* port, int ) override;
       

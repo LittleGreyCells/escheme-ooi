@@ -9,8 +9,6 @@ namespace scheme
       cdr = this;
    }
    
-   void Nil::mark() { setmark(); }
-   
    void Nil::print( Port* port, int style )
    {
       PortIO::put( port, "()" );

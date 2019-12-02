@@ -18,7 +18,7 @@ namespace scheme
 
       virtual bool stringp() override { return true; }
 
-      virtual void mark() override;
+      virtual void mark() override { setmark(); }
 
       virtual void print( Port* port, int style ) override;
    };

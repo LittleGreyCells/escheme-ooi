@@ -7,8 +7,11 @@ namespace scheme
 {
    void Continuation::mark()
    {
-      setmark();
-      Memory::mark( state );
+      if ( !marked )
+      {
+         setmark();
+         state->mark();
+      }
    }
 
    void Continuation::print( Port* port, int )

@@ -12,7 +12,7 @@ namespace scheme
    public:
       Nil();
       
-      virtual void mark() override;
+      virtual void mark() override { setmark(); }
 
       virtual bool nullp() override { return true; }
       virtual bool atomp() override { return true; }

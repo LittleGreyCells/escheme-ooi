@@ -40,10 +40,13 @@ namespace scheme
    unsigned Vector::vlen() { return length; }
 
    void Vector::mark() 
-   { 
-      setmark();
-      for ( int i = 0; i < length; ++i )
-         Memory::mark( data[i] );
+   {
+      if ( !marked )
+      {
+         setmark();
+         for ( int i = 0; i < length; ++i )
+            data[i]->mark();
+      }
    }
 
    void Vector::print( Port* port, int style )

@@ -7,9 +7,12 @@ namespace scheme
 {
    void Promise::mark()
    {
-      setmark();
-      Memory::mark( exp );
-      Memory::mark( val );
+      if ( !marked )
+      {
+         setmark();
+         exp->mark();
+         val->mark();
+      }
    }
 
    void Promise::print( Port* port, int )

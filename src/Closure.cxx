@@ -15,11 +15,14 @@ namespace scheme
    }
    
    void Closure::mark() 
-   { 
-      setmark();
-      Memory::mark( vars );
-      Memory::mark( code );
-      Memory::mark( benv );
+   {
+      if ( !marked )
+      {
+         setmark();
+         vars->mark();
+         code->mark();
+         benv->mark();
+      }
    }
    
    void Closure::print( Port* port, int )
