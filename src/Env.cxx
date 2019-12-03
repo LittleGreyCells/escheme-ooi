@@ -23,7 +23,7 @@ namespace scheme
 
    void Env::mark() 
    {
-      if ( !marked )
+      if ( !ismarked() )
       {
          setmark();
          vars->mark();

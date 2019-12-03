@@ -41,7 +41,7 @@ namespace scheme
 
    void Vector::mark() 
    {
-      if ( !marked )
+      if ( !ismarked() )
       {
          setmark();
          for ( int i = 0; i < length; ++i )

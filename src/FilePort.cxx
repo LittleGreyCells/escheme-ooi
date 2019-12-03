@@ -1,5 +1,6 @@
 #include "FilePort.hxx"
 #include "PortIO.hxx"
+#include "Transcript.hxx"
 
 #include <cstdio>
 
@@ -46,6 +47,10 @@ namespace scheme
          throw SevereException( "not an output port" );
 
       fputc( ch, f );
+      
+      using Transcript::transcript;
+      if ( transcript && (f == ::stdout) )
+         fputc( ch, transcript );
    }
 
    void FilePort::put( const std::string& s )
@@ -53,8 +58,11 @@ namespace scheme
       if ( !outportp() )
          throw SevereException( "not an output port" );
       
-      for ( auto ch : s )
-	 fputc( ch, f );
+      fputs( s.c_str(), f );
+
+      using Transcript::transcript;
+      if ( transcript && (f == ::stdout) )
+         fputs( s.c_str(), transcript );
    }
 
    int FilePort::get_position()

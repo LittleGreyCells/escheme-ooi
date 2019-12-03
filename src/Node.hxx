@@ -94,9 +94,9 @@ namespace scheme
       
       void setform( byte form ) { this->form = form; }
 
-      inline void setmark() { marked = true; }
-      inline void unmark() { marked = false; }
-      inline bool ismarked() { return marked; }
+      void setmark() { marked = true; }
+      void unmark() { marked = false; }
+      bool ismarked() { return marked; }
 
       bool marked;
       byte form;

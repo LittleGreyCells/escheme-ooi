@@ -4,7 +4,6 @@
 #include <string>
 
 #include "Port.hxx"
-#include "Symbol.hxx"
 
 namespace scheme
 {

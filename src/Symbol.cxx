@@ -42,7 +42,7 @@ namespace scheme
 
    void Symbol::mark()
    {
-      if ( !marked )
+      if ( !ismarked() )
       {
          setmark();
          value->mark();

@@ -16,7 +16,7 @@ namespace scheme
    
    void Closure::mark() 
    {
-      if ( !marked )
+      if ( !ismarked() )
       {
          setmark();
          vars->mark();

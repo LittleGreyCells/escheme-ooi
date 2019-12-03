@@ -7,7 +7,7 @@ namespace scheme
 {
    void Continuation::mark()
    {
-      if ( !marked )
+      if ( !ismarked() )
       {
          setmark();
          state->mark();

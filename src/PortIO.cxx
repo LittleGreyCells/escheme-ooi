@@ -2,7 +2,6 @@
 #include "TerminalPort.hxx"
 #include "Memory.hxx"
 #include "SymbolTable.hxx"
-#include "Transcript.hxx"
 
 namespace scheme
 {
@@ -105,19 +104,11 @@ namespace scheme
    void PortIO::put( Port* port, int ch )
    {
       port->put( ch );
-
-      using Transcript::transcript;
-      if ( transcript && (port == stdout) )
-         fputc( ch, transcript );
    }
 
    void PortIO::put( Port* port, const std::string& s )
    {
       port->put( s );
-
-      using Transcript::transcript;
-      if ( transcript && (port == stdout) )
-         fputs( s.c_str(), transcript );
    }
 
    int PortIO::get_position( Port* port )

@@ -7,7 +7,7 @@ namespace scheme
 {
    void Promise::mark()
    {
-      if ( !marked )
+      if ( !ismarked() )
       {
          setmark();
          exp->mark();

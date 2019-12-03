@@ -8,7 +8,7 @@ namespace scheme
 {
    void List::mark() 
    {
-      if ( !marked )
+      if ( !ismarked() )
       {
          setmark();
          car->mark();
