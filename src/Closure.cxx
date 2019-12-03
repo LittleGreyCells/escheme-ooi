@@ -1,5 +1,5 @@
 #include "Closure.hxx"
-#include "PortIO.hxx"
+#include "Port.hxx"
 #include "Eval.hxx"
 #include "Memory.hxx"
 
@@ -27,7 +27,7 @@ namespace scheme
    
    void Closure::print( Port* port, int )
    {
-      PortIO::put( port, id("Closure") );
+      port->put( id("Closure") );
    }
    
    void Closure::apply_dispatch() { Eval::apply_closure( this ); }

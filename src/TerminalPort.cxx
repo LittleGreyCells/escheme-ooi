@@ -1,5 +1,5 @@
 #include "TerminalPort.hxx"
-#include "PortIO.hxx"
+#include "Port.hxx"
 #include "Transcript.hxx"
 
 #include <cstdio>
@@ -10,7 +10,7 @@ namespace scheme
       
    void TerminalPort::print( Port* port, int )
    {
-      PortIO::put( port, id("Terminal") );
+      port->put( id("Terminal") );
    }
 
    int TerminalPort::get()

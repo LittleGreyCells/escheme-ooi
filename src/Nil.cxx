@@ -1,5 +1,5 @@
 #include "Nil.hxx"
-#include "PortIO.hxx"
+#include "Port.hxx"
 
 namespace scheme
 {
@@ -11,7 +11,7 @@ namespace scheme
    
    void Nil::print( Port* port, int style )
    {
-      PortIO::put( port, "()" );
+      port->put( "()" );
    }
    
 }

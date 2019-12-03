@@ -1,5 +1,5 @@
 #include "Str.hxx"
-#include "PortIO.hxx"
+#include "Port.hxx"
 
 #include <cstdio>
 
@@ -16,12 +16,12 @@ namespace scheme
    void Str::print( Port* port, int style )
    {
       if ( style )
-         PortIO::put( port, '"' );
+         port->put( '"' );
       
-      PortIO::put( port, *data );
+      port->put( *data );
       
       if ( style )
-         PortIO::put( port, '"' );
+         port->put( '"' );
    }
    
 }

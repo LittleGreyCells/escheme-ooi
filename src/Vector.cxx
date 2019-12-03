@@ -1,6 +1,6 @@
 #include "Node.hxx"
 #include "Vector.hxx"
-#include "PortIO.hxx"
+#include "Port.hxx"
 #include "Memory.hxx"
 
 namespace scheme
@@ -51,14 +51,14 @@ namespace scheme
 
    void Vector::print( Port* port, int style )
    {
-      PortIO::put( port, "#(" );
+      port->put( "#(" );
       for ( int i = 0; i < length; ++i )
       {
 	 if ( i != 0 )
-	    PortIO::put( port, ' ' );
+	    port->put( ' ' );
 	 data[i]->print( port, style );
       }  
-      PortIO::put( port, ')' );
+      port->put( ')' );
    }
    
 }

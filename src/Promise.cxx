@@ -1,5 +1,5 @@
 #include "Promise.hxx"
-#include "PortIO.hxx"
+#include "Port.hxx"
 #include "Eval.hxx"
 #include "Memory.hxx"
 
@@ -17,7 +17,7 @@ namespace scheme
 
    void Promise::print( Port* port, int )
    {
-      PortIO::put( port, id("Promise") );
+      port->put( id("Promise") );
    }
 
    void Promise::apply_dispatch() { Eval::apply_force(); }

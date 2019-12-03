@@ -1,5 +1,5 @@
 #include "FilePort.hxx"
-#include "PortIO.hxx"
+#include "Port.hxx"
 #include "Transcript.hxx"
 
 #include <cstdio>
@@ -13,7 +13,7 @@ namespace scheme
    
    void FilePort::print( Port* port, int )
    {
-      PortIO::put( port, id("Port") );
+      port->put( id("Port") );
    }
 
    int FilePort::get()

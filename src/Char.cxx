@@ -1,5 +1,5 @@
 #include "Char.hxx"
-#include "PortIO.hxx"
+#include "Port.hxx"
 
 namespace scheme
 {
@@ -10,22 +10,22 @@ namespace scheme
       {
          if ( data == '\n' )
          {
-            PortIO::put( port, "#\\newline" );
+            port->put( "#\\newline" );
          }
          else if ( data == ' ' )
          {
-            PortIO::put( port, "#\\space" );
+            port->put( "#\\space" );
          }
          else
          {
             sprintf( buffer, "#\\%c", (char)data );
-            PortIO::put( port, buffer );	 
+            port->put( buffer );	 
          }
       }
       else
       {
          sprintf( buffer, "%c", (char)data );
-         PortIO::put( port, buffer );	 
+         port->put( buffer );	 
       }
    }
    

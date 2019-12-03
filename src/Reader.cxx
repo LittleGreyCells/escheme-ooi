@@ -64,7 +64,7 @@ namespace scheme
 	       return readComma( inport );
 	       
 	    default:
-	       PortIO::unget( inport, ch );
+	       inport->unget( ch );
 	       return readSymbol( inport );
 	 }
       }
@@ -74,7 +74,7 @@ namespace scheme
    {
       while ( true )
       {
-	 const int ch = PortIO::get( inport );
+	 const int ch = inport->get();
 	 if ( ch == EOF || !isspace( ch ) )
 	    return ch;
       }
@@ -84,14 +84,14 @@ namespace scheme
    {
       while ( true )
       {
-	 const int ch = PortIO::get( inport );
+	 const int ch = inport->get();
 	 if ( ch == EOF )
 	 {
 	    break;
 	 }
 	 else if ( ch == '\n' )
 	 {
-	    PortIO::unget( inport, ch );
+	    inport->unget( ch );
 	    break;
 	 }
       }
@@ -101,10 +101,10 @@ namespace scheme
    {
       std::string sb;
       int ch;
-      while ( ((ch = PortIO::get(inport)) != EOF) && (ch != '"') )
+      while ( ((ch = inport->get()) != EOF) && (ch != '"') )
       {
 	 if ( ch == '\\' )
-	    ch = PortIO::get( inport );
+	    ch = inport->get();
 	 if ( ch != EOF )
 	    sb.push_back( (char)ch );
       }
@@ -141,7 +141,7 @@ namespace scheme
 	       
 	    default:
 	    {
-	       PortIO::unget( inport, ch );
+	       inport->unget( ch );
 	       Node* n = readExpr( inport );
 	       
 	       if ( n == symbol_dot )
@@ -234,11 +234,11 @@ namespace scheme
    {
       std::string name;
       int ch;
-      while ( (ch = PortIO::get( inport )) != EOF && isSym(ch) )
+      while ( (ch = inport->get()) != EOF && isSym(ch) )
       {
     	  name.push_back( tolower( ch ) );
       }
-      PortIO::unget( inport, ch );
+      inport->unget( ch );
       return name;
    }
 
@@ -328,7 +328,7 @@ namespace scheme
 	 
 	 default:
 	 {
-	    PortIO::unget( inport, ch );
+	    inport->unget( ch );
 	    std::string s( getSymbolName( inport ) );
 	    if ( s.compare( "t" ) == 0 )
 	       return symbol_true;
@@ -350,13 +350,13 @@ namespace scheme
 
    Node* Reader::readComma( Port* inport )
    {
-      const int ch = PortIO::get( inport );
+      const int ch = inport->get();
       
       if ( ch == '@' )
 	 return readQuote( inport, symbol_unquotesplicing );
       else
       {
-	 PortIO::unget( inport, ch );
+	 inport->unget( ch );
 	 return readQuote( inport, symbol_unquote );
       }
    }
@@ -385,7 +385,7 @@ namespace scheme
    {
       long n = 0;
       int ch;
-      while ( ((ch = PortIO::get(inport)) != EOF) && isSym(ch) ) 
+      while ( ((ch = inport->get()) != EOF) && isSym(ch) ) 
       {
 	 if ( isupper( ch ) ) 
 	    ch = tolower( ch );
@@ -393,7 +393,7 @@ namespace scheme
 	    throw ParseException( "invalid digit" );
 	 n = n * base + toDigit(ch);
       }
-      PortIO::unget( inport, ch );
+      inport->unget( ch );
       return Memory::fixnum(n);
    }
    

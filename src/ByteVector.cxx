@@ -1,6 +1,6 @@
 #include "Node.hxx"
 #include "ByteVector.hxx"
-#include "PortIO.hxx"
+#include "Port.hxx"
 
 namespace scheme
 {
@@ -19,7 +19,7 @@ namespace scheme
       
    void ByteVector::print( Port* port, int )
    {
-      PortIO::put( port, id("ByteVector") );
+      port->put( id("ByteVector") );
    }
    
 }

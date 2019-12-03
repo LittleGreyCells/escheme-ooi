@@ -1,5 +1,5 @@
 #include "Symbol.hxx"
-#include "PortIO.hxx"
+#include "Port.hxx"
 #include "Memory.hxx"
 
 namespace scheme
@@ -52,7 +52,7 @@ namespace scheme
 
    void Symbol::print( Port* port, int style )
    {
-      PortIO::put( port, *name );
+      port->put( *name );
    }
    
 }

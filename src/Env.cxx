@@ -1,5 +1,5 @@
 #include "Env.hxx"
-#include "PortIO.hxx"
+#include "Port.hxx"
 #include "Memory.hxx"
 
 namespace scheme
@@ -35,7 +35,7 @@ namespace scheme
    
    void Env::print( Port* port, int )
    {
-      PortIO::put( port, id("Env") );
+      port->put( id("Env") );
    }
 
 }

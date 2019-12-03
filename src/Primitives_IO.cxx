@@ -36,7 +36,7 @@ namespace scheme
          auto port = iter.more() ? down_cast<Port*>( guard(iter.getlast(), &Node::outportp) ) : PortIO::stdout;         
          s->print( port, 1 );
          if ( newline )
-            PortIO::put( port, '\n' );
+            port->put( '\n' );
          return symbol_true;
       }
 
@@ -58,7 +58,7 @@ namespace scheme
          // syntax: (newline [<outport>]) -> #t
          ArgstackIterator iter;
          auto port = iter.more() ? down_cast<Port*>( guard(iter.getlast(), &Node::outportp) ) : PortIO::stdout;
-         PortIO::put( port, '\n' );
+         port->put( '\n' );
          return symbol_true;
       }
       
@@ -67,7 +67,7 @@ namespace scheme
          // syntax: (read-char [<inport>])
          ArgstackIterator iter;
          auto port = iter.more() ? down_cast<Port*>( guard(iter.getlast(), &Node::inportp) ) : PortIO::stdin;
-         auto ch = PortIO::get( port );
+         auto ch = port->get();
          if ( ch == EOF )
             return eofObject;
          else
@@ -80,7 +80,7 @@ namespace scheme
          ArgstackIterator iter;
          auto ch = down_cast<Char*>( guard(iter.getarg(), &Node::charp) )->data;
          auto port = iter.more() ? down_cast<Port*>( guard(iter.getlast(), &Node::outportp) ) : PortIO::stdout;        
-         PortIO::put( port, ch );       
+         port->put( ch );       
          return symbol_true;
       }
       
@@ -118,7 +118,7 @@ namespace scheme
          // syntax: (get-file-position <port>)
          ArgstackIterator iter;
          auto  port = down_cast<Port*>( guard(iter.getlast(), &Node::portp) );
-         return Memory::fixnum( PortIO::get_position( port ) );
+         return Memory::fixnum( port->get_position() );
       }
       
       Node* set_file_position()
@@ -127,7 +127,7 @@ namespace scheme
          ArgstackIterator iter;
          auto port = down_cast<Port*>( guard(iter.getarg(), &Node::portp) );
          auto pos = down_cast<Fixnum*>( guard(iter.getlast(), &Node::fixnump) );
-         PortIO::set_position( port, pos->data );
+         port->set_position( pos->data );
          return symbol_true;
       }
       
@@ -136,7 +136,7 @@ namespace scheme
          // syntax: (close-port <port>) -> #t
          ArgstackIterator iter;
          auto port = down_cast<Port*>( guard(iter.getlast(), &Node::portp) );
-         PortIO::close( port );
+         port->close();
          return symbol_true;
       }
       
@@ -145,7 +145,7 @@ namespace scheme
          // syntax: (close-input-port <port>) -> #t
          ArgstackIterator iter;
          auto port = down_cast<Port*>( guard(iter.getlast(), &Node::inportp) );
-         PortIO::close( port );
+         port->close();
          return symbol_true;
       }
       
@@ -153,7 +153,7 @@ namespace scheme
       {
          ArgstackIterator iter;
          auto port = down_cast<Port*>( guard(iter.getlast(), &Node::outportp) );
-         PortIO::close( port );
+         port->close();
          return symbol_true;
       }
       
@@ -161,7 +161,7 @@ namespace scheme
       {
          ArgstackIterator iter;
          auto port = down_cast<Port*>( guard(iter.getlast(), &Node::outportp) );
-         PortIO::flush( port );
+         port->flush();
          return symbol_true;
       }
       

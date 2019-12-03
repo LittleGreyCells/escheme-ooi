@@ -1,7 +1,7 @@
 #include <cstdio>
 
 #include "List.hxx"
-#include "PortIO.hxx"
+#include "Port.hxx"
 #include "Memory.hxx"
 
 namespace scheme
@@ -28,7 +28,7 @@ namespace scheme
    void List::print( Port* port, int style )
    {
       Node* s = this;
-      PortIO::put( port, '(' );
+      port->put( '(' );
       try
       {
 	 while ( !s->nullp() )
@@ -43,12 +43,12 @@ namespace scheme
 	    }
 	    else if ( tail->consp() )
 	    {
-	       PortIO::put( port, ' ' );
+               port->put( ' ' );
 	       s = tail;
 	    }
 	    else
 	    {
-	       PortIO::put( port, " . " );
+               port->put( " . " );
 	       tail->print( port, style );
 	       break;
 	    }
@@ -57,9 +57,9 @@ namespace scheme
       catch ( AccessException& e )
       {
 	 // terminate
-	 PortIO::put( port, "<access-exception>..." );
+	 port->put( "<access-exception>..." );
       }
-      PortIO::put( port, ')' );
+      port->put( ')' );
    }
    
 }

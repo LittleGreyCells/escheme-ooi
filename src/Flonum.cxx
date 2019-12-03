@@ -1,5 +1,5 @@
 #include "Flonum.hxx"
-#include "PortIO.hxx"
+#include "Port.hxx"
 
 namespace scheme
 {
@@ -8,7 +8,7 @@ namespace scheme
       // (std::to_string() uses %f, not %g)
       char buffer[80];
       sprintf( buffer, "%g", data );
-      PortIO::put( port, buffer );
+      port->put( buffer );
    }
    
 }

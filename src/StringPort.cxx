@@ -1,5 +1,5 @@
 #include "StringPort.hxx"
-#include "PortIO.hxx"
+#include "Port.hxx"
 
 #include <cstdio>
 
@@ -17,7 +17,7 @@ namespace scheme
    
    void StringPort::print( Port* port, int )
    {
-      PortIO::put( port, "{StringPort}" );
+      port->put( "{StringPort}" );
    }
 
    int StringPort::get()

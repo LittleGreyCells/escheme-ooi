@@ -25,18 +25,6 @@ namespace scheme
 
       Node* openInputStringPort( const std::string& s );
       Node* openOutputStringPort();
-      
-      void close( Port* port );
-      void flush( Port* port );
-      
-      int get( Port* port );
-      void unget( Port* port, int ch );
-      
-      void put( Port* port, int ch );
-      void put( Port* port, const std::string& s );
-
-      int get_position( Port* port );
-      void set_position( Port* port, int pos );
 
       void initialize();
    }

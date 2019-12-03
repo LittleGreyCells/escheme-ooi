@@ -80,47 +80,7 @@ namespace scheme
       static std::string empty;
       return Memory::stringport( empty, pm_output );
    }
-   
-   void PortIO::close( Port* port )
-   {
-      port->close();
-   }
 
-   void PortIO::flush( Port* port )
-   {
-      port->flush();
-   }
-
-   int PortIO::get( Port* port )
-   {
-      return port->get();
-   }
-
-   void PortIO::unget( Port* port, int ch )
-   {
-      port->unget( ch );
-   }
-   
-   void PortIO::put( Port* port, int ch )
-   {
-      port->put( ch );
-   }
-
-   void PortIO::put( Port* port, const std::string& s )
-   {
-      port->put( s );
-   }
-
-   int PortIO::get_position( Port* port )
-   {
-      return port->get_position();
-   }
-   
-   void PortIO::set_position( Port* port, int pos )
-   {
-      port->set_position( pos );
-   }
-   
    // port values need to be bound AFTER the system table is created
 
    void PortIO::initialize()
@@ -128,7 +88,6 @@ namespace scheme
       stdin  = makeInputPort( "*standard-input*", ::stdin );
       stdout = makeOutputPort( "*standard-output*", ::stdout );
       stderr = makeOutputPort( "*standard-error*", ::stderr );
-      
       terminal = makeTerminalPort( "*terminal*" );
    }
 }

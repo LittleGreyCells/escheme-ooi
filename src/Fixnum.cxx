@@ -1,5 +1,5 @@
 #include "Fixnum.hxx"
-#include "PortIO.hxx"
+#include "Port.hxx"
 
 namespace scheme
 {
@@ -7,7 +7,7 @@ namespace scheme
    {
       char buffer[80];
       sprintf( buffer, "%ld", data );
-      PortIO::put( port, buffer );
+      port->put( buffer );
    }
    
    long Fixnum::getfixnum()
