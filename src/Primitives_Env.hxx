@@ -11,6 +11,7 @@ namespace scheme
       Node* proc_environment();
       Node* env_bindings();
       Node* env_parent();
+      Node* make_environment();
    }
 }
 

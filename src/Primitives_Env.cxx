@@ -54,6 +54,53 @@ namespace scheme
          
          return bindings.get();
       }
+      
+      Node* make_environment()
+      {
+         // syntax: (%make-environment <pairs> <baseenv>)
+         ArgstackIterator iter;
+         auto pairs = guard(iter.getarg(), &Node::listp);
+         auto benv = down_cast<Env*>( guard(iter.getlast(), &Node::envp) );
+         
+         // convert a list of bindings into a frame
+         auto nvars = pairs->length();
+         
+         // if empty, extend base environment w/ empty frame
+         auto env = Memory::environment( nvars, nil, benv );
+         regstack.push( env );
+         
+         {
+            Memory::ListBuilder vars;
+            
+            for ( int i = 0; anyp(pairs); ++i )
+            {
+               auto x = pairs->getcar();
+               
+               if ( x->consp() )
+               {
+                  // ( <var> . <val> )
+                  vars.add( x->getcar() );
+                  env->slots[i] = x->getcdr();
+               }
+               else if ( x->symbolp() )
+               {
+                  // <var>
+                  vars.add( x );
+                  env->slots[i] = nil;
+               }
+               else
+               {
+                  throw SevereException( "expected a symbol or (symbol . val)", x );
+               }
+               
+               pairs = pairs->getcdr();
+            }
+
+            env->vars = down_cast<List*>( vars.get() );
+         }
+
+         return regstack.pop();
+      }
    }
 }
 

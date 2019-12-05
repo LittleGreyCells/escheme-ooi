@@ -342,7 +342,7 @@ namespace scheme
          { "procedure-environment", proc_environment },
          { "environment-bindings", env_bindings },
          { "environment-parent", env_parent },
-         //{ "%make-environment", make_environment },
+         { "%make-environment", make_environment },
 
          { "%closure-code", closure_code },
          { "%closure-benv", closure_benv },
