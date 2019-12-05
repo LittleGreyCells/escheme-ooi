@@ -39,9 +39,10 @@ SRCS	= \
 	$(SRCLOC)/Primitives_String.cxx \
 	$(SRCLOC)/Primitives_Char.cxx \
 	$(SRCLOC)/Primitives_Symbol.cxx \
+	$(SRCLOC)/Primitives_Env.cxx \
+	$(SRCLOC)/Primitives_Closure.cxx \
 	$(SRCLOC)/Primitives_Equality.cxx \
 	$(SRCLOC)/Primitives_IO.cxx \
-	$(SRCLOC)/Primitives_Env.cxx \
 	$(SRCLOC)/Primitives_Unix.cxx \
 	$(SRCLOC)/Scheme.cxx \
 	$(SRCLOC)/intstack.cxx \

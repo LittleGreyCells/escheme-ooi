@@ -11,6 +11,7 @@
 #include "Primitives_Equality.hxx"
 #include "Primitives_IO.hxx"
 #include "Primitives_Env.hxx"
+#include "Primitives_Closure.hxx"
 #include "Primitives_Unix.hxx"
 #include "Memory.hxx"
 #include "Symbol.hxx"
@@ -343,6 +344,12 @@ namespace scheme
          { "environment-parent", env_parent },
          //{ "%make-environment", make_environment },
 
+         { "%closure-code", closure_code },
+         { "%closure-benv", closure_benv },
+         { "%closure-vars", closure_vars },
+         { "%closure-numv", closure_numv },
+         { "%closure-rest", closure_rest },
+         
          { "system", unix_system },
          { "getargs", unix_getargs },
          { "getenv", unix_getenv },
