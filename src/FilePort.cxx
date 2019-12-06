@@ -18,34 +18,16 @@ namespace scheme
 
    int FilePort::get()
    {
-      if ( !inportp() )
-         throw SevereException( "not input port" );
-      
-      if ( ungot )
-      {
-	 ungot = false;
-	 return theUngotten;
-      }
-      else
-      {
-	 return fgetc( f );
-      }
+      return fgetc( f );
    }
 
    void FilePort::unget( int ch )
    {
-      if ( !inportp() )
-         throw SevereException( "not an input port" );
-      
-      ungot = true;
-      theUngotten = ch;
+      ungetc( ch, f );
    }
 
    void FilePort::put( int ch )
    {
-      if ( !outportp() )
-         throw SevereException( "not an output port" );
-
       fputc( ch, f );
       
       using Transcript::transcript;
@@ -55,9 +37,6 @@ namespace scheme
 
    void FilePort::put( const std::string& s )
    {
-      if ( !outportp() )
-         throw SevereException( "not an output port" );
-      
       fputs( s.c_str(), f );
 
       using Transcript::transcript;

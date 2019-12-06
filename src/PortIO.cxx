@@ -88,6 +88,11 @@ namespace scheme
       stdin  = makeInputPort( "*standard-input*", ::stdin );
       stdout = makeOutputPort( "*standard-output*", ::stdout );
       stderr = makeOutputPort( "*standard-error*", ::stderr );
+
+      SymbolTable::enter( "*stdin*", stdin );
+      SymbolTable::enter( "*stdout*", stdout );
+      SymbolTable::enter( "*stderr*", stderr );
+      
       terminal = makeTerminalPort( "*terminal*" );
    }
 }

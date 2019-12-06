@@ -12,11 +12,9 @@ namespace scheme
    public:
       FILE* f;
       bool open;
-      bool ungot;
-      char theUngotten;
       
       FilePort() {}
-      FilePort( FILE *f, byte mode ) : Port(mode), f(f), open(true), ungot(false) {}
+      FilePort( FILE *f, byte mode ) : Port(mode), f(f), open(true) {}
       ~FilePort();
 
       virtual void mark() override { setmark(); }
