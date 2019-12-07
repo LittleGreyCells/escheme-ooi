@@ -14,14 +14,12 @@ namespace scheme
    class Prim : public Node
    {
    public:
-      Prim() {}
       Prim( const std::string& name, PRIMITIVE func ) : name(name), func(func) {}
                                                         
       std::string name;
       PRIMITIVE func;
 
       virtual bool primp() override { return true; }
-
       virtual void mark() override { setmark(); }
 
       virtual void print( Port* port, int style ) override;

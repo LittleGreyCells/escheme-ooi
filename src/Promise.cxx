@@ -18,10 +18,7 @@ namespace scheme
    void Promise::print( Port* port, int )
    {
       port->put( id("Promise") );
-   }
-
-   void Promise::apply_dispatch() { Eval::apply_force(); }
-  
+   }  
 }
 
 

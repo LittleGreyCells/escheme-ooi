@@ -21,8 +21,6 @@ namespace scheme
       virtual void mark() override;
 
       virtual void print( Port* port, int style ) override;
-
-      virtual void apply_dispatch() override;
    };
    
 }
