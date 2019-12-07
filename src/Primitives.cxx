@@ -16,6 +16,7 @@
 #include "Memory.hxx"
 #include "Symbol.hxx"
 #include "SymbolTable.hxx"
+#include "Eval.hxx"
 #include "argstack.hxx"
 #include "regstack.hxx"
 
@@ -366,15 +367,8 @@ namespace scheme
       {
          for ( const auto& x : pairs )
          {
-            SymbolTable::enter( x.name, new Prim( x.name, x.func ) );
+            SymbolTable::enter( x.name, new StandardPrim( x.name, x.func ) );
          }
-
-         SymbolTable::enter( "apply",    new PrimApply( "apply" ) );
-         SymbolTable::enter( "eval",     new PrimEval( "eval" ) );
-         SymbolTable::enter( "call/cc",  new PrimCallcc( "call/cc" ) );
-         SymbolTable::enter( "map",      new PrimMap( "map" ) );
-         SymbolTable::enter( "for-each", new PrimForeach( "for-each" ) );
-         SymbolTable::enter( "force",    new PrimForce( "force" ) );
       }      
    }
 }

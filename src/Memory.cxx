@@ -25,8 +25,8 @@ namespace scheme
       TObjectPool< Flonum,       100 > pool_flonum;
       TObjectPool< Str,         1000 > pool_string;
       TObjectPool< Char,         100 > pool_char;
-      TObjectPool< Env,         1000 > pool_env;
-      TObjectPool< List,        4000 > pool_cons;
+      TObjectPool< Env,         5000 > pool_env;
+      TObjectPool< List,        8000 > pool_cons;
       TObjectPool< Vector,       500 > pool_vec;
       TObjectPool< Closure,      500 > pool_clo;
       TObjectPool< FilePort,      10 > pool_fport;

@@ -4,6 +4,7 @@
 #include "Prim.hxx"
 #include "List.hxx"
 #include "PortIO.hxx"
+#include "SymbolTable.hxx"
 
 #include "intstack.hxx"
 #include "regstack.hxx"
@@ -181,7 +182,7 @@ namespace scheme
          return Memory::environment( nvars, vars.get(), benv );
       }
 
-      void apply_primitive( Prim* prim )
+      void apply_primitive( StandardPrim* prim )
       {
          val = (prim->func)();
          argstack.removeargc();
@@ -1217,6 +1218,13 @@ namespace scheme
          symbol_cond   ->setform( EV_COND );
          symbol_access ->setform( EV_ACCESS );
          symbol_delay  ->setform( EV_DELAY );
+
+         SymbolTable::enter( "apply",    new EvalPrim( "apply",    apply_apply ) );
+         SymbolTable::enter( "eval",     new EvalPrim( "eval",     apply_eval ) );
+         SymbolTable::enter( "call/cc",  new EvalPrim( "call/cc",  apply_callcc ) );
+         SymbolTable::enter( "map",      new EvalPrim( "map",      apply_map ) );
+         SymbolTable::enter( "for-each", new EvalPrim( "for-each", apply_foreach ) );
+         SymbolTable::enter( "force",    new EvalPrim( "force",    apply_force ) );
 
          Memory::register_marker( marker );
       }

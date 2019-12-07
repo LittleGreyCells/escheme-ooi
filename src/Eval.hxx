@@ -77,7 +77,7 @@ namespace scheme
 
       Node* eval( Node* sexpr );
 
-      void apply_primitive( Prim* prim );
+      void apply_primitive( StandardPrim* prim );
       void apply_apply();
       void apply_eval();
       void apply_callcc();

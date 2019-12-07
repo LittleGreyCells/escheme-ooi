@@ -9,66 +9,36 @@ namespace scheme
 {
    class Port;
 
-   using PRIMITIVE = Node*(*)();
+   using STANDARD = Node*(*)();
+   using EVALFUNC = void(*)();
    
    class Prim : public Node
    {
-   public:
-      Prim( const std::string& name, PRIMITIVE func ) : name(name), func(func) {}
-                                                        
+   protected:
       std::string name;
-      PRIMITIVE func;
-
+   public:
+      Prim( const std::string& name ) : name(name) {}
+                                                        
       virtual bool primp() override { return true; }
       virtual void mark() override { setmark(); }
-
       virtual void print( Port* port, int style ) override;
-
-      virtual void apply_dispatch() override;
    };
 
-   class PrimApply : public Prim
+   class StandardPrim : public Prim
    {
    public:
-      PrimApply( const std::string& name ) : Prim(name, 0) {}
+      StandardPrim( const std::string& name, STANDARD func ) : Prim(name), func(func) {}
+      STANDARD func;
       virtual void apply_dispatch() override;
    };
-   
-   class PrimEval : public Prim
+
+   class EvalPrim : public Prim
    {
    public:
-      PrimEval( const std::string& name ) : Prim(name, 0) {}
+      EvalPrim( const std::string& name, EVALFUNC func ) : Prim(name), func(func) {}
+      EVALFUNC func;
       virtual void apply_dispatch() override;
-   };
-   
-   class PrimCallcc : public Prim
-   {
-   public:
-      PrimCallcc( const std::string& name ) : Prim(name, 0) {}
-      virtual void apply_dispatch() override;
-   };
-   
-   class PrimMap : public Prim
-   {
-   public:
-      PrimMap( const std::string& name ) : Prim(name, 0) {}
-      virtual void apply_dispatch() override;
-   };
-   
-   class PrimForeach : public Prim
-   {
-   public:
-      PrimForeach( const std::string& name ) : Prim(name, 0) {}
-      virtual void apply_dispatch() override;
-   };
-   
-   class PrimForce : public Prim
-   {
-   public:
-      PrimForce( const std::string& name ) : Prim(name, 0) {}
-      virtual void apply_dispatch() override;
-   };
-   
+   };   
 }
 
 #endif
