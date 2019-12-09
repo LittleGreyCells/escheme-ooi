@@ -77,15 +77,15 @@ namespace scheme
 
       Node* eval( Node* sexpr );
 
-      void apply_primitive( StandardPrim* prim );
+      void apply_primitive( PrimFunc* prim );
+      void apply_closure( Closure* closure );
+      void apply_continuation( Continuation* continuation );
       void apply_apply();
       void apply_eval();
       void apply_callcc();
       void apply_map();
       void apply_foreach();
       void apply_force();
-      void apply_closure( Closure* closure );
-      void apply_continuation( Continuation* continuation );
 
       void parse_formals( Node* formals, int& numv, bool& rargs, List*& vars );
 

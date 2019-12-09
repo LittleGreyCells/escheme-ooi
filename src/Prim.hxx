@@ -9,8 +9,8 @@ namespace scheme
 {
    class Port;
 
-   using STANDARD = Node*(*)();
-   using EVALFUNC = void(*)();
+   using PrimFuncSig = Node*(*)();
+   using EvalFuncSig = void(*)();
    
    class Prim : public Node
    {
@@ -19,26 +19,26 @@ namespace scheme
    public:
       Prim( const std::string& name ) : name(name) {}
                                                         
-      virtual bool primp() override { return true; }
-      virtual void mark() override { setmark(); }
-      virtual void print( Port* port, int style ) override;
+      bool primp() override { return true; }
+      void mark() override { setmark(); }
+      void print( Port* port, int style ) override;
    };
 
-   class StandardPrim : public Prim
+   class PrimFunc : public Prim
    {
    public:
-      StandardPrim( const std::string& name, STANDARD func ) : Prim(name), func(func) {}
-      STANDARD func;
-      virtual void apply_dispatch() override;
+      PrimFunc( const std::string& name, PrimFuncSig func ) : Prim(name), func(func) {}
+      PrimFuncSig func;
+      void apply_dispatch() override;
    };
 
-   class EvalPrim : public Prim
+   class EvalFunc : public Prim
    {
    public:
-      EvalPrim( const std::string& name, EVALFUNC func ) : Prim(name), func(func) {}
-      EVALFUNC func;
-      virtual void apply_dispatch() override;
-   };   
+      EvalFunc( const std::string& name, EvalFuncSig func ) : Prim(name), func(func) {}
+      EvalFuncSig func;
+      void apply_dispatch() override;
+   };
 }
 
 #endif

@@ -182,7 +182,7 @@ namespace scheme
          return Memory::environment( nvars, vars.get(), benv );
       }
 
-      void apply_primitive( StandardPrim* prim )
+      void apply_primitive( PrimFunc* prim )
       {
          val = (prim->func)();
          argstack.removeargc();
@@ -197,6 +197,17 @@ namespace scheme
          next = EVAL_SEQUENCE;
       }
             
+      void apply_continuation( Continuation* cc )
+      {
+         ArgstackIterator iter;
+         Node* ccresult = iter.more() ? iter.getlast() : nil;
+         argstack.removeargc();
+         restore_continuation( cc );
+         val = ccresult;
+         restore_evs( cont );
+         next = cont;
+      }
+      
       void apply_apply()
       {
          ArgstackIterator iter;
@@ -228,17 +239,6 @@ namespace scheme
          argstack.removeargc();
          argstack.push( create_continuation() );
          next = APPLY_DISPATCH;
-      }
-      
-      void apply_continuation( Continuation* cc )
-      {
-         ArgstackIterator iter;
-         Node* ccresult = iter.more() ? iter.getlast() : nil;
-         argstack.removeargc();
-         restore_continuation( cc );
-         val = ccresult;
-         restore_evs( cont );
-         next = cont;
       }
       
       void apply_map()
@@ -1219,12 +1219,12 @@ namespace scheme
          symbol_access ->setform( EV_ACCESS );
          symbol_delay  ->setform( EV_DELAY );
 
-         SymbolTable::enter( "apply",    new EvalPrim( "apply",    apply_apply ) );
-         SymbolTable::enter( "eval",     new EvalPrim( "eval",     apply_eval ) );
-         SymbolTable::enter( "call/cc",  new EvalPrim( "call/cc",  apply_callcc ) );
-         SymbolTable::enter( "map",      new EvalPrim( "map",      apply_map ) );
-         SymbolTable::enter( "for-each", new EvalPrim( "for-each", apply_foreach ) );
-         SymbolTable::enter( "force",    new EvalPrim( "force",    apply_force ) );
+         SymbolTable::enter( "apply",    new EvalFunc( "apply",    apply_apply ) );
+         SymbolTable::enter( "eval",     new EvalFunc( "eval",     apply_eval ) );
+         SymbolTable::enter( "call/cc",  new EvalFunc( "call/cc",  apply_callcc ) );
+         SymbolTable::enter( "map",      new EvalFunc( "map",      apply_map ) );
+         SymbolTable::enter( "for-each", new EvalFunc( "for-each", apply_foreach ) );
+         SymbolTable::enter( "force",    new EvalFunc( "force",    apply_force ) );
 
          Memory::register_marker( marker );
       }

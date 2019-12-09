@@ -160,23 +160,19 @@ namespace scheme
          new (obj) Closure( code, benv );
          return obj;
       }
-      
-      void gc()
+
+      void mark()
       {
-         if ( suspensions > 0 )
-            return;
-
-         collections += 1;
-
-         // mark all
          vector_null->mark();         
          string_null->mark();         
          listhead->mark();
          
          for ( auto marker : markers )
             marker();
+      }
 
-         // sweep all
+      void sweep()
+      {
          pool_symbol.sweep();
          pool_fixnum.sweep();
          pool_flonum.sweep();
@@ -191,6 +187,17 @@ namespace scheme
          pool_bvec.sweep();
          pool_cont.sweep();
          pool_prom.sweep();
+      }
+      
+      void gc()
+      {
+         if ( suspensions > 0 )
+            return;
+
+         collections += 1;
+
+         mark();
+         sweep();
       }
       
       std::vector<PoolStats> gc_stats()

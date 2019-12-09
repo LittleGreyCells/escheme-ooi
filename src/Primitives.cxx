@@ -367,7 +367,7 @@ namespace scheme
       {
          for ( const auto& x : pairs )
          {
-            SymbolTable::enter( x.name, new StandardPrim( x.name, x.func ) );
+            SymbolTable::enter( x.name, new PrimFunc( x.name, x.func ) );
          }
       }      
    }
