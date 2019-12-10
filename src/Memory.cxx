@@ -213,9 +213,7 @@ namespace scheme
          {
             std::thread t2{ sweep2 };
             std::thread t3{ sweep3 };
-            
             sweep1();
-            
             t2.join();
             t3.join();
          }
@@ -286,7 +284,7 @@ namespace scheme
       
       List* ListBuilder::get()
       {
-         return (List*)listhead->getcdr();
+         return down_cast<List*>( listhead->getcdr() );
       }
    }
 }
