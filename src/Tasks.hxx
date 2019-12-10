@@ -121,13 +121,15 @@ private:
 //
 // How To Use
 //
+//   Tasks ts;
+//
 //   ts.start( 6 );
 //
-//   fu1 = ts.queue( sweep1 );
-//   fu2 = ts.queue( sweep2 );
-//   fu3 = ts.queue( sweep3 );
+//   fut1 = ts.queue( []{} );
+//   fut2 = ts.queue( []{} );
+//   fut3 = ts.queue( []{} );
 //
-//   v1 = fu1.get();
-//   v2 = fu2.get();
-//   v3 = fu3.get();
+//   fut1.get();
+//   fut2.get();
+//   fut3.get();
 //
