@@ -56,7 +56,6 @@ namespace scheme
       ~Symbol();
 
       virtual bool symbolp() override { return true; }
-      virtual bool falsep() override { return this == symbol_false; }
 
       Node* getvalue() { return value; }
       void  setvalue( Node* value ) { this->value = value; }

@@ -17,9 +17,6 @@ namespace scheme
       virtual bool nullp() override { return true; }
       virtual bool atomp() override { return true; }
       virtual bool consp() override { return false; }
-      //virtual bool lastp() override { return true; }
-
-      virtual bool falsep() override { return true; }      
 
       virtual unsigned length() override { return 0; }
 

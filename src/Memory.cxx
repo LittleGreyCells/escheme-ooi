@@ -9,12 +9,10 @@ namespace scheme
    namespace Memory
    {
       std::list<Marker> markers;
+      
       int suspensions = 0;
-
       long collections = 0;
 
-      long get_collections() { return collections; }
-      
       Nil* nil;
       Str* string_null;
       Vector* vector_null;
@@ -51,6 +49,8 @@ namespace scheme
       TObjectAlloc< ByteVector,   decltype(pool_bvec  ) > alloc_bvec  ( pool_bvec,   gc );
       TObjectAlloc< Continuation, decltype(pool_cont  ) > alloc_cont  ( pool_cont,   gc );
       TObjectAlloc< Promise,      decltype(pool_prom  ) > alloc_prom  ( pool_prom,   gc );
+      
+      long get_collections() { return collections; }
       
       void register_marker( Marker marker )
       {
@@ -173,13 +173,13 @@ namespace scheme
 
       void sweep()
       {
+         pool_cons.sweep();
+         pool_env.sweep();
          pool_symbol.sweep();
          pool_fixnum.sweep();
          pool_flonum.sweep();
          pool_string.sweep();
          pool_char.sweep();
-         pool_env.sweep();
-         pool_cons.sweep();
          pool_vec.sweep();
          pool_clo.sweep();
          pool_fport.sweep();

@@ -64,7 +64,7 @@ OBJS	= $(SRCS:.cxx=.o)
 DEBUG_FLAGS = -O
 
 CFLAGS = $(DEBUG_FLAGS) -pedantic -std=c++14
-LFLAGS = $(DEBUG_FLAGS) -v -lm
+LFLAGS = $(DEBUG_FLAGS) -v -lm -pthread
 
 $(APP)	: $(OBJS)
 	$(C++) -o $@ $(OBJS) $(LFLAGS)

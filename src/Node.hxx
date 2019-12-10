@@ -19,8 +19,8 @@ namespace scheme
    //   Vector
    //   Env
    //   Prim
-   //     StandardPrim
-   //     EvalPrim
+   //     PrimFunc
+   //     EvalFunc
    //   Closure
    //   Continuation
    //   Port
@@ -69,8 +69,6 @@ namespace scheme
       virtual bool outportp() { return false; }
       virtual bool stringportp() { return false; }
       
-      virtual bool falsep() { return false; }
-
       virtual Node* getcar();
       virtual Node* getcdr();
       virtual void setcar( Node* );
