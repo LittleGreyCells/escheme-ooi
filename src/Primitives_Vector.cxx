@@ -17,7 +17,7 @@ namespace scheme
          auto v = Memory::vector( n );
          
          for ( int i = 0; i < n; ++i )
-            v->data[i] = iter.getarg();;
+            v->data[i] = iter.getarg();
          
          return v;
       }
@@ -40,7 +40,7 @@ namespace scheme
       Node* vector_ref()
       {
          ArgstackIterator iter;
-         auto v = (Vector*)( guard( iter.getarg(), &Node::vectorp ) );
+         auto v = down_cast<Vector*>( guard( iter.getarg(), &Node::vectorp ) );
          auto index = iter.getlast()->getfixnum();
          if ( index < 0 || index >= v->length )
             throw SevereException("index out of range");
@@ -50,7 +50,7 @@ namespace scheme
       Node* vector_set()
       {
          ArgstackIterator iter;
-         auto v = (Vector*)( guard( iter.getarg(), &Node::vectorp ) );
+         auto v = down_cast<Vector*>( guard( iter.getarg(), &Node::vectorp ) );
          auto index = iter.getarg()->getfixnum();
          auto value = iter.getlast();
          if ( index < 0 || index >= v->length )
@@ -62,18 +62,18 @@ namespace scheme
       Node* list_to_vector()
       {
          ArgstackIterator iter;
-         auto list = (List*)( guard( iter.getlast(), &Node::listp ) );
+         auto list = iter.getlast();
          auto len = list->length();
-         auto v = Memory::vector(len);
-         for ( int i = 0; i < len; ++i, list = (List*)list->cdr )
-            (*v)[i] = list->car;
+         auto v = Memory::vector( len );
+         for ( int i = 0; i < len; ++i, list = list->getcdr() )
+            (*v)[i] = list->getcar();
          return v;
       }
 
       Node* vector_to_list()
       {
          ArgstackIterator iter;
-         auto v = (Vector*)( guard( iter.getlast(), &Node::vectorp ) );
+         auto v = down_cast<Vector*>( guard( iter.getarg(), &Node::vectorp ) );
          regstack.push( Memory::nil );
          for ( int i = v->length-1; i >= 0; --i )
             regstack.top() = Memory::cons( (*v)[i], regstack.top() );
@@ -86,7 +86,7 @@ namespace scheme
          // syntax: (vector-fill! <vector> <value>) -> <vector>
          //
          ArgstackIterator iter;
-         auto v = (Vector*)( guard( iter.getarg(), &Node::vectorp ) );
+         auto v = down_cast<Vector*>( guard( iter.getarg(), &Node::vectorp ) );
          auto x = iter.getlast();
 
          for ( int i = 0; i < v->length; ++i )
@@ -101,20 +101,20 @@ namespace scheme
          // syntax: (vector-copy! <dest> <dest-start> <src> [<src-start> <src-end>]) -> <dest>
          //
          ArgstackIterator iter;
-         auto dst   = (Vector*)( guard( iter.getarg(), &Node::vectorp ) );
-         int  dst_s = guard( iter.getarg(), &Node::fixnump )->getfixnum();
-         auto src   = (Vector*)( guard( iter.getarg(), &Node::vectorp ) );
+         auto dst   = down_cast<Vector*>( guard( iter.getarg(), &Node::vectorp ) );
+         auto dst_s = iter.getarg()->getfixnum();
+         auto src   = down_cast<Vector*>( guard( iter.getarg(), &Node::vectorp ) );
 
          if ( dst_s >= dst->length )
             throw SevereException( "dst-start > dst length" );
 
-         int src_s;
-         int src_e;
+         long src_s;
+         long src_e;
 
          if ( iter.more() )
          {
-            src_s = guard( iter.getarg(), &Node::fixnump )->getfixnum();
-            src_e = guard( iter.getlast(), &Node::fixnump )->getfixnum();
+            src_s = iter.getarg()->getfixnum();
+            src_e = iter.getlast()->getfixnum();
 
             if ( src_s >= src->length )
                throw SevereException( "src-start >= src length" );
@@ -132,8 +132,8 @@ namespace scheme
          if ( dst_s + (src_e - src_s) > dst->length )
             throw SevereException( "dest not large enough for src" );
 
-         int i = dst_s;
-         for ( int j = src_s; j < src_e; ++j, ++i )
+         auto i = dst_s;
+         for ( auto j = src_s; j < src_e; ++j, ++i )
             (*dst)[i] = (*src)[j];
 
          return dst;
@@ -152,8 +152,8 @@ namespace scheme
          
          for ( int i = 0; i < n; ++i )
          {
-            auto b = (Fixnum*)guard(iter.getarg(), &Node::fixnump);
-            bv->data[i] = static_cast<byte>( b->data );
+            auto b = iter.getarg()->getfixnum();
+            bv->data[i] = static_cast<byte>( b );
          }
          
          return bv;
@@ -163,7 +163,7 @@ namespace scheme
       {
          // syntax: (make-byte-vector <size>)
          ArgstackIterator iter;
-         auto size = ((Fixnum*)guard(iter.getlast(), &Node::fixnump))->data;
+         auto size = iter.getlast()->getfixnum();
          
          if ( size < 0 )
             throw SevereException("byte-vector size must be non-negative");
@@ -175,8 +175,8 @@ namespace scheme
       {
          // syntax: (byte-vector-ref <vector> <index>)
          ArgstackIterator iter;
-         auto bv    = (ByteVector*)guard(iter.getarg(), &Node::bvecp);
-         auto index = ((Fixnum*)guard(iter.getlast(), &Node::fixnump))->data;
+         auto bv    = down_cast<ByteVector*>( guard(iter.getarg(), &Node::bvecp) );
+         auto index = iter.getlast()->getfixnum();
          
          if ( index < 0 || index >= bv->length )
             throw SevereException("byte vector index out of range");
@@ -188,14 +188,15 @@ namespace scheme
       {
          // syntax: (byte-vector-set! <vector> <index> <value>)
          ArgstackIterator iter;
-         auto bv    = (ByteVector*)guard(iter.getarg(), &Node::bvecp);
-         auto index = ((Fixnum*)guard(iter.getarg(), &Node::fixnump))->data;
-         auto value = (Fixnum*)guard(iter.getlast(), &Node::fixnump);
+         auto bv    = down_cast<ByteVector*>( guard(iter.getarg(), &Node::bvecp) );
+         auto index = iter.getarg()->getfixnum();
+         auto value = iter.getlast();
          
          if ( index < 0 || index >= bv->length )
             throw SevereException("byte index out of range");
          
-         bv->data[index] = value->data;
+         bv->data[index] = value->getfixnum();
+         
          return value;
       }
       
@@ -203,7 +204,7 @@ namespace scheme
       {
          // syntax: (byte-vector-length <byte-vector>)
          ArgstackIterator iter;
-         auto bv = (ByteVector*)guard(iter.getlast(), &Node::bvecp);
+         auto bv = down_cast<ByteVector*>(guard(iter.getarg(), &Node::bvecp));
          return Memory::fixnum( bv->length );
       }
       
