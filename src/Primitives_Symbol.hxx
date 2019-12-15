@@ -16,7 +16,7 @@ namespace scheme
       Node* set_symbol_plist();
       Node* get_property();
       Node* put_property();
-      Node* symbols();
+      Node* symbol_table();
    }
 }
 

@@ -47,7 +47,6 @@ namespace scheme
 
       if ( ch != EOF )
          s->push_back( ch );
-
    }
 
    void StringPort::put( const std::string& s2 )

@@ -62,6 +62,7 @@ namespace scheme
 
    void TerminalPort::set_position( int pos )
    {
+      throw SevereException( "set position on terminal port" );
    }
    
    void TerminalPort::close()

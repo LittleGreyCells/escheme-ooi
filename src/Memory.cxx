@@ -1,5 +1,4 @@
 #include <list>
-#include <thread>
 
 #include "Memory.hxx"
 #include "TObjectPool.hxx"
@@ -9,8 +8,6 @@ namespace scheme
 {
    namespace Memory
    {
-      auto use_threads = false;
-      
       std::list<Marker> markers;
       
       int suspensions = 0;
@@ -21,19 +18,19 @@ namespace scheme
       Vector* vector_null;
       List* listhead;
       
-      TObjectPool< Symbol,       500 > pool_symbol;
-      TObjectPool< Fixnum,       500 > pool_fixnum;
-      TObjectPool< Flonum,       100 > pool_flonum;
-      TObjectPool< Str,         2000 > pool_string;
-      TObjectPool< Char,         100 > pool_char;
-      TObjectPool< Env,        10000 > pool_env;
-      TObjectPool< List,       16000 > pool_cons;
-      TObjectPool< Vector,       500 > pool_vec;
-      TObjectPool< Closure,     5000 > pool_clo;
+      TObjectPool< Symbol,       800 > pool_symbol;
+      TObjectPool< Fixnum,       400 > pool_fixnum;
+      TObjectPool< Flonum,        50 > pool_flonum;
+      TObjectPool< Str,          500 > pool_string;
+      TObjectPool< Char,          50 > pool_char;
+      TObjectPool< Env,          500 > pool_env;
+      TObjectPool< List,        5000 > pool_cons;
+      TObjectPool< Vector,       100 > pool_vec;
+      TObjectPool< Closure,      200 > pool_clo;
       TObjectPool< FilePort,      10 > pool_fport;
       TObjectPool< StringPort,    10 > pool_sport;
       TObjectPool< ByteVector,    20 > pool_bvec;
-      TObjectPool< Continuation, 100 > pool_cont;
+      TObjectPool< Continuation,  50 > pool_cont;
       TObjectPool< Promise,       20 > pool_prom;
 
       void gc();
@@ -208,21 +205,9 @@ namespace scheme
          collections += 1;
 
          mark();
-
-         if ( use_threads )
-         {
-            std::thread t2{ sweep2 };
-            std::thread t3{ sweep3 };
-            sweep1();
-            t2.join();
-            t3.join();
-         }
-         else
-         {
-            sweep1();
-            sweep2();
-            sweep3();
-         }
+         sweep1();
+         sweep2();
+         sweep3();
       }
       
       std::vector<PoolStats> gc_stats()

@@ -64,7 +64,7 @@ namespace scheme
       {
          // syntax: (symbol-value <sym-expr>)
          ArgstackIterator iter;
-         auto s = down_cast<Symbol*>( guard( iter.getarg(), &Node::symbolp ) );
+         auto s = down_cast<Symbol*>( guard( iter.getlast(), &Node::symbolp ) );
          return s->value;
       }
       
@@ -82,7 +82,7 @@ namespace scheme
       {
          // syntax: (symbol-plist <sym-expr>)
          ArgstackIterator iter;
-         auto s = down_cast<Symbol*>( guard( iter.getarg(), &Node::symbolp ) );
+         auto s = down_cast<Symbol*>( guard( iter.getlast(), &Node::symbolp ) );
          return s->properties;
       }
       
@@ -143,7 +143,7 @@ namespace scheme
          return p;
       }
       
-      Node* symbols()
+      Node* symbol_table()
       {
          argstack.noargs();
          return SymbolTable::symbols();

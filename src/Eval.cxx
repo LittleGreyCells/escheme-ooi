@@ -455,6 +455,10 @@ namespace scheme
                   break;
                }
 
+               ////////////////////////////////////////////////
+               // End Function Application
+               ////////////////////////////////////////////////
+
                case EV_FORCE_VALUE:
                {
                   // cache and return the value
@@ -466,10 +470,6 @@ namespace scheme
                   next = cont;
                   break;
                }
-
-               ////////////////////////////////////////////////
-               // End Function Application
-               ////////////////////////////////////////////////
 
                //
                // syntax: (map <func> <list>)
