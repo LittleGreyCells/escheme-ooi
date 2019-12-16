@@ -25,6 +25,7 @@ namespace scheme
 	 throw AccessException( "range constraint error");
    }
 
+#if 0
    Node* Vector::vref( int index )
    {
       range_check( index );
@@ -36,6 +37,7 @@ namespace scheme
       range_check( index );
       data[index] = value;
    }
+#endif
 
    unsigned Vector::vlen() { return length; }
 
@@ -48,7 +50,7 @@ namespace scheme
             data[i]->mark();
       }
    }
-
+   
    void Vector::print( Port* port, int style )
    {
       port->put( "#(" );

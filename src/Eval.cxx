@@ -14,6 +14,7 @@ namespace scheme
 {
    using Memory::nil;
    using Memory::anyp;
+   using Memory::nullp;
    
    namespace Eval
    {
@@ -25,8 +26,7 @@ namespace scheme
       EVSTATE next;
       int frameindex;
       Env* the_global_env;
-
-      inline bool nullp( Node* n ) { return n == nil; }
+      
       inline bool lastp( Node* n ) { return nullp(n->getcdr()); }
       inline bool falsep( Node* n ) { return n == symbol_false || n == nil; }
       inline bool truep( Node* n ) { return !falsep(n); }

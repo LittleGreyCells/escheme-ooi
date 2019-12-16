@@ -51,7 +51,8 @@ namespace scheme
       Continuation* continuation( Vector* state );
       Promise* promise( Node* exp );
 
-      inline bool anyp( Node* n ) { return n != Memory::nil; }
+      inline bool anyp( Node* n ) { return n != nil; }
+      inline bool nullp( Node* n ) { return n == nil; }
 
       void gc();
       void register_marker( Marker fn );

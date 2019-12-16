@@ -11,9 +11,7 @@ namespace scheme
    Node* Node::getvalue()        { throw AccessException( "not a symbol" ); }
    void  Node::setvalue( Node* ) { throw AccessException( "not a symbol" ); }
 
-   Node* Node::vref( int )        { throw AccessException( "not a vector" ); }
-   void  Node::vset( int, Node* ) { throw AccessException( "not a vector" ); }
-   unsigned Node::vlen()          { throw AccessException( "not a vector" ); }
+   unsigned Node::vlen() { throw AccessException( "not a vector" ); }
 
    long Node::getfixnum() { throw AccessException( "not a fixnum" ); }
    double Node::getflonum() { throw AccessException( "not a flonum" ); }
@@ -23,7 +21,7 @@ namespace scheme
    Node* guard( Node* n, bool (Node::*pred)() )
    {
       if ( !(n->*pred)() )
-         throw SevereException("incorrect object type");
+         throw SevereException( "incorrect object type", n );
       return n;
    }
    

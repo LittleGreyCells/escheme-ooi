@@ -78,8 +78,6 @@ namespace scheme
       virtual Node* getvalue();
       virtual void  setvalue( Node* value );
 
-      virtual Node* vref( int index );
-      virtual void  vset( int index, Node* value );
       virtual unsigned vlen();
 
       virtual long getfixnum();
@@ -103,7 +101,7 @@ namespace scheme
    };
 
    Node* guard( Node* n, bool (Node::*pred)() );
-
+   
    class Exception
    {
    public:

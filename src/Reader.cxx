@@ -8,10 +8,9 @@
 namespace scheme
 {
    using Memory::nil;
+   using Memory::anyp;
    
    const std::string Reader::delimeter = "();[]";
-
-   inline bool anyp( Node* n ) { return n != nil; }
 
    Node* Reader::read( Port* inport )
    {

@@ -19,10 +19,10 @@ namespace scheme
       
       virtual bool vectorp() override { return true; }
 
-      virtual Node* vref( int index ) override;
-      virtual void  vset( int index, Node* value ) override;
+      //virtual Node* vref( int index ) override;
+      //virtual void  vset( int index, Node* value ) override;
       virtual unsigned vlen() override;
-
+      
       virtual void mark() override;
 
       virtual void print( Port* port, int style ) override;
