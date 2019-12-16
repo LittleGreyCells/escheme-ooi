@@ -38,7 +38,7 @@ namespace scheme
      (display *version*)
      (newline)
      (newline)
-     ;;(flush-output)
+     (flush-output)
      (call/cc (lambda (cc) (set! *toplevel* cc)))
      (while #t
        (display "oops> ")

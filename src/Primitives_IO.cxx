@@ -160,7 +160,7 @@ namespace scheme
       Node* flush_output_port()
       {
          ArgstackIterator iter;
-         auto port = down_cast<Port*>( guard(iter.getlast(), &Node::outportp) );
+         auto port = iter.more() ? down_cast<Port*>( guard(iter.getlast(), &Node::outportp) ) : PortIO::stdout;       
          port->flush();
          return symbol_true;
       }

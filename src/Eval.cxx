@@ -26,8 +26,6 @@ namespace scheme
       int frameindex;
       Env* the_global_env;
 
-      Env* the_environment() { return env; }
-
       inline bool nullp( Node* n ) { return n == nil; }
       inline bool lastp( Node* n ) { return nullp(n->getcdr()); }
       inline bool falsep( Node* n ) { return n == symbol_false || n == nil; }

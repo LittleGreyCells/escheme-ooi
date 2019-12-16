@@ -15,7 +15,7 @@ namespace scheme
       {
          // syntax: (the-environment)
          argstack.noargs();
-         return Eval::the_environment();
+         return Eval::env;
       }
 
       Node* proc_environment()

@@ -67,13 +67,13 @@ namespace scheme
 	 EV_SIZE
       };
 
+      extern Env* env;
+
       Node* lookup( Node* var, Env* env );
       void set_variable_value( Node* var, Node* val, Env* env );
       
       Env* extend_env_fun( Closure* closure );
       Env* extend_env_vars( Node* bindings, Env* benv );
-
-      Env* the_environment();
 
       Node* eval( Node* sexpr );
 
