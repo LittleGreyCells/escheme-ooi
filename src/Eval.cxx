@@ -180,6 +180,24 @@ namespace scheme
          return Memory::environment( nvars, vars.get(), benv );
       }
 
+      void append( Env* env, Node* var, Node* val )
+      {
+         // I. prepend var to vars
+         env->vars = Memory::cons( var, env->vars );
+
+         // II. add a slot and assign val
+         auto slots = new Node*[env->nslots+1];
+         slots[0] = val;
+         if ( env->slots )
+         {
+            for ( int i = 0; i < env->nslots; ++i )
+               slots[i+1] = env->slots[i];
+            delete[] env->slots;
+         }
+         env->slots = slots;
+         env->nslots += 1;
+      }
+      
       void apply_primitive( PrimFunc* prim )
       {
          val = (prim->func)();
@@ -785,7 +803,10 @@ namespace scheme
                   restore_env( env );
                   restore_reg( unev );
                   if ( env != the_global_env )
-                     throw SevereException( "nested defines not supported" );
+                  {
+                     // throw SevereException( "nested defines not supported" );
+                     append( env, unev, val );
+                  }
                   unev->setvalue( val );
                   val = unev;
                   next = cont;
