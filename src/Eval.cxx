@@ -690,7 +690,7 @@ namespace scheme
                      next = EVAL_DISPATCH;             // evaluate <env2>
                   }
                   else
-                     throw SevereException( "not a valid target for set!" );  
+                     throw SevereException( "not a valid target for set!", var );  
                   break;
                }
                   
@@ -804,7 +804,6 @@ namespace scheme
                   restore_reg( unev );
                   if ( env != the_global_env )
                   {
-                     // throw SevereException( "nested defines not supported" );
                      append( env, unev, val );
                   }
                   unev->setvalue( val );

@@ -105,13 +105,16 @@ namespace scheme
          }
          catch ( SevereException& e )
          {
-            printf( "%s\n", e.description.c_str() );
+            PortIO::stdout->put( e.description );
             
             if ( e.object )
             {
+               PortIO::stdout->put( " [ " );
                e.object->print( PortIO::stdout, 1 );
-               printf( "\n" );
+               PortIO::stdout->put( " ] " );
             }
+            
+            PortIO::stdout->put( "\n" );
             
             exp = SymbolTable::enter(TOPLEVEL);
             
@@ -123,13 +126,13 @@ namespace scheme
             else
             {
                // abandon the interpeter
-               printf( "toplevel is not a continuation\n" );
+               PortIO::stdout->put( "toplevel is not a continuation\n" );
                break;
             }
          }
          catch ( FatalException& e )
          {
-            printf( "%s\n", e.description.c_str() );
+            PortIO::stdout->put( e.description + "\n" );
             break;
          }
          catch ( Exit& )

@@ -2,19 +2,19 @@
 
 namespace scheme
 {
-   Node* Node::getcar() { throw AccessException( "not a list" ); }
-   Node* Node::getcdr() { throw AccessException( "not a list" ); }
-   void  Node::setcar( Node* ) { throw AccessException( "not a list" ); }
-   void  Node::setcdr( Node* ) { throw AccessException( "not a list" ); }
-   unsigned Node::length() { throw AccessException( "not a list" ); }
+   Node* Node::getcar() { throw AccessException( "not a list", this ); }
+   Node* Node::getcdr() { throw AccessException( "not a list", this ); }
+   void  Node::setcar( Node* ) { throw AccessException( "not a list", this ); }
+   void  Node::setcdr( Node* ) { throw AccessException( "not a list", this ); }
+   unsigned Node::length() { throw AccessException( "not a list", this ); }
 
-   Node* Node::getvalue()        { throw AccessException( "not a symbol" ); }
-   void  Node::setvalue( Node* ) { throw AccessException( "not a symbol" ); }
+   Node* Node::getvalue()        { throw AccessException( "not a symbol", this ); }
+   void  Node::setvalue( Node* ) { throw AccessException( "not a symbol", this ); }
 
-   unsigned Node::vlen() { throw AccessException( "not a vector" ); }
+   unsigned Node::vlen() { throw AccessException( "not a vector", this ); }
 
-   long Node::getfixnum() { throw AccessException( "not a fixnum" ); }
-   double Node::getflonum() { throw AccessException( "not a flonum" ); }
+   long Node::getfixnum() { throw AccessException( "not a fixnum", this ); }
+   double Node::getflonum() { throw AccessException( "not a flonum", this ); }
 
    void Node::apply_dispatch() { throw EvalException( "not a callable", this ); }
 

@@ -41,9 +41,10 @@ namespace scheme
       {
          ArgstackIterator iter;
          auto v = down_cast<Vector*>( guard( iter.getarg(), &Node::vectorp ) );
-         auto index = iter.getlast()->getfixnum();
+         auto fi = iter.getlast();
+         auto index = fi->getfixnum();
          if ( index < 0 || index >= v->length )
-            throw SevereException("index out of range");
+            throw SevereException("index out of range", fi);
          return (*v)[index];
       }
 
@@ -51,10 +52,11 @@ namespace scheme
       {
          ArgstackIterator iter;
          auto v = down_cast<Vector*>( guard( iter.getarg(), &Node::vectorp ) );
-         auto index = iter.getarg()->getfixnum();
+         auto fi = iter.getarg();
+         auto index = fi->getfixnum();
          auto value = iter.getlast();
          if ( index < 0 || index >= v->length )
-            throw SevereException("index out of range");
+            throw SevereException("index out of range", fi);
          (*v)[index] = value;
          return value;
       }
@@ -176,10 +178,11 @@ namespace scheme
          // syntax: (byte-vector-ref <vector> <index>)
          ArgstackIterator iter;
          auto bv    = down_cast<ByteVector*>( guard(iter.getarg(), &Node::bvecp) );
-         auto index = iter.getlast()->getfixnum();
+         auto fi    = iter.getlast();
+         auto index = fi->getfixnum();
          
          if ( index < 0 || index >= bv->length )
-            throw SevereException("byte vector index out of range");
+            throw SevereException("byte vector index out of range", fi);
          
          return Memory::fixnum( bv->data[index] );
       }
@@ -189,11 +192,12 @@ namespace scheme
          // syntax: (byte-vector-set! <vector> <index> <value>)
          ArgstackIterator iter;
          auto bv    = down_cast<ByteVector*>( guard(iter.getarg(), &Node::bvecp) );
-         auto index = iter.getarg()->getfixnum();
+         auto fi    = iter.getarg();
+         auto index = fi->getfixnum();
          auto value = iter.getlast();
          
          if ( index < 0 || index >= bv->length )
-            throw SevereException("byte index out of range");
+            throw SevereException("byte index out of range", fi);
          
          bv->data[index] = value->getfixnum();
          

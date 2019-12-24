@@ -26,9 +26,10 @@ namespace scheme
          // syntax: (string-ref <s> <index>) -> <char>
          ArgstackIterator iter;
          auto s = ((Str*)guard( iter.getarg(), &Node::stringp ))->data;
-         auto n = ((Fixnum*)guard( iter.getlast(), &Node::fixnump ))->data;
+         auto fn = ((Fixnum*)guard( iter.getlast(), &Node::fixnump ));
+         auto n = fn->data;
          if ( !(n >=0 && n < s->size()) )
-            throw SevereException( "index out of string bounds" );
+            throw SevereException( "index out of string bounds", fn );
          return Memory::character( s->at(n) );
       }
 
@@ -37,11 +38,12 @@ namespace scheme
          // syntax: (string-set! <s> <index> <ch>) -> <string>
          ArgstackIterator iter;
          auto str = (Str*)guard( iter.getarg(), &Node::stringp );
-         auto n = ((Fixnum*)guard( iter.getarg(), &Node::fixnump ))->data;
+         auto fn = ((Fixnum*)guard( iter.getarg(), &Node::fixnump ));
+         auto n = fn->data;
          auto c = ((Char*)guard( iter.getlast(), &Node::charp ))->data;
          auto s = str->data;
          if ( !(n >=0 && n < s->size()) )
-            throw SevereException( "index out of string bounds" );
+            throw SevereException( "index out of string bounds", fn );
          s->at(n) = c;
          return str;
       }

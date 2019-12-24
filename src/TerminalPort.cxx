@@ -47,32 +47,32 @@ namespace scheme
 
    void TerminalPort::put( int ch )
    {
-      throw SevereException( "not an output port" );   
+      throw SevereException( "terminal not an output port", this );   
    }
 
    void TerminalPort::put( const std::string& s )
    {
-      throw SevereException( "not an output port" );   
+      throw SevereException( "terminal not an output port", this );   
    }
 
    int TerminalPort::get_position()
    {
-      throw SevereException( "get position on terminal port" );
+      throw SevereException( "get position on terminal port", this );
    }
 
    void TerminalPort::set_position( int pos )
    {
-      throw SevereException( "set position on terminal port" );
+      throw SevereException( "set position on terminal port", this );
    }
    
    void TerminalPort::close()
    {
-      throw SevereException( "close on terminal port" );
+      throw SevereException( "close on terminal port", this );
    }
 
    void TerminalPort::flush()
    {
-      throw SevereException( "flush on terminal port" );
+      throw SevereException( "flush on terminal port", this );
    }
 
 }

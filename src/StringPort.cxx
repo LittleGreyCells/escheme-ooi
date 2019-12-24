@@ -23,7 +23,7 @@ namespace scheme
    int StringPort::get()
    {
       if ( !inportp() )
-         throw SevereException( "not an input port" );
+         throw SevereException( "not an input port", this );
 
       if ( index < s->size() )
          return s->at( index++ );
@@ -34,7 +34,7 @@ namespace scheme
    void StringPort::unget( int ch )
    {
       if ( !inportp() )
-         throw SevereException( "not an input port" );
+         throw SevereException( "not an input port", this );
       
       if ( ch != EOF && index > 0 )
          index--;
@@ -43,7 +43,7 @@ namespace scheme
    void StringPort::put( int ch )
    {
       if ( !outportp() )
-         throw SevereException( "not an output port" );
+         throw SevereException( "not an output port", this );
 
       if ( ch != EOF )
          s->push_back( ch );
@@ -52,7 +52,7 @@ namespace scheme
    void StringPort::put( const std::string& s2 )
    {
       if ( !outportp() )
-         throw SevereException( "not an output port" );
+         throw SevereException( "not an output port", this );
       
       s->append( s2 );
    }
@@ -75,7 +75,7 @@ namespace scheme
             throw SevereException( "set_position pos out of range for string port" );
       }
       else
-         throw SevereException( "set_position not support for out string ports" );
+         throw SevereException( "set_position not supported for out string ports" );
    }
    
    void StringPort::close()

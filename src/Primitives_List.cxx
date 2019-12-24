@@ -238,10 +238,11 @@ namespace scheme
       {
          ArgstackIterator iter;
          Node* list = guard( iter.getarg(), &Node::listp );
-         auto n = guard(iter.getlast(), &Node::fixnump)->getfixnum();
+         auto fn = guard(iter.getlast(), &Node::fixnump);
+         auto n = fn->getfixnum();
          
          if ( n < 0 )
-            throw SevereException( "index out of range", Memory::fixnum(n) );
+            throw SevereException( "index out of range", fn );
          
          while ( !list->nullp() && n > 0 )
          {
