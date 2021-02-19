@@ -34,7 +34,7 @@ The scheme interpeter and its supporting files can be installed on Unix/Linux sy
    $ sudo make install
 
 The interpreter can now be invoked anywhere, not just off of the build directory, using the
-pathless executable name "escheme". The executable is installed in /usr/local/bin which
+pathless executable name "escheme-oops". The executable is installed in /usr/local/bin which
 should be included in the path definition, if not already.
 
 Lastly the interpreter can be uninstalled.
