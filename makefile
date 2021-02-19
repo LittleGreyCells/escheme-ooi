@@ -1,6 +1,6 @@
 C++ = g++
 
-APP    = escheme4
+APP    = escheme-oops
 
 CWD = $(shell pwd)
 SRCLOC = $(CWD)/src
@@ -68,7 +68,6 @@ LFLAGS = $(DEBUG_FLAGS) -v -lm -pthread
 
 $(APP)	: $(OBJS)
 	$(C++) -o $@ $(OBJS) $(LFLAGS)
-	ln -sf $(APP) escheme
 
 %.o	: %.cxx
 	$(C++) $(DEFINES) $(INCLUDES) -c $(CFLAGS) $< -o $@
@@ -76,7 +75,7 @@ $(APP)	: $(OBJS)
 clean :
 	find . -name "*.o" -delete
 	find . -name "*~" -delete
-	rm -f escheme
+	rm -f $(APP)
 
 install : $(APP)
 	mkdir -p /usr/share/$(APP)
@@ -88,7 +87,6 @@ install : $(APP)
 	cp $(APP) /usr/local/bin/$(APP)_i
 	echo 'ESCHEME=/usr/share/$(APP) $(APP)_i $$@' > /usr/local/bin/$(APP)
 	chmod +x /usr/local/bin/$(APP)
-	ln -s /usr/local/bin/$(APP) /usr/local/bin/escheme
 
 uninstall :
 	if [ -d /usr/share/$(APP) ]; \
@@ -96,6 +94,5 @@ uninstall :
 	   rm -rf /usr/share/$(APP); \
 	   rm -f /usr/local/bin/$(APP); \
 	   rm -f /usr/local/bin/$(APP)_i; \
-	   rm -f /usr/local/bin/escheme; \
 	fi
 
