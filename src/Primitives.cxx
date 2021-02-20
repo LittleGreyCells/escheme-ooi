@@ -311,7 +311,7 @@ namespace scheme
          { "set-symbol-plist!", set_symbol_plist },
          { "get", get_property },
          { "put", put_property },
-         { "*symbol-table*", symbol_table },
+         { "*symbols*", symbols },
 
          { "read", read },
          { "print", print },

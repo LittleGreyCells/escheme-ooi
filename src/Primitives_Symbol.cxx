@@ -143,7 +143,7 @@ namespace scheme
          return p;
       }
       
-      Node* symbol_table()
+      Node* symbols()
       {
          argstack.noargs();
          return SymbolTable::symbols();

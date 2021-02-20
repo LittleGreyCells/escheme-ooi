@@ -7,6 +7,7 @@ SRCLOC = $(CWD)/src
 INCLUDES = -I$(SRCLOC)
 
 SRCS	= \
+	$(SRCLOC)/Main.cxx \
 	$(SRCLOC)/Char.cxx \
 	$(SRCLOC)/Fixnum.cxx \
 	$(SRCLOC)/Flonum.cxx \
@@ -44,7 +45,6 @@ SRCS	= \
 	$(SRCLOC)/Primitives_Equality.cxx \
 	$(SRCLOC)/Primitives_IO.cxx \
 	$(SRCLOC)/Primitives_Unix.cxx \
-	$(SRCLOC)/Scheme.cxx \
 	$(SRCLOC)/intstack.cxx \
 	$(SRCLOC)/regstack.cxx \
 	$(SRCLOC)/argstack.cxx \
