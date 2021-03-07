@@ -40,17 +40,28 @@ namespace scheme
       Node* gc()
       {
          argstack.noargs();
-         Memory:: gc();
+         Memory::gc();
          return nil;
       }
 
       Node* gc_stats()
       {
          argstack.noargs();
-         printf( "collections: %ld\n", Memory::get_collections() );
-         for ( auto& x : Memory::gc_stats() )
-            printf( "%s: %d/%d\n", x.pool.c_str(), x.count, x.free );
-         return nil;
+	 auto stats = Memory::gc_stats();
+	 auto vstats = Memory::vector( stats.size() + 1 );
+	 regstack.push( vstats );
+	 int index = 0;
+	 (*vstats)[index++] = Memory::fixnum( Memory::get_collections() );
+         for ( auto& x : stats )
+	 {
+	    auto v3 = Memory::vector( 3 );
+	    regstack.push( v3 );
+	    (*v3)[0] = Memory::string( x.pool );
+	    (*v3)[1] = Memory::fixnum( x.count );
+	    (*v3)[2] = Memory::fixnum( x.free );
+	    (*vstats)[index++] = regstack.pop();
+	 }
+         return regstack.pop();
       }
 
       //
