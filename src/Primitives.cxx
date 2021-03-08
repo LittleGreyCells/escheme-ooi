@@ -46,22 +46,21 @@ namespace scheme
 
       Node* gc_stats()
       {
-         argstack.noargs();
+	 argstack.noargs();
 	 auto stats = Memory::gc_stats();
-	 auto vstats = Memory::vector( stats.size() + 1 );
+	 auto vstats = Memory::vector( 3 );
 	 regstack.push( vstats );
-	 int index = 0;
-	 (*vstats)[index++] = Memory::fixnum( Memory::get_collections() );
-         for ( auto& x : stats )
+	 (*vstats)[0] = Memory::fixnum( Memory::get_collections() );
+	 int total_nodes = 0;
+	 int total_free = 0;
+	 for ( auto& x : stats )
 	 {
-	    auto v3 = Memory::vector( 3 );
-	    regstack.push( v3 );
-	    (*v3)[0] = Memory::string( x.pool );
-	    (*v3)[1] = Memory::fixnum( x.count );
-	    (*v3)[2] = Memory::fixnum( x.free );
-	    (*vstats)[index++] = regstack.pop();
+	    total_nodes += x.count;
+	    total_free += x.free;
 	 }
-         return regstack.pop();
+	 (*vstats)[1] = Memory::fixnum( total_nodes );
+	 (*vstats)[2] = Memory::fixnum( total_free );
+	 return regstack.pop();
       }
 
       //
