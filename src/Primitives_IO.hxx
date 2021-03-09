@@ -32,6 +32,11 @@ namespace scheme
 
       Node* transcript_on();
       Node* transcript_off();
+
+      Node* history_add();
+      Node* history_show();
+      Node* history_clear();
+      Node* set_prompt();
    }
 }
 

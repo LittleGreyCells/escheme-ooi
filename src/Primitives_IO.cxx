@@ -3,6 +3,7 @@
 #include "Reader.hxx"
 #include "Str.hxx"
 #include "Transcript.hxx"
+#include "TerminalPort.hxx"
 #include "argstack.hxx"
 
 namespace scheme
@@ -201,6 +202,41 @@ namespace scheme
          Transcript::off();
          return symbol_true;
       }
+
+      //
+      // Terminal IO
+      //
+      
+      Node* history_add()
+      {         
+         ArgstackIterator iter;
+         auto s = iter.getlast();
+         TerminalPort::history_add;
+         return symbol_true;
+      }
+
+      Node* history_show()
+      {
+         argstack.noargs();
+         TerminalPort::history_show;
+         return symbol_true;
+      }
+      
+      Node* history_clear()
+      {
+         argstack.noargs();
+         TerminalPort::history_clear;
+         return symbol_true;
+      }
+      
+      Node* set_prompt()
+      {         
+         ArgstackIterator iter;
+         auto s = down_cast<Str*>( guard(iter.getlast(), &Node::stringp) );
+         TerminalPort::set_prompt( *s->data );
+         return symbol_true;
+      }
+
    }
 }
 

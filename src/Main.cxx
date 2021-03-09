@@ -27,6 +27,7 @@ namespace scheme
       const std::string system = R"(
 (begin
    (define *version* "<interpreter>")
+   (set-prompt "noise> ")
    (let ((x 0))
      (call/cc (lambda (cc) (set! *toplevel* cc)))
      (if (= x 0)
@@ -41,8 +42,8 @@ namespace scheme
      (flush-output)
      (call/cc (lambda (cc) (set! *toplevel* cc)))
      (while #t
-       (display "oops> ")
        (let ((sexpr (read *terminal*)))
+         (add-history sexpr)
          (print (eval sexpr)))))
 
 (define (load file . noisily)

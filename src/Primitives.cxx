@@ -349,6 +349,11 @@ namespace scheme
          { "transcript-on", transcript_on },
          { "transcript-off", transcript_off },
 
+         { "add-history", history_add },
+         { "show-history", history_show },
+         { "clear-history", history_clear },
+         { "set-prompt", set_prompt },
+
          { "the-environment", the_environment },
          { "procedure-environment", proc_environment },
          { "environment-bindings", env_bindings },

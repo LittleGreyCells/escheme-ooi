@@ -10,6 +10,10 @@ namespace scheme
 {   
    class TerminalPort : public Port
    {
+      static const char* history;
+      static const int history_max_length;
+      static std::string prompt;
+      
    public:
       FILE* f;
       int index;
@@ -36,6 +40,11 @@ namespace scheme
 
       virtual void close() override;
       virtual void flush() override;
+
+      static void history_add( Node* sexpr );
+      static void history_show();
+      static void history_clear();
+      static void set_prompt( const std::string& new_prompt );
 };
    
 }

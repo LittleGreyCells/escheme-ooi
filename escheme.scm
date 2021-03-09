@@ -31,6 +31,8 @@
                 (exit))))
        (set! options (cdr options)))
     ;; boot the interpreter
+    (set! *version* "v1.0 (interpeter)")
+    (set-prompt "oops> ")
     (load (system-path "boot/standard-functions.scm"))
     (load (system-path "macros/macros.scm"))
     (load (system-path "macros/qquote.scm"))

@@ -6,6 +6,10 @@
 
 namespace scheme
 {
+   const char* TerminalPort::history = "history.txt";
+   const int TerminalPort::history_max_length = 100;
+   std::string TerminalPort::prompt = "> ";
+   
    void TerminalPort::mark() { setmark(); }
       
    void TerminalPort::print( Port* port, int )
@@ -22,16 +26,24 @@ namespace scheme
          index = 0;
          line.clear();
 
+	 fputs( prompt.c_str(), ::stdout );
+
          while ( true )
          {
             auto ch = fgetc( f );
+	    
             if ( ch == EOF )
                ch = '\n';
+	    
             line.push_back( ch );
+	    
             if ( ch == '\n' )
             {
                if ( transcript )
+	       {
+                  fputs( prompt.c_str(), transcript );
                   fputs( line.c_str(), transcript );
+	       }
                break;
             }
          }
@@ -73,6 +85,26 @@ namespace scheme
    void TerminalPort::flush()
    {
       throw SevereException( "flush on terminal port", this );
+   }
+
+   void TerminalPort::history_add( Node* sexpr )
+   {
+      // TBI
+   }
+   
+   void TerminalPort::history_show()
+   {
+      // TBI
+   }
+   
+   void TerminalPort::history_clear()
+   {
+      // TBI
+   }
+   
+   void TerminalPort::set_prompt( const std::string& new_prompt )
+   {
+      prompt = new_prompt;
    }
 
 }
