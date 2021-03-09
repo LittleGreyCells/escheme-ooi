@@ -2,6 +2,8 @@
 #include "Port.hxx"
 #include "Transcript.hxx"
 
+#include "linenoise/linenoise.h"
+
 #include <cstdio>
 
 namespace scheme
@@ -15,35 +17,29 @@ namespace scheme
 
    int TerminalPort::get()
    {
-      using Transcript::transcript;
-      
       if ( index >= line.size() )
       {
-         index = 0;
-         line.clear();
-
-	 fputs( prompt.c_str(), ::stdout );
-
-         while ( true )
-         {
-            auto ch = fgetc( f );
-	    
-            if ( ch == EOF )
-               ch = '\n';
-	    
-            line.push_back( ch );
-	    
-            if ( ch == '\n' )
-            {
-               if ( transcript )
-	       {
-                  fputs( prompt.c_str(), transcript );
-                  fputs( line.c_str(), transcript );
-	       }
-               break;
-            }
-         }
+	 char* noise = linenoise( prompt.c_str() );
+	 
+	 if ( !noise )
+	    throw FatalException( "linenoise returned an empty line" );
+	 
+	 index = 0;
+	 line = noise;
+	 
+	 // append whitespace to satisfy scheme tokenizer
+	 line.push_back('\n');
+	 
+	 using Transcript::transcript;
+	 if ( transcript )
+	 {
+	    fputs( prompt.c_str(), transcript );
+	    fputs( line.c_str(), transcript );
+	 }
+	 
+	 linenoiseFree( noise );
       }
+      
       return line.at( index++ );
    }
 

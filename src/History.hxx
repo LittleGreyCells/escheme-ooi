@@ -4,7 +4,7 @@ namespace scheme
 {
    namespace History
    {
-      void init();
+      void initialize();
       void show();
       void clear();
       void add( Node* sexpr );

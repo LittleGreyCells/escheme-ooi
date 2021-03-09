@@ -161,7 +161,7 @@ int main( int argc, char* argv[] )
       scheme::PortIO::initialize();
       scheme::Primitives::initialize();
       scheme::Eval::initialize();
-      scheme::History::init();
+      scheme::History::initialize();
    }
    catch ( scheme::Exception& e )
    {

@@ -15,7 +15,7 @@ namespace scheme
       const char* history_fname = "history.txt";
       const int history_max_length = 100;
       
-      void init()
+      void initialize()
       {
 	 linenoiseHistoryLoad( history_fname );
 	 linenoiseHistorySetMaxLen( history_max_length );
@@ -54,6 +54,7 @@ namespace scheme
       {
 	 std::string empty;
 	 auto string_port = Memory::stringport( empty, pm_output );
+	 
 	 sexpr->print( string_port, 1 );
 	 
 	 // linenoise makes a copy when it adds it to the history.
