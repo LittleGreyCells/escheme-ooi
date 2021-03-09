@@ -14,7 +14,7 @@ using a purely object-oriented approach. Among the OO-cognoscenti this means NO 
 
 ## Post Construction
 
-Almost all of the original escheme system is completed with the exception of a handful of custom object access primtives and no linenoise integration.
+Almost all of the original escheme system is completed including linenoise integration with the exception of a handful of custom object access primtives.
 
 ## Performance
 
