@@ -4,6 +4,7 @@ APP    = escheme-oops
 
 CWD = $(shell pwd)
 SRCLOC = $(CWD)/src
+NOISE  = $(SRCLOC)/linenoise
 INCLUDES = -I$(SRCLOC)
 
 SRCS	= \
@@ -33,6 +34,7 @@ SRCS	= \
 	$(SRCLOC)/PortIO.cxx \
 	$(SRCLOC)/Equality.cxx \
 	$(SRCLOC)/Transcript.cxx \
+	$(SRCLOC)/History.cxx \
 	$(SRCLOC)/Primitives.cxx \
 	$(SRCLOC)/Primitives_List.cxx \
 	$(SRCLOC)/Primitives_Vector.cxx \
@@ -66,12 +68,17 @@ DEBUG_FLAGS = -O
 CFLAGS = $(DEBUG_FLAGS) -pedantic -std=c++14
 LFLAGS = $(DEBUG_FLAGS) -v -lm -pthread
 
-$(APP)	: $(OBJS)
-	$(C++) -o $@ $(OBJS) $(LFLAGS)
+#$(APP)	: $(OBJS)
+#	$(C++) -o $@ $(OBJS) $(LFLAGS)
+
+$(APP) : $(OBJS) $(NOISE)/linenoise.o
+	$(C++) -o $@ $(OBJS) $(NOISE)/linenoise.o $(LFLAGS)
 
 %.o	: %.cxx
 	$(C++) $(DEFINES) $(INCLUDES) -c $(CFLAGS) $< -o $@
 
+$(NOISE)/linenoise.o : $(NOISE)/linenoise.c
+	$(CC) -Wall -W -Os -c $< -o $@
 clean :
 	find . -name "*.o" -delete
 	find . -name "*~" -delete

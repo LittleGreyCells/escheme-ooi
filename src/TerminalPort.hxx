@@ -9,22 +9,22 @@
 namespace scheme
 {   
    class TerminalPort : public Port
-   {
-      static const char* history;
-      static const int history_max_length;
-      static std::string prompt;
-      
+   {      
    public:
       FILE* f;
       int index;
       std::string line;
+      std::string prompt;
       
       TerminalPort() : Port(pm_input), f(::stdin)
       {
          index = 0;
          line.clear();
+	 prompt = "> ";
       }
       
+      void set_prompt( const std::string& new_prompt );
+
       virtual void mark() override;
 
       virtual void print( Port* port, int ) override;
@@ -39,12 +39,7 @@ namespace scheme
       virtual void set_position( int pos ) override;
 
       virtual void close() override;
-      virtual void flush() override;
-
-      static void history_add( Node* sexpr );
-      static void history_show();
-      static void history_clear();
-      static void set_prompt( const std::string& new_prompt );
+      virtual void flush() override;      
 };
    
 }

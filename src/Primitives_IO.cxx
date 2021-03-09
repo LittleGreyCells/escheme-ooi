@@ -3,6 +3,7 @@
 #include "Reader.hxx"
 #include "Str.hxx"
 #include "Transcript.hxx"
+#include "History.hxx"
 #include "TerminalPort.hxx"
 #include "argstack.hxx"
 
@@ -202,30 +203,26 @@ namespace scheme
          Transcript::off();
          return symbol_true;
       }
-
-      //
-      // Terminal IO
-      //
       
       Node* history_add()
       {         
          ArgstackIterator iter;
          auto s = iter.getlast();
-         TerminalPort::history_add;
+         scheme::History::add( s );
          return symbol_true;
       }
 
       Node* history_show()
       {
          argstack.noargs();
-         TerminalPort::history_show;
+         scheme::History::show();
          return symbol_true;
       }
       
       Node* history_clear()
       {
          argstack.noargs();
-         TerminalPort::history_clear;
+         scheme::History::clear();
          return symbol_true;
       }
       
@@ -233,7 +230,7 @@ namespace scheme
       {         
          ArgstackIterator iter;
          auto s = down_cast<Str*>( guard(iter.getlast(), &Node::stringp) );
-         TerminalPort::set_prompt( *s->data );
+	 down_cast<TerminalPort*>( PortIO::terminal )->set_prompt( *s->data );
          return symbol_true;
       }
 

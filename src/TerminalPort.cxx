@@ -5,11 +5,7 @@
 #include <cstdio>
 
 namespace scheme
-{
-   const char* TerminalPort::history = "history.txt";
-   const int TerminalPort::history_max_length = 100;
-   std::string TerminalPort::prompt = "> ";
-   
+{   
    void TerminalPort::mark() { setmark(); }
       
    void TerminalPort::print( Port* port, int )
@@ -57,6 +53,11 @@ namespace scheme
          index--;
    }
 
+   void TerminalPort::set_prompt( const std::string& new_prompt )
+   {
+      prompt = new_prompt;
+   }
+
    void TerminalPort::put( int ch )
    {
       throw SevereException( "terminal not an output port", this );   
@@ -85,28 +86,7 @@ namespace scheme
    void TerminalPort::flush()
    {
       throw SevereException( "flush on terminal port", this );
-   }
-
-   void TerminalPort::history_add( Node* sexpr )
-   {
-      // TBI
-   }
-   
-   void TerminalPort::history_show()
-   {
-      // TBI
-   }
-   
-   void TerminalPort::history_clear()
-   {
-      // TBI
-   }
-   
-   void TerminalPort::set_prompt( const std::string& new_prompt )
-   {
-      prompt = new_prompt;
-   }
-
+   }   
 }
 
 

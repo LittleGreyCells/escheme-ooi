@@ -7,6 +7,7 @@
 #include "SymbolTable.hxx"
 #include "Primitives.hxx"
 #include "Transcript.hxx"
+#include "History.hxx"
 
 using namespace scheme;
 
@@ -160,6 +161,7 @@ int main( int argc, char* argv[] )
       scheme::PortIO::initialize();
       scheme::Primitives::initialize();
       scheme::Eval::initialize();
+      scheme::History::init();
    }
    catch ( scheme::Exception& e )
    {
