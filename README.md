@@ -1,12 +1,12 @@
 escheme-oops
 ================
 
-The escheme interpreter is implemented using object-oriented programming techniques -- classes, virtual functions, and templates.
+The _escheme_ interpreter is implemented using object-oriented programming techniques -- classes, virtual functions, and templates.
 
 ## Introduction
 
-In this old project, whose inception reaches back into the early 1990s, I answer the question whether it is possible to implement escheme
-using a purely object-oriented approach. Among the OO-cognoscenti this means NO CASE ANALYSIS.
+The inception of this project reaches back into the early 1990s. I answer the question whether it is possible to implement _escheme_
+using a purely object-oriented approach. Among the OO-cognoscenti this means NO CASE ANALYSIS, only dynamic dispatch.
 
 ## Implementation Constraint(s)
 
@@ -14,7 +14,7 @@ using a purely object-oriented approach. Among the OO-cognoscenti this means NO 
 
 ## Post Construction
 
-Almost all of the original escheme system is completed including linenoise integration with the exception of a handful of custom object access primtives.
+Almost all of the original _escheme_ system is completed including _linenoise_ integration with the exception of a handful of custom object access primtives.
 
 ## Performance
 
