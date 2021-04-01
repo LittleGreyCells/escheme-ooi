@@ -35,13 +35,13 @@ namespace scheme
       inline Node* car( Node* n ) { return n->getcar(); }
       inline Node* cdr( Node* n ) { return n->getcdr(); }
       
-      inline void save_evs( EVSTATE x )  { intstack.push(int(x)); }
-      inline void save_int( int x )  { intstack.push(x); }
-      inline void save_reg( Node* x ) { regstack.push(x); }
+      inline void save( EVSTATE x )  { intstack.push(int(x)); }
+      inline void save( int x )  { intstack.push(x); }
+      inline void save( Node* x ) { regstack.push(x); }
       
-      inline void restore_evs( EVSTATE& x ) { x = EVSTATE( intstack.pop() ); }
-      inline void restore_int( int& x ) { x = intstack.pop(); }
-      inline void restore_reg( Node*& x ) { x = regstack.pop(); }
+      inline void restore( EVSTATE& x ) { x = EVSTATE( intstack.pop() ); }
+      inline void restore( int& x ) { x = intstack.pop(); }
+      inline void restore( Node*& x ) { x = regstack.pop(); }
       
       void restore_env( Env*& x )
       {
@@ -202,7 +202,7 @@ namespace scheme
       {
          val = (prim->func)();
          argstack.removeargc();
-         restore_evs( cont );
+         restore( cont );
          next = cont;
       }
       
@@ -220,7 +220,7 @@ namespace scheme
          argstack.removeargc();
          restore_continuation( cc );
          val = ccresult;
-         restore_evs( cont );
+         restore( cont );
          next = cont;
       }
       
@@ -244,7 +244,7 @@ namespace scheme
          else
             env =  the_global_env;
          argstack.removeargc();
-         restore_evs( cont );
+         restore( cont );
          next = EVAL_DISPATCH;
       }
       
@@ -261,8 +261,8 @@ namespace scheme
       {
          if ( argstack.argc < 2 )
             throw SevereException( "map requires two or more arguments" );
-         save_int( argstack.argc );
-         save_reg( Memory::cons(nil, nil) );
+         save( argstack.argc );
+         save( Memory::cons(nil, nil) );
          next = EV_MAP_APPLY;
       }
       
@@ -270,8 +270,8 @@ namespace scheme
       {
          if ( argstack.argc < 2 )
             throw SevereException( "foreach requires two or more arguments" );
-         save_int( argstack.argc );
-         save_reg( nil );              // no accume == ()
+         save( argstack.argc );
+         save( nil );              // no accume == ()
          next = EV_FOR_APPLY;
       }
       
@@ -284,13 +284,13 @@ namespace scheme
          {
             // already forced
             val = promise->val;
-            restore_evs( cont );
+            restore( cont );
             next = cont;   
          }
          else
          {
             // force the evaluation...
-            save_reg( promise );
+            save( promise );
             exp = promise->exp;
             cont = EV_FORCE_VALUE;
             next = EVAL_DISPATCH;
@@ -387,11 +387,11 @@ namespace scheme
                //
                case EV_APPLICATION:
                {
-                  save_evs( cont );
+                  save( cont );
                   unev = cdr(exp);  // args
                   exp = car(exp);   // callable
-                  save_reg( env );
-                  save_reg( unev );
+                  save( env );
+                  save( unev );
                   cont = EVAL_ARGS;
                   next = EVAL_DISPATCH;
                   break;
@@ -399,7 +399,7 @@ namespace scheme
                
                case EVAL_ARGS:
                {
-                  restore_reg( unev );
+                  restore( unev );
                   restore_env( env );
                   argstack.argc = 0;
                   if ( nullp(unev) )
@@ -408,7 +408,7 @@ namespace scheme
                   }
                   else
                   {
-                     save_reg( val );
+                     save( val );
                      next = EVAL_ARG_LOOP;
                   }
                   break;
@@ -419,15 +419,15 @@ namespace scheme
                   exp = car(unev);
                   if ( lastp(unev) )
                   {
-                     save_int( argstack.argc );
+                     save( argstack.argc );
                      cont = ACCUMULATE_LAST_ARG;
                      next = EVAL_DISPATCH;
                   }
                   else
                   {
-                     save_int( argstack.argc );
-                     save_reg( env );
-                     save_reg( unev );
+                     save( argstack.argc );
+                     save( env );
+                     save( unev );
                      cont = ACCUMULATE_ARG;
                      next = EVAL_DISPATCH;
                   }
@@ -436,9 +436,9 @@ namespace scheme
                   
                case ACCUMULATE_ARG:
                {
-                  restore_reg( unev );
+                  restore( unev );
                   restore_env( env );
-                  restore_int( argstack.argc );
+                  restore( argstack.argc );
                   argstack.push( val );
                   unev = cdr(unev);
                   next = EVAL_ARG_LOOP;
@@ -447,9 +447,9 @@ namespace scheme
                   
                case ACCUMULATE_LAST_ARG:
                {
-                  restore_int( argstack.argc );
+                  restore( argstack.argc );
                   argstack.push( val );
-                  restore_reg( val );
+                  restore( val );
                   next = APPLY_DISPATCH;
                   break;
                }
@@ -478,11 +478,11 @@ namespace scheme
                case EV_FORCE_VALUE:
                {
                   // cache and return the value
-                  restore_reg( exp );
+                  restore( exp );
                   auto promise = down_cast<Promise*>( guard(exp, &Node::promisep) );
                   promise->exp = nil;
                   promise->val = val;
-                  restore_evs( cont );
+                  restore( cont );
                   next = cont;
                   break;
                }
@@ -494,11 +494,11 @@ namespace scheme
                {
                   if ( nullp(argstack.top()) )
                   {
-                     restore_reg( val );            // val == (<list> . <last>)
+                     restore( val );            // val == (<list> . <last>)
                      val = car(val);           // val == <list>
-                     restore_int( argstack.argc );
+                     restore( argstack.argc );
                      argstack.removeargc();
-                     restore_evs( cont );           // cont
+                     restore( cont );           // cont
                      next = cont;
                   }
                   else
@@ -514,7 +514,7 @@ namespace scheme
                         argstack.push( car(arg) );
                         argstack[p+i] = cdr(arg);
                      }
-                     save_evs( EV_MAP_RESULT );
+                     save( EV_MAP_RESULT );
                      next = APPLY_DISPATCH;
                   }
                   break;
@@ -549,10 +549,10 @@ namespace scheme
                {
                   if ( nullp(argstack.top()) )
                   {
-                     restore_reg( val );
-                     restore_int( argstack.argc );
+                     restore( val );
+                     restore( argstack.argc );
                      argstack.removeargc();
-                     restore_evs( cont );
+                     restore( cont );
                      next = cont;
                   }
                   else
@@ -568,7 +568,7 @@ namespace scheme
                         argstack.push( car(arg) );
                         argstack[p+i] = cdr(arg);
                      }
-                     save_evs( EV_FOR_APPLY );
+                     save( EV_FOR_APPLY );
                      next = APPLY_DISPATCH;
                   }
                   break;
@@ -579,7 +579,7 @@ namespace scheme
                //
                case EV_BEGIN:
                {
-                  save_evs( cont );
+                  save( cont );
                   unev = cdr(exp);
                   next = EVAL_SEQUENCE;
                   break;
@@ -590,13 +590,13 @@ namespace scheme
                   exp = car(unev);
                   if ( nullp(unev) || lastp(unev) )
                   {
-                     restore_evs( cont );
+                     restore( cont );
                      next = EVAL_DISPATCH;
                   }
                   else
                   {
-                     save_reg( unev );
-                     save_reg( env );
+                     save( unev );
+                     save( env );
                      cont = EVAL_SEQUENCE_BODY;
                      next = EVAL_DISPATCH;
                   }
@@ -606,7 +606,7 @@ namespace scheme
                case EVAL_SEQUENCE_BODY:
                {
                   restore_env( env );
-                  restore_reg( unev );
+                  restore( unev );
                   unev = cdr(unev);
                   next = EVAL_SEQUENCE;
                   break;
@@ -617,21 +617,21 @@ namespace scheme
                //
                case EV_WHILE:
                {
-                  save_evs( cont );
+                  save( cont );
                   unev = cdr(exp);          // (<condition> <sequence>)
-                  save_reg( env );               // prep for cond eval
-                  save_reg( unev );
+                  save( env );               // prep for cond eval
+                  save( unev );
                   next = EVAL_WHILE_COND;
                   break;
                }
 
                case EVAL_WHILE_COND:
                {
-                  restore_reg( unev );                  // FETCH <cond> evaluation context
+                  restore( unev );                  // FETCH <cond> evaluation context
                   restore_env( env );                   // 
                   exp = car(unev);                 // exp = <cond>
-                  save_reg( env );                      // SAVE the <cond> evaluation context
-                  save_reg( unev );                     // (<sequence>)
+                  save( env );                      // SAVE the <cond> evaluation context
+                  save( unev );                     // (<sequence>)
                   cont = EVAL_WHILE_BODY;
                   next = EVAL_DISPATCH;
                   break;
@@ -639,19 +639,19 @@ namespace scheme
   
                case EVAL_WHILE_BODY:
                {
-                  restore_reg( unev );                    // (<cond> <sequence>)
+                  restore( unev );                    // (<cond> <sequence>)
                   restore_env( env );                     // RESTORE cond evaluation context
                   if ( truep(val) )
                   {
-                     save_reg( env );                     // SAVE the cond evaluation ENV
-                     save_reg( unev );                    // save (<cond> <sequence>)
+                     save( env );                     // SAVE the cond evaluation ENV
+                     save( unev );                    // save (<cond> <sequence>)
                      exp = cdr(unev);
-                     save_evs(EVAL_WHILE_COND);           // setup EVAL_SEQUENCE to return above
+                     save(EVAL_WHILE_COND);           // setup EVAL_SEQUENCE to return above
                      next = EVAL_SEQUENCE;
                   }
                   else
                   {
-                     restore_evs( cont );
+                     restore( cont );
                      next = cont;
                   }
                   break;
@@ -672,9 +672,9 @@ namespace scheme
                      // unev = (<var> <exp>)
                      exp = car(cdr(unev));
                      unev = var;
-                     save_reg( unev );
-                     save_reg( env );
-                     save_evs( cont );
+                     save( unev );
+                     save( env );
+                     save( cont );
                      cont = EV_SET_VALUE;
                      next = EVAL_DISPATCH;
                   }
@@ -683,9 +683,9 @@ namespace scheme
                      // var = (access <var> <env2>)
                      // unev = ((access <var> <env2> <exp>)
                      exp = car(cdr(cdr(var)));   // exp = <env2>
-                     save_evs( cont );
-                     save_reg( unev );
-                     save_reg( env );
+                     save( cont );
+                     save( unev );
+                     save( env );
                      cont = EV_SETACCESS_ENV;
                      next = EVAL_DISPATCH;             // evaluate <env2>
                   }
@@ -696,9 +696,9 @@ namespace scheme
                   
                case EV_SET_VALUE:
                {
-                  restore_evs( cont );
+                  restore( cont );
                   restore_env( env );
-                  restore_reg( unev );
+                  restore( unev );
                   set_variable_value( unev, val, env );
                   next = cont;
                   break;
@@ -707,12 +707,12 @@ namespace scheme
                case EV_SETACCESS_ENV:
                {
                   restore_env( env );
-                  restore_reg( unev );                        // unev = ((access <var> <env2>) <exp>)
+                  restore( unev );                        // unev = ((access <var> <env2>) <exp>)
                   exp = car(cdr(unev));             // exp = <exp>
                   unev = car(cdr(car(unev)));       // unev = <var>
-                  save_reg( val );                            // save(eval(<env2>))
-                  save_reg( unev );                           // save(<var>)
-                  save_reg( env );                            // save(<env>)
+                  save( val );                            // save(eval(<env2>))
+                  save( unev );                           // save(<var>)
+                  save( env );                            // save(<env>)
                   cont = EV_SETACCESS_VALUE;                  // evaluate <exp>
                   next = EVAL_DISPATCH;
                   break;
@@ -721,9 +721,9 @@ namespace scheme
                case EV_SETACCESS_VALUE:
                {
                   restore_env( env );                    // restore(<env>)
-                  restore_reg( unev );                   // restore(<var>)
-                  restore_reg( exp );                    // restore(eval(<env2>))
-                  restore_evs( cont );
+                  restore( unev );                   // restore(<var>)
+                  restore( exp );                    // restore(eval(<env2>))
+                  restore( cont );
                   auto exp_as_env = down_cast<Env*>( guard(exp, &Node::envp ) );
                   set_variable_value( unev, val, exp_as_env );
                   next = cont;
@@ -738,9 +738,9 @@ namespace scheme
                   auto xcdr = cdr(exp);
                   unev = car(xcdr);       // <symbol>
                   exp = car(cdr(xcdr));   // <env>
-                  save_reg( unev );
-                  save_reg( env );
-                  save_evs( cont );
+                  save( unev );
+                  save( env );
+                  save( cont );
                   cont = EV_ACCESS_VALUE;
                   next = EVAL_DISPATCH;
                   break;
@@ -748,9 +748,9 @@ namespace scheme
                
                case EV_ACCESS_VALUE:
                {
-                  restore_evs( cont );
+                  restore( cont );
                   restore_env( env );
-                  restore_reg( unev );
+                  restore( unev );
                   auto val_as_env = down_cast<Env*>( guard(val, &Node::envp) );
                   val = lookup( unev, val_as_env );   // unev=symbol, val=env
                   next = cont;
@@ -771,9 +771,9 @@ namespace scheme
                      // syntax: (define <var> <exp>)
                      unev = xcadr;
                      exp = car(cdr(xcdr));
-                     save_reg( unev );
-                     save_reg( env );
-                     save_evs( cont );
+                     save( unev );
+                     save( env );
+                     save( cont );
                      cont = EV_DEFINE_VALUE;
                      next = EVAL_DISPATCH;
                   }
@@ -781,9 +781,9 @@ namespace scheme
                   {
                      // (define (<var> [<param>...]) [<exp> ...])
                      unev = car(xcadr);                       // <var>
-                     save_reg( unev );
-                     save_reg( env );
-                     save_evs( cont );
+                     save( unev );
+                     save( env );
+                     save( cont );
                      // perform accelerated lambda creation
                      unev = cdr(xcadr);                      // pars: ([<param>...])
                      exp = cdr(xcdr);                        // code: ([<exp>...])
@@ -799,9 +799,9 @@ namespace scheme
 
                case EV_DEFINE_VALUE:
                {
-                  restore_evs( cont );
+                  restore( cont );
                   restore_env( env );
-                  restore_reg( unev );
+                  restore( unev );
                   if ( env != the_global_env )
                   {
                      append( env, unev, val );
@@ -835,7 +835,7 @@ namespace scheme
                //
                case EV_COND:
                {
-                  save_evs( cont );
+                  save( cont );
                   unev = cdr(exp);
                   cont = EVCOND_DECIDE;
                   next = EVCOND_PRED;
@@ -846,7 +846,7 @@ namespace scheme
                {
                   if ( nullp(unev) )
                   {
-                     restore_evs( cont );
+                     restore( cont );
                      val = nil;
                      next = cont;
                   }
@@ -860,8 +860,8 @@ namespace scheme
                      }
                      else
                      { 
-                        save_reg( env );
-                        save_reg( unev );
+                        save( env );
+                        save( unev );
                         exp = car(exp);
                         cont = EVCOND_DECIDE;
                         next = EVAL_DISPATCH;
@@ -872,7 +872,7 @@ namespace scheme
                
                case EVCOND_DECIDE:
                {
-                  restore_reg( unev );
+                  restore( unev );
                   restore_env( env );
                   if ( truep(val) )
                   {
@@ -893,22 +893,22 @@ namespace scheme
                //
                case EV_IF:
                {
-                  save_evs( cont );
+                  save( cont );
                   cont = EVIF_DECIDE;
                   unev = cdr(exp);
                   exp = car(unev);
                   unev = cdr(unev);
-                  save_reg( env );
-                  save_reg( unev );
+                  save( env );
+                  save( unev );
                   next = EVAL_DISPATCH;
                   break;
                }
                   
                case EVIF_DECIDE:
                {
-                  restore_reg( unev );
+                  restore( unev );
                   restore_env( env );
-                  restore_evs( cont );
+                  restore( cont );
                   exp = truep(val) ? car(unev) : car(cdr(unev));
                   next = EVAL_DISPATCH;
                   break;
@@ -919,7 +919,7 @@ namespace scheme
                //
                case EV_AND:
                {
-                  save_evs( cont );
+                  save( cont );
                   unev = cdr(exp);
                   next = EVAL_ANDSEQ;
                   break;
@@ -930,13 +930,13 @@ namespace scheme
                   exp = car(unev);
                   if ( nullp(unev) || lastp(unev) )
                   {
-                     restore_evs( cont );
+                     restore( cont );
                      next = EVAL_DISPATCH;
                   }
                   else
                   {
-                     save_reg( unev );
-                     save_reg( env );
+                     save( unev );
+                     save( env );
                      cont = EVAL_ANDSEQ_FORK;
                      next = EVAL_DISPATCH;
                   }
@@ -946,10 +946,10 @@ namespace scheme
                case EVAL_ANDSEQ_FORK:
                {
                   restore_env( env );
-                  restore_reg( unev );
+                  restore( unev );
                   if ( falsep(val) )
                   {
-                     restore_evs( cont );
+                     restore( cont );
                      next = cont;
                   }
                   else
@@ -965,7 +965,7 @@ namespace scheme
                //
                case EV_OR:
                {
-                  save_evs( cont );
+                  save( cont );
                   unev = cdr(exp);
                   next = EVAL_ORSEQ;
                   break;
@@ -976,13 +976,13 @@ namespace scheme
                   exp = car(unev);
                   if ( nullp(unev) || lastp(unev) )
                   {
-                     restore_evs( cont );
+                     restore( cont );
                      next = EVAL_DISPATCH;
                   }
                   else
                   {
-                     save_reg( unev );
-                     save_reg( env );
+                     save( unev );
+                     save( env );
                      cont = EVAL_ORSEQ_FORK;
                      next = EVAL_DISPATCH;
                   }
@@ -992,10 +992,10 @@ namespace scheme
                case EVAL_ORSEQ_FORK:
                {
                   restore_env( env );
-                  restore_reg( unev );
+                  restore( unev );
                   if ( truep(val) )
                   {
-                     restore_evs( cont );
+                     restore( cont );
                      next = cont;
                   }
                   else
@@ -1013,13 +1013,13 @@ namespace scheme
                case EV_LET:
                case EV_LETREC:
                {
-                  save_evs( cont );
+                  save( cont );
                   exp = cdr(exp);
                   unev = car(exp);                     // bindings; ((v1 e1) (v2 e2) ...)
                   exp = cdr(exp);                      // body: (<body>)
-                  save_reg( exp );                          // save the body
+                  save( exp );                          // save the body
                   auto xenv = extend_env_vars( unev, env );
-                  save_reg( xenv );
+                  save( xenv );
                   if ( next == EV_LETREC )
                      env = xenv;
                   frameindex = 0;
@@ -1047,15 +1047,15 @@ namespace scheme
                   
                   if ( lastp(unev) )
                   {
-                     save_int( frameindex );
+                     save( frameindex );
                      cont = EV_LET_ACCUM_LAST_ARG;
                      next = EVAL_DISPATCH;
                   }
                   else
                   {
-                     save_int( frameindex );
-                     save_reg( env );
-                     save_reg( unev );
+                     save( frameindex );
+                     save( env );
+                     save( unev );
                      cont = EV_LET_ACCUM_ARG;
                      next = EVAL_DISPATCH;
                   }  
@@ -1064,9 +1064,9 @@ namespace scheme
                
                case EV_LET_ACCUM_ARG:
                {
-                  restore_reg( unev );
+                  restore( unev );
                   restore_env( env );
-                  restore_int( frameindex );
+                  restore( frameindex );
                   if ( regstack.top()->envp() )
                   {
                      auto letenv = down_cast<Env*>( regstack.top() );
@@ -1080,7 +1080,7 @@ namespace scheme
                
                case EV_LET_ACCUM_LAST_ARG:
                {
-                  restore_int( frameindex );
+                  restore( frameindex );
                   if ( regstack.top()->envp() )
                   {
                      auto letenv = down_cast<Env*>( regstack.top() );
@@ -1093,7 +1093,7 @@ namespace scheme
                case EV_LET_BODY:
                {
                   restore_env( env );            // assign env (benign for letrec)
-                  restore_reg( unev );           // restore (<body>)
+                  restore( unev );           // restore (<body>)
                   next = EVAL_SEQUENCE;
                   break;
                }

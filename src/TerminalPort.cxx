@@ -22,22 +22,22 @@ namespace scheme
 	 char* noise = linenoise( prompt.c_str() );
 	 
 	 if ( !noise )
-	    throw FatalException( "linenoise returned an empty line" );
+	    throw Exit();
 	 
 	 index = 0;
 	 line = noise;
 	 
+	 linenoiseFree( noise );
+	 
 	 // append whitespace to satisfy scheme tokenizer
 	 line.push_back('\n');
 	 
-	 using Transcript::transcript;
-	 if ( transcript )
+	 if ( Transcript::transcript )
 	 {
-	    fputs( prompt.c_str(), transcript );
-	    fputs( line.c_str(), transcript );
+	    fputs( prompt.c_str(), Transcript::transcript );
+	    fputs( line.c_str(), Transcript::transcript );
 	 }
 	 
-	 linenoiseFree( noise );
       }
       
       return line.at( index++ );

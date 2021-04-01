@@ -63,7 +63,8 @@ OBJS	= $(SRCS:.cxx=.o)
 #DEBUG_FLAGS = -O2
 #DEBUG_FLAGS = -O1
 #DEBUG_FLAGS = -g
-DEBUG_FLAGS = -O
+#DEBUG_FLAGS = -O
+DEBUG_FLAGS = -Ofast
 
 CFLAGS = $(DEBUG_FLAGS) -pedantic -std=c++14
 LFLAGS = $(DEBUG_FLAGS) -v -lm -pthread
