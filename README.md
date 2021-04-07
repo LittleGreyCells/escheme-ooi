@@ -1,4 +1,4 @@
-escheme-oops
+escheme-ooi
 ================
 
 The _escheme_ interpreter is implemented using object-oriented programming techniques -- classes, virtual functions, and templates.
@@ -6,15 +6,11 @@ The _escheme_ interpreter is implemented using object-oriented programming techn
 ## Introduction
 
 The inception of this project reaches back into the early 1990s. I answer the question whether it is possible to implement _escheme_
-using a purely object-oriented approach. Among the OO-cognoscenti this means NO CASE ANALYSIS, only dynamic dispatch.
+using a purely object-oriented approach -- no case analysis, only dynamic dispatch.
 
 ## Implementation Constraint(s)
 
 * No discriminated union(s)
-
-## Post Construction
-
-Almost all of the original _escheme_ system is completed including _linenoise_ integration with the exception of a handful of custom object access primtives.
 
 ## Performance
 

@@ -1,6 +1,6 @@
 C++ = g++
 
-APP    = escheme-oops
+APP    = escheme
 
 CWD = $(shell pwd)
 SRCLOC = $(CWD)/src
