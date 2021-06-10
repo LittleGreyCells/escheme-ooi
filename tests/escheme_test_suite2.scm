@@ -60,6 +60,11 @@
 ;;
 ;;
 
+(define x)
+(define alist)
+(define a1)
+(define a2)
+
 (define (test-driver)
 
   (set! x nil)

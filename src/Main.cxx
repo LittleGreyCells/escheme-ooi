@@ -29,6 +29,7 @@ namespace scheme
 (begin
    (define *version* "<interpreter>")
    (set-prompt "noise> ")
+   (define *toplevel* nil)
    (let ((x 0))
      (call/cc (lambda (cc) (set! *toplevel* cc)))
      (if (= x 0)
@@ -42,6 +43,8 @@ namespace scheme
      (newline)
      (flush-output)
      (call/cc (lambda (cc) (set! *toplevel* cc)))
+     (if (bound? '%unwind-all) 
+       (%unwind-all))
      (while #t
        (let ((sexpr (read *terminal*)))
          (add-history sexpr)

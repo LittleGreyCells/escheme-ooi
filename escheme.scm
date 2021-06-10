@@ -1,3 +1,7 @@
+;;
+;; escheme configurer
+;;
+
 (define (split-args args options files)
   (if (null? args)
       (cons options files)
@@ -10,11 +14,10 @@
 (let ((args (cdr (vector->list (getargs))))
       (usage
        (lambda ()
-	 (display "usage: escheme-oops [-h | --help] | [files...]")
+	 (display "usage: escheme [-h | --help ] | [files...]")
 	 (newline)))
       )
   (let ((args (split-args args nil nil))
-        (macro-rep #t)
         options)
     (set! options (car args)) 
     (while options
@@ -30,13 +33,14 @@
                 (newline)
                 (exit))))
        (set! options (cdr options)))
-    ;; boot the interpreter
-    (set! *version* "v1.0 (interpeter)")
+    ;; boot the intepreter
+    (set! *version* "-- an explicit control evaluator")
     (set-prompt "ece> ")
     (load (system-path "boot/standard-functions.scm"))
-    (load (system-path "macros/macros.scm"))
     (load (system-path "macros/qquote.scm"))
-    (load (system-path "boot/macro-definitions.scm"))
+    (load (system-path "macros/macros-interpreter.scm"))
+    (load (system-path "boot/standard-macros.scm"))
+    (load (system-path "boot/catch-throw.scm"))
     (let ((try-load
            (lambda (file)
              (let ((result (load file)))

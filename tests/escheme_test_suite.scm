@@ -91,6 +91,7 @@
        (set! failures (1+ failures))
        )))
 
+(define v)
 
 (define (test-structured-ops)  
   
@@ -141,6 +142,12 @@
   (assert (equal? (string->list (list->string '(#\a #\b))) '(#\a #\b)))
 )
 
+(define s1)
+(define s2)
+(define n1)
+(define n2)
+(define f1)
+(define f2)
 
 (define (test-equality)
   
@@ -165,6 +172,7 @@
   (assert (symbol? (gensym)))
 )
 
+(define x)
 
 (define (test-property-lists)  
   
@@ -266,6 +274,10 @@
   (assert (= (shift-right-arithmetic #xFFFFFFFFFFFFFFFE 1) #xFFFFFFFFFFFFFFFF))
 )
 
+(define foo)
+(define foo2)
+(define e)
+(define x)
 
 (define (test-environment)
 
@@ -378,6 +390,9 @@
   (assert (not (even? 1)))
 )
 
+(define s1)
+(define s2)
+(define s3)
 
 (define (test-strings)
 
