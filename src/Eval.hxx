@@ -74,7 +74,6 @@ namespace scheme
       
       Env* extend_env_fun( Closure* closure );
       Env* extend_env_vars( Node* bindings, Env* benv );
-      void append( Env* env, Node* var, Node* val );
 
       Node* eval( Node* sexpr );
 

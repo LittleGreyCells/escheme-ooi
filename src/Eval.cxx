@@ -70,7 +70,7 @@ namespace scheme
          auto val = var->getvalue();
 
          if ( val == symbol_unbound )
-            throw SevereException( "symbol is unbound", var );
+            throw SevereException( "symbol is undefined", var );
          
          return val;
       }
@@ -92,6 +92,9 @@ namespace scheme
          }
          
          // global var
+         if ( var->getvalue() == symbol_unbound )
+            throw SevereException( "symbol is undefined", var );
+
          var->setvalue( val );
       }
 
@@ -180,24 +183,6 @@ namespace scheme
          return Memory::environment( nvars, vars.get(), benv );
       }
 
-      void append( Env* env, Node* var, Node* val )
-      {
-         // I. prepend var to vars
-         env->vars = Memory::cons( var, env->vars );
-
-         // II. add a slot and assign val
-         auto slots = new Node*[env->nslots+1];
-         slots[0] = val;
-         if ( env->slots )
-         {
-            for ( int i = 0; i < env->nslots; ++i )
-               slots[i+1] = env->slots[i];
-            delete[] env->slots;
-         }
-         env->slots = slots;
-         env->nslots += 1;
-      }
-      
       void apply_primitive( PrimFunc* prim )
       {
          val = (prim->func)();
@@ -239,10 +224,7 @@ namespace scheme
       {
          ArgstackIterator iter;
          exp = iter.getarg();
-         if ( iter.more() )
-            env = down_cast<Env*>( guard(iter.getlast(), &Node::envp) );
-         else
-            env =  the_global_env;
+         env = iter.more() ? down_cast<Env*>( guard(iter.getlast(), &Node::envp) ) : the_global_env;
          argstack.removeargc();
          restore( cont );
          next = EVAL_DISPATCH;
@@ -803,9 +785,7 @@ namespace scheme
                   restore_env( env );
                   restore( unev );
                   if ( env != the_global_env )
-                  {
-                     append( env, unev, val );
-                  }
+                     throw SevereException( "internal defines not supported", env );
                   unev->setvalue( val );
                   val = unev;
                   next = cont;
