@@ -17,7 +17,7 @@ namespace scheme
       Symbol* enter( const std::string& name, Node* value );
 
       int size();
-      Node* symbols();
+      Node* all_symbols();
 
       void initialize();
    }

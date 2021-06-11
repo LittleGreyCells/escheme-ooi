@@ -95,6 +95,13 @@ namespace scheme
          return obj;
       }
       
+      Str* string( long len, char ch )
+      {
+         auto obj = alloc_string();
+         new (obj) Str( len, ch );
+         return obj;
+      }
+      
       Env* environment( int nvars, List* vars, Env* base )
       {
          auto obj = alloc_env();

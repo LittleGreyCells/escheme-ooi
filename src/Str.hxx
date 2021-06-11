@@ -14,6 +14,7 @@ namespace scheme
 
       Str() {}
       Str( const std::string& s );
+      Str( long len, char ch );
       ~Str();
 
       virtual bool stringp() override { return true; }

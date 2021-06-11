@@ -42,7 +42,7 @@ namespace scheme
       
       int size() { return table.size(); }
 
-      Node* symbols()
+      Node* all_symbols()
       {
          regstack.push( nil );
          for ( auto& x : table )

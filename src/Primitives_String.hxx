@@ -14,6 +14,18 @@ namespace scheme
       Node* string_substr();
       Node* string_fill();
       Node* string_copy();
+
+      Node* string_make();
+      Node* string_dup();
+      Node* string_find();
+      Node* string_trim();
+      Node* string_trim_left();
+      Node* string_trim_right();
+      Node* string_downcase();
+      Node* string_upcase();
+      Node* string_pad_left();
+      Node* string_pad_right();
+
       Node* list_to_string();
       Node* string_to_list();
       

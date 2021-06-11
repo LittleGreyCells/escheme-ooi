@@ -276,10 +276,12 @@ namespace scheme
 	       ch = '\n';
 	    else if ( s.compare( "space" ) == 0 )
 	       ch = ' ';
+	    else if ( s.compare( "tab" ) == 0 )
+	       ch = '\t';
 	    else if ( s.length() > 1 )
 	       throw ParseException( "unknown special symbol" );
 	    else if ( s.length() == 0 )
-	       throw ParseException( "missing special symbol" );
+	       ch = inport->get();
 	    else
 	       ch = s[0];
 	    return Memory::character( ch );

@@ -41,6 +41,7 @@ namespace scheme
       Fixnum* fixnum( long n );
       Flonum* flonum( double n );
       Str* string( const std::string& s );
+      Str* string( long len, char ch );
       Env* environment( int nvars, List* vars, Env* base );
       List* cons( Node* car, Node* cdr );
       Vector* vector( int length );

@@ -16,6 +16,10 @@ namespace scheme
          {
             port->put( "#\\space" );
          }
+         else if ( data == '\t' )
+         {
+            port->put( "#\\tab" );
+         }
          else
          {
             sprintf( buffer, "#\\%c", (char)data );

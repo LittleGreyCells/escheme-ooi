@@ -2,6 +2,7 @@
 
 #include <cstring>
 #include <cstdio>
+#include <ctype.h>
 
 #include "Memory.hxx"
 #include "SymbolTable.hxx"
@@ -172,6 +173,179 @@ namespace scheme
          return regstack.pop();
       }
 
+      Node* string_make()
+      {
+	 // syntax: (string-make <length> [<char>]) -> <string>
+	 ArgstackIterator iter;
+         auto length = ((Fixnum*)guard(iter.getarg(), &Node::fixnump))->data;
+	 auto ch = ' ';
+	 if ( iter.more() )
+	    ch = ((Char*)guard(iter.getlast(), &Node::charp))->data;
+	 return Memory::string( length, ch );
+      }
+      
+      Node* string_dup()
+      {
+	 // syntax: (string <str>) -> <str-duplicated>
+	 ArgstackIterator iter;
+         auto s = ((Str*)guard(iter.getlast(), &Node::stringp))->data;
+	 return Memory::string( *s );
+      }
+      
+      Node* string_find()
+      {
+	 // syntax: (string-find <s1> <s2> [<start> [<end>]]) -> <fixnum> or null
+	 ArgstackIterator iter;
+         auto s1 = (Str*)guard(iter.getarg(), &Node::stringp);
+         auto s2 = (Str*)guard(iter.getarg(), &Node::stringp);
+	 
+	 int start = 0;
+	 int end = s1->data->size();
+
+	 if ( iter.more() )
+            start = ((Fixnum*)guard(iter.getarg(), &Node::fixnump))->data;
+	 if ( iter.more() )
+            end = ((Fixnum*)guard(iter.getlast(), &Node::fixnump))->data;
+	 
+	 if ( start < 0 )
+	    throw SevereException( "start < 0" );
+	 if ( end > s1->data->size() )
+	    throw SevereException( "end > string length" );
+	 if ( start >= end )
+	    throw SevereException( "start >= end" );
+	 
+	 auto pos = s1->data->find( *s2->data, start );
+	 
+	 if ( pos == std::string::npos || pos + s2->data->size() > end )
+	    return nil;
+	 else
+	    return Memory::fixnum( pos );
+      }
+      
+      static const char* whitespace = " \t\n\v\f\r";
+
+      Node* string_trim_left()
+      {
+	 // syntax: (string-trim-left <s1> <s2>) -> <string>
+	 ArgstackIterator iter;
+         auto s1 = (Str*)guard(iter.getarg(), &Node::stringp);
+	 
+	 std::string ws = whitespace;
+	 if ( iter.more() )
+	    ws += *((Str*)guard(iter.getlast(), &Node::stringp))->data;
+	 
+	 std::string s = *s1->data;
+	 
+	 auto pos = s.find_first_not_of( ws ); 
+	 
+	 return Memory::string( s.substr(pos) );
+      }
+      
+      Node* string_trim_right()
+      {
+	 // syntax: (string-trim-right <s1> <s2>) -> <string>
+	 ArgstackIterator iter;
+         auto s1 = (Str*)guard(iter.getarg(), &Node::stringp);
+	 
+	 std::string ws = whitespace;
+	 if ( iter.more() )
+	    ws += *((Str*)guard(iter.getlast(), &Node::stringp))->data;
+	 
+	 std::string s = *s1->data;
+	 
+	 auto pos = s.find_last_not_of( ws ); 
+	 
+	 if ( pos == std::string::npos )
+	    return Memory::string( s );
+	 else
+	    return Memory::string( s.substr(0, pos+1) );
+      }
+      
+      Node* string_trim()
+      {
+	 // syntax: (string-trim-right <s1> <s2>) -> <string>
+	 ArgstackIterator iter;
+         auto s1 = (Str*)guard(iter.getarg(), &Node::stringp);
+	 
+	 std::string ws = whitespace;
+	 if ( iter.more() )
+	    ws += *((Str*)guard(iter.getlast(), &Node::stringp))->data;
+	 
+	 std::string s = *s1->data;
+	 
+	 auto pos1 = s.find_first_not_of( ws ); 
+	 auto pos2 = s.find_last_not_of( ws ); 
+	 
+	 if ( pos1 == std::string::npos )
+	    return Memory::string( s.substr(pos1) );
+	 else
+	    return Memory::string( s.substr(pos1, pos2-pos1+1) );
+      }
+      
+      Node* string_downcase()
+      {
+	 // syntax: (string-downcase! <s>) -> <string>
+	 ArgstackIterator iter;
+         auto s = (Str*)guard(iter.getlast(), &Node::stringp);
+	 auto p = s->data;
+	 
+	 for ( int i = 0; i < p->size(); ++i )
+	    (*p)[i] = tolower((*p)[i]);
+	 
+	 return s;
+      }
+      
+      Node* string_upcase()
+      {
+	 // syntax: (string-upcase! <s>) -> <string>
+	 ArgstackIterator iter;
+         auto s = (Str*)guard(iter.getlast(), &Node::stringp);
+	 auto p = s->data;
+	 
+	 for ( int i = 0; i < p->size(); ++i )
+	    (*p)[i] = toupper((*p)[i]);
+	 
+	 return s;
+      }
+      
+      Node* string_pad_left()
+      {
+	 // syntax: (string-pad-left <s> <k> [<char>]) -> <string>
+	 ArgstackIterator iter;
+         auto s = (Str*)guard(iter.getarg(), &Node::stringp);
+	 auto k = ((Fixnum*)guard(iter.getarg(), &Node::fixnump))->data;
+	 char pad = iter.more() ? ((Char*)guard(iter.getlast(), &Node::charp))->data : ' ';
+	 
+	 if ( k < 0 )
+	    throw SevereException( "pad size must be > 0");
+	 
+	 auto s_size = s->data->size();
+	 
+	 if ( s_size > k )
+	    return Memory::string( s->data->substr( s_size-k ) );
+	 else
+	    return Memory::string( std::string( k-s_size, pad ) + *s->data );
+      }
+      
+      Node* string_pad_right()
+      {
+	 // syntax: (string-pad-right <s> <k> [<char>]) -> <string>
+	 ArgstackIterator iter;
+         auto s = (Str*)guard(iter.getarg(), &Node::stringp);
+	 auto k = ((Fixnum*)guard(iter.getarg(), &Node::fixnump))->data;
+	 char pad = iter.more() ? ((Char*)guard(iter.getlast(), &Node::charp))->data : ' ';
+	 
+	 if ( k < 0 )
+	    throw SevereException( "pad size must be > 0");
+	 
+	 auto s_size = s->data->size();
+	 
+	 if ( s_size > k )
+	    return Memory::string( s->data->substr( 0, k ) );
+	 else
+	    return Memory::string( *s->data + std::string( k-s_size, pad ) );
+      }
+      
       enum RelOp { EQop, LTop, LEop, GTop, GEop };
       
       using StrCmpFuncType = int (*)( const char*, const char* );

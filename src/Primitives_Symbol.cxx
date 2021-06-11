@@ -143,10 +143,10 @@ namespace scheme
          return p;
       }
       
-      Node* symbols()
+      Node* all_symbols()
       {
          argstack.noargs();
-         return SymbolTable::symbols();
+         return SymbolTable::all_symbols();
       }
       
    }

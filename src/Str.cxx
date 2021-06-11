@@ -6,6 +6,7 @@
 namespace scheme
 {
    Str::Str( const std::string& s ) : data(new std::string(s)) {}
+   Str::Str( long len, char ch ) : data(new std::string(len, ch)) {}
    
    Str::~Str()
    {
