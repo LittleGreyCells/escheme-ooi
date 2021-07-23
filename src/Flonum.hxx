@@ -23,6 +23,8 @@ namespace scheme
       virtual void print( Port* port, int style ) override;
       
       virtual double getflonum() override { return data; }
+
+      virtual size_t hash() override;
    };
    
 }

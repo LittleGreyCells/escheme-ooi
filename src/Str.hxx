@@ -22,6 +22,8 @@ namespace scheme
       virtual void mark() override { setmark(); }
 
       virtual void print( Port* port, int style ) override;
+
+      virtual size_t hash() override;
    };
    
 }

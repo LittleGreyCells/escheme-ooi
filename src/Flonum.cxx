@@ -11,5 +11,9 @@ namespace scheme
       port->put( buffer );
    }
    
+   size_t Flonum::hash()
+   {
+      return static_cast<size_t>( data );
+   }
 }
 

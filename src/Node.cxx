@@ -18,6 +18,9 @@ namespace scheme
 
    void Node::apply_dispatch() { throw EvalException( "not a callable", this ); }
 
+   size_t Node::hash() { return reinterpret_cast<size_t>( this ); }
+
+
    Node* guard( Node* n, bool (Node::*pred)() )
    {
       if ( !(n->*pred)() )

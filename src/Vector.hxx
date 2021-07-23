@@ -19,8 +19,6 @@ namespace scheme
       
       virtual bool vectorp() override { return true; }
 
-      //virtual Node* vref( int index ) override;
-      //virtual void  vset( int index, Node* value ) override;
       virtual unsigned vlen() override;
       
       virtual void mark() override;
@@ -28,10 +26,6 @@ namespace scheme
       virtual void print( Port* port, int style ) override;
 
       Node*& operator[]( int i ) { return data[i]; }
-
-   private:
-      void range_check( int index );
-
    };
    
 }

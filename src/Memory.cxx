@@ -32,6 +32,7 @@ namespace scheme
       TObjectPool< ByteVector,    20 > pool_bvec;
       TObjectPool< Continuation,  50 > pool_cont;
       TObjectPool< Promise,       20 > pool_prom;
+      TObjectPool< Dict,          20 > pool_dict;
 
       void gc();
 
@@ -49,6 +50,7 @@ namespace scheme
       TObjectAlloc< ByteVector,   decltype(pool_bvec  ) > alloc_bvec  ( pool_bvec,   gc );
       TObjectAlloc< Continuation, decltype(pool_cont  ) > alloc_cont  ( pool_cont,   gc );
       TObjectAlloc< Promise,      decltype(pool_prom  ) > alloc_prom  ( pool_prom,   gc );
+      TObjectAlloc< Dict,         decltype(pool_dict  ) > alloc_dict  ( pool_dict,   gc );
       
       long get_collections() { return collections; }
       
@@ -123,6 +125,13 @@ namespace scheme
          
          auto obj = alloc_vec();
          new (obj) Vector( length );
+         return obj;
+      }
+      
+      Dict* dict()
+      {
+         auto obj = alloc_dict();
+         new (obj) Dict( 64 );
          return obj;
       }
       
@@ -202,6 +211,7 @@ namespace scheme
          pool_bvec.sweep();
          pool_cont.sweep();
          pool_prom.sweep();
+         pool_dict.sweep();
       }
       
       void gc()
@@ -235,6 +245,7 @@ namespace scheme
          stats.push_back( {"bvec", pool_bvec.count, pool_bvec.free} );
          stats.push_back( {"cont", pool_cont.count, pool_cont.free} );
          stats.push_back( {"promise", pool_prom.count, pool_prom.free} );
+         stats.push_back( {"dict", pool_dict.count, pool_dict.free} );
 
          return stats;
       }

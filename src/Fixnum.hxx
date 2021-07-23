@@ -23,6 +23,8 @@ namespace scheme
       virtual void print( Port* port, int style ) override;
 
       virtual long getfixnum() override;
+
+      virtual size_t hash() override;
    };
    
 }

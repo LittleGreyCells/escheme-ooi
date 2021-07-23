@@ -28,6 +28,7 @@ SRCS	= \
 	$(SRCLOC)/ByteVector.cxx \
 	$(SRCLOC)/Continuation.cxx \
 	$(SRCLOC)/Promise.cxx \
+	$(SRCLOC)/Dict.cxx \
 	$(SRCLOC)/SymbolTable.cxx \
 	$(SRCLOC)/Reader.cxx \
 	$(SRCLOC)/Eval.cxx \
@@ -47,6 +48,7 @@ SRCS	= \
 	$(SRCLOC)/Primitives_Equality.cxx \
 	$(SRCLOC)/Primitives_IO.cxx \
 	$(SRCLOC)/Primitives_Unix.cxx \
+	$(SRCLOC)/Primitives_Dict.cxx \
 	$(SRCLOC)/intstack.cxx \
 	$(SRCLOC)/regstack.cxx \
 	$(SRCLOC)/argstack.cxx \

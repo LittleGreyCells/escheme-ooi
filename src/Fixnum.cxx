@@ -14,6 +14,11 @@ namespace scheme
    {
       return data;
    }
+
+   size_t Fixnum::hash()
+   {
+      return static_cast<size_t>( data );
+   }
 }
 
 

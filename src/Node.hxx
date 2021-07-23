@@ -28,6 +28,7 @@ namespace scheme
    //     StringPort
    //     TerminalPort
    //   Promise
+   //   Dict
    //
    
    enum ConfigurationConstants
@@ -63,6 +64,7 @@ namespace scheme
       virtual bool bvecp() { return false; }
       virtual bool contp() { return false; }
       virtual bool promisep() { return false; }
+      virtual bool dictp() { return false; }
       
       virtual bool portp() { return false; }
       virtual bool inportp() { return false; }
@@ -87,6 +89,8 @@ namespace scheme
       virtual void print( Port* port, int style ) = 0;
 
       virtual void apply_dispatch();
+
+      virtual size_t hash();
 
       std::string id( const std::string& label );
       

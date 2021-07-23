@@ -1,7 +1,6 @@
 #include "Primitives_List.hxx"
 
 #include "Memory.hxx"
-//#include "SymbolTable.hxx"
 #include "Equality.hxx"
 #include "argstack.hxx"
 #include "regstack.hxx"

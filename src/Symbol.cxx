@@ -54,6 +54,14 @@ namespace scheme
    {
       port->put( *name );
    }
+
+   size_t Symbol::hash()
+   {
+      size_t hval = 0;
+      for ( auto ch : *name )
+	 hval = (hval << 2) ^ ch;
+      return hval;
+   }
    
 }
 

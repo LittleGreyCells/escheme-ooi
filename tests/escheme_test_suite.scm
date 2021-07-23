@@ -539,7 +539,6 @@
     (assert (null? (string-find "12abc45" "xyz")))
     (assert (null? (string-find "12abc45" "5z")))
 
-    
     (set! s1 "abc")
     (set! s2 "abc")
     (set! s3 "ABC")

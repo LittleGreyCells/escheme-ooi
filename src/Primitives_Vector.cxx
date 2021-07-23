@@ -1,7 +1,6 @@
 #include "Primitives_Vector.hxx"
 
 #include "Memory.hxx"
-#include "SymbolTable.hxx"
 #include "argstack.hxx"
 #include "regstack.hxx"
 

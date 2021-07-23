@@ -21,6 +21,8 @@ namespace scheme
       virtual unsigned length() override { return 0; }
 
       virtual void print( Port* port, int style ) override;
+
+      virtual size_t hash() override { return 0; }
    };
    
 }

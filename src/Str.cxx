@@ -24,6 +24,14 @@ namespace scheme
       if ( style )
          port->put( '"' );
    }
+
+   size_t Str::hash()
+   {
+      size_t hval = 0;
+      for ( auto ch : *data )
+	 hval = (hval << 2) ^ ch;
+      return hval;      
+   }
    
 }
 

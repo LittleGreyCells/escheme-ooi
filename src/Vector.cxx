@@ -19,26 +19,6 @@ namespace scheme
       data = nullptr;
    }
    
-   void Vector::range_check( int index )
-   {
-      if ( !(0 <= index && index < length) )
-	 throw AccessException( "range constraint error");
-   }
-
-#if 0
-   Node* Vector::vref( int index )
-   {
-      range_check( index );
-      return data[index];
-   }
-
-   void Vector::vset( int index, Node* value )
-   {
-      range_check( index );
-      data[index] = value;
-   }
-#endif
-
    unsigned Vector::vlen() { return length; }
 
    void Vector::mark() 

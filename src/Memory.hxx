@@ -24,6 +24,7 @@
 #include "ByteVector.hxx"
 #include "Continuation.hxx"
 #include "Promise.hxx"
+#include "Dict.hxx"
 #include "tstack.hxx"
 
 namespace scheme
@@ -51,6 +52,7 @@ namespace scheme
       ByteVector* bvector( int length );
       Continuation* continuation( Vector* state );
       Promise* promise( Node* exp );
+      Dict* dict();
 
       inline bool anyp( Node* n ) { return n != nil; }
       inline bool nullp( Node* n ) { return n == nil; }

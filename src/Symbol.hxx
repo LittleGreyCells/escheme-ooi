@@ -63,6 +63,8 @@ namespace scheme
       virtual void mark() override;
 
       virtual void print( Port* port, int style ) override;
+
+      virtual size_t hash() override;
    };
    
 }
