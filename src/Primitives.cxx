@@ -263,6 +263,7 @@ namespace scheme
          { "inexact?",              []{ return predicate( inexactp ); } },
          { "promise?",              []{ return predicate( &Node::promisep ); } },
          { "dict?",                 []{ return predicate( &Node::dictp ); } },
+         { "module?",               []{ return predicate( &Node::modulep ); } },
          
          { "string-length",         string_length },
          { "string-ref",            string_ref },

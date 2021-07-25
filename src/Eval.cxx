@@ -67,7 +67,7 @@ namespace scheme
             }
          }
 
-	 if ( env->modulep() )
+	 if ( env->module_envp() )
 	 {
 	    auto mod = (Module*)env;
 	    if ( mod->dict->has( var ) )
@@ -99,7 +99,7 @@ namespace scheme
             }
          }
          
-	 if ( env->modulep() )
+	 if ( env->module_envp() )
 	 {
 	    auto mod = (Module*)env;
 	    if ( mod->dict->has( var ) )
