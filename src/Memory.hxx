@@ -25,6 +25,7 @@
 #include "Continuation.hxx"
 #include "Promise.hxx"
 #include "Dict.hxx"
+#include "Module.hxx"
 #include "tstack.hxx"
 
 namespace scheme
@@ -53,6 +54,7 @@ namespace scheme
       Continuation* continuation( Vector* state );
       Promise* promise( Node* exp );
       Dict* dict();
+      Module* module( Dict* dict );
 
       inline bool anyp( Node* n ) { return n != nil; }
       inline bool nullp( Node* n ) { return n == nil; }

@@ -1,6 +1,7 @@
 #include "Eval.hxx"
 #include "Memory.hxx"
 #include "Env.hxx"
+#include "GlobalEnv.hxx"
 #include "Prim.hxx"
 #include "List.hxx"
 #include "PortIO.hxx"
@@ -25,7 +26,7 @@ namespace scheme
       EVSTATE cont;
       EVSTATE next;
       int frameindex;
-      Env* the_global_env;
+      GlobalEnv* the_global_env;
       
       inline bool lastp( Node* n ) { return nullp(n->getcdr()); }
       inline bool falsep( Node* n ) { return n == symbol_false || n == nil; }
@@ -53,7 +54,7 @@ namespace scheme
 
       Node* lookup( Node* var, Env* env )
       {
-         for ( ; env != the_global_env; env = env->benv )
+         for ( ; env->frame_envp(); env = env->benv )
          {
             // note: env->vars is a proper list
             List* vars = env->vars;
@@ -65,6 +66,13 @@ namespace scheme
                }
             }
          }
+
+	 if ( env->modulep() )
+	 {
+	    auto mod = (Module*)env;
+	    if ( mod->dict->has( var ) )
+	       return mod->dict->ref( var );
+	 }
          
          // global var
          auto val = var->getvalue();
@@ -77,7 +85,7 @@ namespace scheme
 
       void set_variable_value( Node* var, Node* val, Env* env )
       {
-         for ( ; env != the_global_env; env = env->benv )
+         for ( ; env->frame_envp(); env = env->benv )
          {
             // note: env->vars is a proper list
             List* vars = env->vars;
@@ -90,6 +98,16 @@ namespace scheme
                }
             }
          }
+         
+	 if ( env->modulep() )
+	 {
+	    auto mod = (Module*)env;
+	    if ( mod->dict->has( var ) )
+	    {
+	       mod->dict->set( var, val );
+	       return;
+	    }
+	 }
          
          // global var
          if ( var->getvalue() == symbol_unbound )
@@ -784,9 +802,19 @@ namespace scheme
                   restore( cont );
                   restore_env( env );
                   restore( unev );
-                  if ( env != the_global_env )
+		  if ( env->global_envp() )
+		  {
+		     unev->setvalue( val );
+		  }
+		  else if ( env->module_envp() )
+		  {
+		     auto mod = (Module*)env;
+		     mod->dict->set( unev, val );
+		  }
+		  else
+		  {
                      throw SevereException( "internal defines not supported", env );
-                  unev->setvalue( val );
+		  }
                   val = unev;
                   next = cont;
                   break;
@@ -1191,7 +1219,7 @@ namespace scheme
 
       void initialize()
       {
-         the_global_env = Memory::environment( 0, nil, nullptr );
+         the_global_env = new GlobalEnv();
          the_global_env->benv = the_global_env;
 
          exp = nil;

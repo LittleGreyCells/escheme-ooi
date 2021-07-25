@@ -12,6 +12,9 @@ namespace scheme
       Node* env_bindings();
       Node* env_parent();
       Node* make_environment();
+
+      Node* make_module();
+      Node* module_dict();
    }
 }
 

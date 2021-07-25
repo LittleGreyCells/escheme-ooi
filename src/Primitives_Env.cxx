@@ -40,6 +40,9 @@ namespace scheme
          ArgstackIterator iter;
          auto env = down_cast<Env*>( guard(iter.getlast(), &Node::envp) );
 
+	 if ( !env->frame_envp() )
+	    return nil;
+
          // convert a frame into a list of bindings
          auto vars = env->vars;
          
@@ -101,6 +104,30 @@ namespace scheme
 
          return regstack.pop();
       }
+
+      Node* make_module()
+      {
+         // syntax: (%make-module)
+	 argstack.noargs();
+
+         auto dict = Memory::dict();
+         regstack.push( dict );
+
+	 auto mod = Memory::module( dict );
+	 regstack.pop();
+	 
+	 return mod;
+      }
+
+      Node* module_dict()
+      {
+         // syntax: (module-dict <module>)
+         ArgstackIterator iter;
+         auto mod = down_cast<Module*>( guard(iter.getlast(), &Node::modulep) );
+
+	 return mod->dict;
+      }
+      
    }
 }
 

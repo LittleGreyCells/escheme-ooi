@@ -23,6 +23,8 @@ SRCS	= \
 	$(SRCLOC)/StringPort.cxx \
 	$(SRCLOC)/TerminalPort.cxx \
 	$(SRCLOC)/Env.cxx \
+	$(SRCLOC)/GlobalEnv.cxx \
+	$(SRCLOC)/Module.cxx \
 	$(SRCLOC)/Prim.cxx \
 	$(SRCLOC)/Closure.cxx \
 	$(SRCLOC)/ByteVector.cxx \

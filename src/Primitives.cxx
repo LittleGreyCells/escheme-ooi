@@ -396,6 +396,9 @@ namespace scheme
 	 { "dict-set!",  dict_set },
 	 { "dict-items", dict_items },
 
+	 { "%make-module", make_module },
+	 { "module-dict",  module_dict },
+
       };
          
       void initialize()

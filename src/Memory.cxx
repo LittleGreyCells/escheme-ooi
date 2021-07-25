@@ -23,16 +23,17 @@ namespace scheme
       TObjectPool< Flonum,        50 > pool_flonum;
       TObjectPool< Str,          500 > pool_string;
       TObjectPool< Char,          50 > pool_char;
-      TObjectPool< Env,          500 > pool_env;
-      TObjectPool< List,        5000 > pool_cons;
+      TObjectPool< Env,         1000 > pool_env;
+      TObjectPool< List,       10000 > pool_cons;
       TObjectPool< Vector,       100 > pool_vec;
-      TObjectPool< Closure,      200 > pool_clo;
+      TObjectPool< Closure,      500 > pool_clo;
       TObjectPool< FilePort,      10 > pool_fport;
       TObjectPool< StringPort,    10 > pool_sport;
       TObjectPool< ByteVector,    20 > pool_bvec;
       TObjectPool< Continuation,  50 > pool_cont;
       TObjectPool< Promise,       20 > pool_prom;
       TObjectPool< Dict,          20 > pool_dict;
+      TObjectPool< Module,        20 > pool_module;
 
       void gc();
 
@@ -51,6 +52,7 @@ namespace scheme
       TObjectAlloc< Continuation, decltype(pool_cont  ) > alloc_cont  ( pool_cont,   gc );
       TObjectAlloc< Promise,      decltype(pool_prom  ) > alloc_prom  ( pool_prom,   gc );
       TObjectAlloc< Dict,         decltype(pool_dict  ) > alloc_dict  ( pool_dict,   gc );
+      TObjectAlloc< Module,       decltype(pool_module) > alloc_module( pool_module, gc );
       
       long get_collections() { return collections; }
       
@@ -135,6 +137,13 @@ namespace scheme
          return obj;
       }
       
+      Module* module( Dict* dict )
+      {
+         auto obj = alloc_module();
+         new (obj) Module( dict );
+         return obj;
+      }
+      
       ByteVector* bvector( int length )
       {
          auto obj = alloc_bvec();
@@ -212,6 +221,7 @@ namespace scheme
          pool_cont.sweep();
          pool_prom.sweep();
          pool_dict.sweep();
+         pool_module.sweep();
       }
       
       void gc()
@@ -246,6 +256,7 @@ namespace scheme
          stats.push_back( {"cont", pool_cont.count, pool_cont.free} );
          stats.push_back( {"promise", pool_prom.count, pool_prom.free} );
          stats.push_back( {"dict", pool_dict.count, pool_dict.free} );
+         stats.push_back( {"module", pool_module.count, pool_module.free} );
 
          return stats;
       }
