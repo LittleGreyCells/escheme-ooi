@@ -16,7 +16,6 @@ namespace scheme
       ~Module() {}
 
       virtual bool frame_envp() { return false; }
-      virtual bool module_envp() { return true; }
 
       virtual bool modulep() override { return true; }
 
@@ -27,6 +26,8 @@ namespace scheme
       virtual bool lookup( Node* var, Node*& val ) override;
       virtual bool set_variable_value( Node* var, Node* val ) override;
       virtual void define( Node* var, Node* val ) override;
+
+      virtual Node* bindings();
 
       Dict* dict;
    };

@@ -1,10 +1,12 @@
 #include "Module.hxx"
 #include "Port.hxx"
 #include "Eval.hxx"
+#include "Memory.hxx"
 
 namespace scheme
 {
    using Eval::the_global_env;
+   using Memory::nil;
    
    Module::Module( Dict* dict ) : Env(the_global_env), dict(dict) {}
 
@@ -54,6 +56,10 @@ namespace scheme
       dict->set( var, val );
    }
    
+   Node* Module::bindings()
+   {
+      return dict->items();
+   }
 }
 
 

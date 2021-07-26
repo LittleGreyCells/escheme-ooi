@@ -1,9 +1,12 @@
 #include "GlobalEnv.hxx"
 #include "Port.hxx"
 #include "Symbol.hxx"
+#include "Memory.hxx"
 
 namespace scheme
 {
+   using Memory::nil;
+
    void GlobalEnv::mark() 
    {
       setmark();
@@ -36,6 +39,11 @@ namespace scheme
    void GlobalEnv::define( Node* var, Node* val )
    {
       var->setvalue( val );
+   }
+   
+   Node* GlobalEnv::bindings()
+   {
+      return nil;
    }
    
 }

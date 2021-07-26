@@ -26,8 +26,6 @@ namespace scheme
 
       virtual bool envp() override { return true; }
       virtual bool frame_envp() { return true; }
-      virtual bool global_envp() { return false; }
-      virtual bool module_envp() { return false; }
 
       virtual void mark() override;
 
@@ -36,6 +34,8 @@ namespace scheme
       virtual bool lookup( Node* var, Node*& val );
       virtual bool set_variable_value( Node* var, Node* val );
       virtual void define( Node* var, Node* val );
+
+      virtual Node* bindings();
    };
    
 }

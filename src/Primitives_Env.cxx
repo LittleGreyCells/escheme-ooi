@@ -39,23 +39,7 @@ namespace scheme
          // syntax: (environment-bindings <env>) -> (<pair1> <pair2> ...)
          ArgstackIterator iter;
          auto env = down_cast<Env*>( guard(iter.getlast(), &Node::envp) );
-
-	 if ( !env->frame_envp() )
-	    return nil;
-
-         // convert a frame into a list of bindings
-         auto vars = env->vars;
-         
-         Memory::ListBuilder bindings;
-         
-         for ( int i = 0; anyp(vars); ++i, vars = (List*)vars->cdr )
-         {
-            regstack.push( Memory::cons( vars->car, env->slots[i] ) );
-            bindings.add( regstack.top() );
-            regstack.pop();
-         }
-         
-         return bindings.get();
+	 return env->bindings();
       }
       
       Node* make_environment()

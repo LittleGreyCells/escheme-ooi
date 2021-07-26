@@ -14,7 +14,6 @@ namespace scheme
       ~GlobalEnv();
 
       virtual bool frame_envp() { return false; }
-      virtual bool global_envp() { return true; }
 
       virtual void mark() override;
 
@@ -23,6 +22,8 @@ namespace scheme
       virtual bool lookup( Node* var, Node*& val ) override;
       virtual bool set_variable_value( Node* var, Node* val ) override;
       virtual void define( Node* var, Node* val ) override;
+
+      virtual Node* bindings() override;
    };
    
 }

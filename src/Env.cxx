@@ -1,10 +1,12 @@
 #include "Env.hxx"
 #include "Port.hxx"
 #include "Memory.hxx"
+#include "regstack.hxx"
 
 namespace scheme
 {
    using Memory::nil;
+   using Memory::anyp;
    
    Env::Env( int nvars, List* vars, Env* benv ) : nslots(nvars), vars(vars), benv(benv)
    {
@@ -75,6 +77,23 @@ namespace scheme
    void Env::define( Node* var, Node* val )
    {
       throw SevereException( "internal defines not supported", this );
+   }
+
+   Node* Env::bindings()
+   {
+      // convert a frame into a list of bindings
+      auto v = vars;
+      
+      Memory::ListBuilder bindings;
+      
+      for ( int i = 0; anyp(v); ++i, v = (List*)v->cdr )
+      {
+	 regstack.push( Memory::cons( v->car, slots[i] ) );
+	 bindings.add( regstack.top() );
+	 regstack.pop();
+      }
+      
+      return bindings.get();
    }
 }
 
