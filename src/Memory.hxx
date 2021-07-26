@@ -12,7 +12,7 @@
 #include "Char.hxx"
 #include "Symbol.hxx"
 #include "Str.hxx"
-#include "Env.hxx"
+#include "FrameEnv.hxx"
 #include "Symbol.hxx"
 #include "List.hxx"
 #include "Nil.hxx"
@@ -44,7 +44,7 @@ namespace scheme
       Flonum* flonum( double n );
       Str* string( const std::string& s );
       Str* string( long len, char ch );
-      Env* environment( int nvars, List* vars, Env* base );
+      FrameEnv* environment( int nvars, List* vars, Env* base );
       List* cons( Node* car, Node* cdr );
       Vector* vector( int length );
       FilePort* fileport( FILE* f, int mode );

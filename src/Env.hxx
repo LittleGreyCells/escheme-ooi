@@ -5,7 +5,6 @@
 #include <utility>
 
 #include "Node.hxx"
-#include "List.hxx"
 
 namespace scheme
 {
@@ -14,27 +13,20 @@ namespace scheme
    class Env : public Node
    {
    public:
-      int nslots;
-      Node** slots;
-      List* vars;
       Env* benv;
 
-      Env() : nslots(0), slots(nullptr) {}
-      Env( int nvars, List* vars, Env* benv );
-      Env( Env* benv );
-      ~Env();
+      Env() {}
+      Env( Env* benv ) : benv(benv) {}
+      ~Env() {}
 
       virtual bool envp() override { return true; }
 
       virtual void mark() override;
 
-      virtual void print( Port* port, int style ) override;
-
-      virtual bool lookup( Node* var, Node*& val );
-      virtual bool set_variable_value( Node* var, Node* val );
-      virtual void define( Node* var, Node* val );
-
-      virtual Node* bindings();
+      virtual bool lookup( Node* var, Node*& val ) = 0;
+      virtual bool set_variable_value( Node* var, Node* val ) = 0;
+      virtual void define( Node* var, Node* val ) = 0;
+      virtual Node* bindings() = 0;
    };
    
 }

@@ -24,6 +24,7 @@ SRCS	= \
 	$(SRCLOC)/TerminalPort.cxx \
 	$(SRCLOC)/Env.cxx \
 	$(SRCLOC)/GlobalEnv.cxx \
+	$(SRCLOC)/FrameEnv.cxx \
 	$(SRCLOC)/Module.cxx \
 	$(SRCLOC)/Prim.cxx \
 	$(SRCLOC)/Closure.cxx \

@@ -79,13 +79,13 @@ namespace scheme
                {
                   throw SevereException( "expected a symbol or (symbol . val)", x );
                }
-               
+	       
                pairs = pairs->getcdr();
             }
-
+	    
             env->vars = down_cast<List*>( vars.get() );
          }
-
+	 
          return regstack.pop();
       }
 
@@ -93,13 +93,10 @@ namespace scheme
       {
          // syntax: (%make-module)
 	 argstack.noargs();
-
          auto dict = Memory::dict();
          regstack.push( dict );
-
 	 auto mod = Memory::module( dict );
 	 regstack.pop();
-	 
 	 return mod;
       }
 
@@ -108,7 +105,6 @@ namespace scheme
          // syntax: (module-dict <module>)
          ArgstackIterator iter;
          auto mod = down_cast<Module*>( guard(iter.getlast(), &Node::modulep) );
-
 	 return mod->dict;
       }
       

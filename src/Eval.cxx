@@ -87,7 +87,7 @@ namespace scheme
          const int nactual = argstack.getargc();
          const int nformal = closure->numv;
 
-         Env* xenv = Memory::environment( nformal, closure->vars, closure->benv );
+         FrameEnv* xenv = Memory::environment( nformal, closure->vars, closure->benv );
 
          regstack.push( xenv );
 
@@ -1024,7 +1024,7 @@ namespace scheme
                   restore( frameindex );
                   if ( regstack.top()->envp() )
                   {
-                     auto letenv = down_cast<Env*>( regstack.top() );
+                     auto letenv = down_cast<FrameEnv*>( regstack.top() );
                      letenv->slots[frameindex] = val;
                   }
                   frameindex += 1;
@@ -1038,7 +1038,7 @@ namespace scheme
                   restore( frameindex );
                   if ( regstack.top()->envp() )
                   {
-                     auto letenv = down_cast<Env*>( regstack.top() );
+                     auto letenv = down_cast<FrameEnv*>( regstack.top() );
                      letenv->slots[frameindex] = val;
                   }
                   next = EV_LET_BODY;
@@ -1166,7 +1166,7 @@ namespace scheme
 
       void initialize()
       {
-	 the_null_env = new Env();
+	 the_null_env = new FrameEnv();
 	 the_null_env->benv = the_null_env;
 	 
          the_global_env = new GlobalEnv();

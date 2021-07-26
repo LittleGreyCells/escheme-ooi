@@ -23,7 +23,7 @@ namespace scheme
       TObjectPool< Flonum,        50 > pool_flonum;
       TObjectPool< Str,          500 > pool_string;
       TObjectPool< Char,          50 > pool_char;
-      TObjectPool< Env,         1000 > pool_env;
+      TObjectPool< FrameEnv,    1000 > pool_fenv;
       TObjectPool< List,       10000 > pool_cons;
       TObjectPool< Vector,       100 > pool_vec;
       TObjectPool< Closure,      500 > pool_clo;
@@ -42,7 +42,7 @@ namespace scheme
       TObjectAlloc< Flonum,       decltype(pool_flonum) > alloc_flonum( pool_flonum, gc );
       TObjectAlloc< Str,          decltype(pool_string) > alloc_string( pool_string, gc );
       TObjectAlloc< Char,         decltype(pool_char  ) > alloc_char  ( pool_char,   gc );
-      TObjectAlloc< Env,          decltype(pool_env   ) > alloc_env   ( pool_env,    gc );
+      TObjectAlloc< FrameEnv,     decltype(pool_fenv  ) > alloc_fenv  ( pool_fenv,   gc );
       TObjectAlloc< List,         decltype(pool_cons  ) > alloc_cons  ( pool_cons,   gc );
       TObjectAlloc< Vector,       decltype(pool_vec   ) > alloc_vec   ( pool_vec,    gc );
       TObjectAlloc< Closure,      decltype(pool_clo   ) > alloc_clo   ( pool_clo,    gc );
@@ -106,10 +106,10 @@ namespace scheme
          return obj;
       }
       
-      Env* environment( int nvars, List* vars, Env* base )
+      FrameEnv* environment( int nvars, List* vars, Env* base )
       {
-         auto obj = alloc_env();
-         new (obj) Env( nvars, vars, base );
+         auto obj = alloc_fenv();
+         new (obj) FrameEnv( nvars, vars, base );
          return obj;
       }
       
@@ -203,7 +203,7 @@ namespace scheme
 
       void sweep2()
       {
-         pool_env.sweep();
+         pool_fenv.sweep();
       }
 
       void sweep3()
@@ -246,7 +246,7 @@ namespace scheme
          stats.push_back( {"flonum", pool_flonum.count, pool_flonum.free} );
          stats.push_back( {"string", pool_string.count, pool_string.free} );
          stats.push_back( {"char", pool_char.count, pool_char.free} );
-         stats.push_back( {"env", pool_env.count, pool_env.free} );
+         stats.push_back( {"fenv", pool_fenv.count, pool_fenv.free} );
          stats.push_back( {"cons", pool_cons.count, pool_cons.free} );
          stats.push_back( {"vector", pool_vec.count, pool_vec.free} );
          stats.push_back( {"closure", pool_clo.count, pool_clo.free} );

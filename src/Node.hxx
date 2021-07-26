@@ -8,7 +8,7 @@ namespace scheme
    //
    // Node Object Heirarchy
    //
-   // Node
+   // Node (abstract)
    //   Char
    //   Fixnum
    //   Flonum
@@ -17,15 +17,16 @@ namespace scheme
    //   List
    //     Nil
    //   Vector
-   //   Env
+   //   Env (abstract)
    //     GlobalEnv
+   //     FrameEnv
    //     Module
    //   Prim
    //     PrimFunc
    //     EvalFunc
    //   Closure
    //   Continuation
-   //   Port
+   //   Port (abstract)
    //     FilePort
    //     StringPort
    //     TerminalPort
