@@ -13,8 +13,6 @@ namespace scheme
       GlobalEnv() {}
       ~GlobalEnv();
 
-      virtual bool frame_envp() { return false; }
-
       virtual void mark() override;
 
       virtual void print( Port* port, int style ) override;

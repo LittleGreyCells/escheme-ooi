@@ -25,7 +25,6 @@ namespace scheme
       ~Env();
 
       virtual bool envp() override { return true; }
-      virtual bool frame_envp() { return true; }
 
       virtual void mark() override;
 

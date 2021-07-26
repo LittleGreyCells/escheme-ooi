@@ -15,8 +15,6 @@ namespace scheme
       Module( Dict* dict );
       ~Module() {}
 
-      virtual bool frame_envp() { return false; }
-
       virtual bool modulep() override { return true; }
 
       virtual void mark() override;
