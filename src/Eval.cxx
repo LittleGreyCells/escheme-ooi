@@ -27,6 +27,7 @@ namespace scheme
       EVSTATE next;
       int frameindex;
       GlobalEnv* the_global_env;
+      Env* the_null_env;
       
       inline bool lastp( Node* n ) { return nullp(n->getcdr()); }
       inline bool falsep( Node* n ) { return n == symbol_false || n == nil; }
@@ -54,66 +55,24 @@ namespace scheme
 
       Node* lookup( Node* var, Env* env )
       {
-         for ( ; env->frame_envp(); env = env->benv )
-         {
-            // note: env->vars is a proper list
-            List* vars = env->vars;
-            for ( int i = 0; i < env->nslots; ++i, vars = down_cast<List*>( vars->cdr ) )
-            {
-               if ( var == vars->car )
-               {
-                  return env->slots[i];
-               }
-            }
-         }
-
-	 if ( env->module_envp() )
+	 for ( ; ; env = env->benv )
 	 {
-	    auto mod = (Module*)env;
-	    if ( mod->dict->has( var ) )
-	       return mod->dict->ref( var );
+	    Node* val;
+	    if ( env->lookup( var, val ) )
+	       return val;	    
 	 }
-         
-         // global var
-         auto val = var->getvalue();
 
-         if ( val == symbol_unbound )
-            throw SevereException( "symbol is undefined", var );
-         
-         return val;
+	 // should never get here
+	 return nil;
       }
 
       void set_variable_value( Node* var, Node* val, Env* env )
       {
-         for ( ; env->frame_envp(); env = env->benv )
-         {
-            // note: env->vars is a proper list
-            List* vars = env->vars;
-            for ( int i = 0; i < env->nslots; ++i, vars = down_cast<List*>( vars->cdr ) )
-            {
-               if ( var == vars->car )
-               {
-                  env->slots[i] = val;
-                  return;
-               }
-            }
-         }
-         
-	 if ( env->module_envp() )
+	 for ( ; ; env = env->benv )
 	 {
-	    auto mod = (Module*)env;
-	    if ( mod->dict->has( var ) )
-	    {
-	       mod->dict->set( var, val );
-	       return;
-	    }
+	    if ( env->set_variable_value( var, val ) )
+	       return;	    
 	 }
-         
-         // global var
-         if ( var->getvalue() == symbol_unbound )
-            throw SevereException( "symbol is undefined", var );
-
-         var->setvalue( val );
       }
 
       static void arg_error( const char* text, unsigned n1, unsigned n2 )
@@ -802,19 +761,7 @@ namespace scheme
                   restore( cont );
                   restore_env( env );
                   restore( unev );
-		  if ( env->global_envp() )
-		  {
-		     unev->setvalue( val );
-		  }
-		  else if ( env->module_envp() )
-		  {
-		     auto mod = (Module*)env;
-		     mod->dict->set( unev, val );
-		  }
-		  else
-		  {
-                     throw SevereException( "internal defines not supported", env );
-		  }
+		  env->define( unev, val );
                   val = unev;
                   next = cont;
                   break;
@@ -1219,8 +1166,11 @@ namespace scheme
 
       void initialize()
       {
+	 the_null_env = new Env();
+	 the_null_env->benv = the_null_env;
+	 
          the_global_env = new GlobalEnv();
-         the_global_env->benv = the_global_env;
+         the_global_env->benv = the_null_env;
 
          exp = nil;
          env = the_global_env;

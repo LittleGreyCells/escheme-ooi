@@ -4,6 +4,7 @@
 #include "Node.hxx"
 #include "Symbol.hxx"
 #include "Env.hxx"
+#include "GlobalEnv.hxx"
 #include "Prim.hxx"
 #include "List.hxx"
 #include "Closure.hxx"
@@ -68,6 +69,7 @@ namespace scheme
       };
 
       extern Env* env;
+      extern GlobalEnv* the_global_env;
 
       Node* lookup( Node* var, Env* env );
       void set_variable_value( Node* var, Node* val, Env* env );

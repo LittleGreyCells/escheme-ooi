@@ -12,7 +12,7 @@ namespace scheme
    {
    public:
       Module() {}
-      Module( Dict* dict ) : dict(dict) {}
+      Module( Dict* dict );
       ~Module() {}
 
       virtual bool frame_envp() { return false; }
@@ -23,6 +23,10 @@ namespace scheme
       virtual void mark() override;
 
       virtual void print( Port* port, int style ) override;
+
+      virtual bool lookup( Node* var, Node*& val ) override;
+      virtual bool set_variable_value( Node* var, Node* val ) override;
+      virtual void define( Node* var, Node* val ) override;
 
       Dict* dict;
    };

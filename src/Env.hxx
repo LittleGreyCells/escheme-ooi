@@ -21,6 +21,7 @@ namespace scheme
 
       Env() : nslots(0), slots(nullptr) {}
       Env( int nvars, List* vars, Env* benv );
+      Env( Env* benv );
       ~Env();
 
       virtual bool envp() override { return true; }
@@ -31,6 +32,10 @@ namespace scheme
       virtual void mark() override;
 
       virtual void print( Port* port, int style ) override;
+
+      virtual bool lookup( Node* var, Node*& val );
+      virtual bool set_variable_value( Node* var, Node* val );
+      virtual void define( Node* var, Node* val );
    };
    
 }

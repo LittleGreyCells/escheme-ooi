@@ -19,6 +19,10 @@ namespace scheme
       virtual void mark() override;
 
       virtual void print( Port* port, int style ) override;
+      
+      virtual bool lookup( Node* var, Node*& val ) override;
+      virtual bool set_variable_value( Node* var, Node* val ) override;
+      virtual void define( Node* var, Node* val ) override;
    };
    
 }

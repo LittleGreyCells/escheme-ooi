@@ -14,6 +14,8 @@ namespace scheme
          slots[i] = nil;
    }
 
+   Env::Env( Env* benv ) : nslots(0), vars(nil), benv(benv) {}
+
    Env::~Env()
    {
       nslots = 0;
@@ -38,6 +40,42 @@ namespace scheme
       port->put( id("Env") );
    }
 
+   bool Env::lookup( Node* var, Node*& val )
+   {
+      List* v = vars;
+      
+      for ( int i = 0; i < nslots; ++i, v = down_cast<List*>( v->cdr ) )
+      {
+	 if ( var == v->car )
+	 {
+	    val = slots[i];
+	    return true;
+	 }
+      }
+      
+      return false;
+   }
+   
+   bool Env::set_variable_value( Node* var, Node* val )
+   {
+      List* v = vars;
+      
+      for ( int i = 0; i < nslots; ++i, v = down_cast<List*>( v->cdr ) )
+      {
+	 if ( var == v->car )
+	 {
+	    slots[i] = val;
+	    return true;
+	 }
+      }
+      
+      return false;
+   }
+
+   void Env::define( Node* var, Node* val )
+   {
+      throw SevereException( "internal defines not supported", this );
+   }
 }
 
 
