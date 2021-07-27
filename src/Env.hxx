@@ -26,6 +26,7 @@ namespace scheme
       virtual bool lookup( Node* var, Node*& val ) = 0;
       virtual bool set_variable_value( Node* var, Node* val ) = 0;
       virtual void define( Node* var, Node* val ) = 0;
+      
       virtual Node* bindings() = 0;
    };
    
