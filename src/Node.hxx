@@ -36,9 +36,9 @@ namespace scheme
    
    enum ConfigurationConstants
    {
-      ARGSTACK_SIZE      = 500,
-      REGSTACK_SIZE      = 1000,
-      INTSTACK_SIZE      = 1000,
+      ARGSTACK_SIZE = 500,
+      REGSTACK_SIZE = 1000,
+      INTSTACK_SIZE = 1000,
    };
 
    using byte = unsigned char;

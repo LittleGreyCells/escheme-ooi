@@ -12,7 +12,7 @@ namespace scheme
    {
    public:
       Module() {}
-      Module( Dict* dict );
+      Module( Dict* dict, Env* base );
       ~Module() {}
 
       virtual bool modulep() override { return true; }

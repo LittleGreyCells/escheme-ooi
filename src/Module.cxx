@@ -5,10 +5,9 @@
 
 namespace scheme
 {
-   using Eval::the_global_env;
    using Memory::nil;
    
-   Module::Module( Dict* dict ) : Env(the_global_env), dict(dict) {}
+   Module::Module( Dict* dict, Env* base ) : Env(base), dict(dict) {}
 
    void Module::mark() 
    {

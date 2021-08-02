@@ -577,7 +577,7 @@ namespace scheme
                case EV_WHILE:
                {
                   save( cont );
-                  unev = cdr(exp);          // (<condition> <sequence>)
+                  unev = cdr(exp);           // (<condition> <sequence>)
                   save( env );               // prep for cond eval
                   save( unev );
                   next = EVAL_WHILE_COND;
@@ -586,11 +586,11 @@ namespace scheme
 
                case EVAL_WHILE_COND:
                {
-                  restore( unev );                  // FETCH <cond> evaluation context
-                  restore_env( env );                   // 
+                  restore( unev );                 // FETCH <cond> evaluation context
+                  restore_env( env );              // 
                   exp = car(unev);                 // exp = <cond>
-                  save( env );                      // SAVE the <cond> evaluation context
-                  save( unev );                     // (<sequence>)
+                  save( env );                     // SAVE the <cond> evaluation context
+                  save( unev );                    // (<sequence>)
                   cont = EVAL_WHILE_BODY;
                   next = EVAL_DISPATCH;
                   break;
@@ -599,7 +599,7 @@ namespace scheme
                case EVAL_WHILE_BODY:
                {
                   restore( unev );                    // (<cond> <sequence>)
-                  restore_env( env );                     // RESTORE cond evaluation context
+                  restore_env( env );                 // RESTORE cond evaluation context
                   if ( truep(val) )
                   {
                      save( env );                     // SAVE the cond evaluation ENV
@@ -641,12 +641,12 @@ namespace scheme
                   {
                      // var = (access <var> <env2>)
                      // unev = ((access <var> <env2> <exp>)
-                     exp = car(cdr(cdr(var)));   // exp = <env2>
+                     exp = car(cdr(cdr(var)));      // exp = <env2>
                      save( cont );
                      save( unev );
                      save( env );
                      cont = EV_SETACCESS_ENV;
-                     next = EVAL_DISPATCH;             // evaluate <env2>
+                     next = EVAL_DISPATCH;          // evaluate <env2>
                   }
                   else
                      throw SevereException( "not a valid target for set!", var );  
@@ -666,20 +666,20 @@ namespace scheme
                case EV_SETACCESS_ENV:
                {
                   restore_env( env );
-                  restore( unev );                        // unev = ((access <var> <env2>) <exp>)
+                  restore( unev );                  // unev = ((access <var> <env2>) <exp>)
                   exp = car(cdr(unev));             // exp = <exp>
                   unev = car(cdr(car(unev)));       // unev = <var>
-                  save( val );                            // save(eval(<env2>))
-                  save( unev );                           // save(<var>)
-                  save( env );                            // save(<env>)
-                  cont = EV_SETACCESS_VALUE;                  // evaluate <exp>
+                  save( val );                      // save(eval(<env2>))
+                  save( unev );                     // save(<var>)
+                  save( env );                      // save(<env>)
+                  cont = EV_SETACCESS_VALUE;        // evaluate <exp>
                   next = EVAL_DISPATCH;
                   break;
                }
                
                case EV_SETACCESS_VALUE:
                {
-                  restore_env( env );                    // restore(<env>)
+                  restore_env( env );                // restore(<env>)
                   restore( unev );                   // restore(<var>)
                   restore( exp );                    // restore(eval(<env2>))
                   restore( cont );
@@ -695,8 +695,8 @@ namespace scheme
                case EV_ACCESS:
                {
                   auto xcdr = cdr(exp);
-                  unev = car(xcdr);       // <symbol>
-                  exp = car(cdr(xcdr));   // <env>
+                  unev = car(xcdr);                  // <symbol>
+                  exp = car(cdr(xcdr));              // <env>
                   save( unev );
                   save( env );
                   save( cont );
@@ -711,7 +711,7 @@ namespace scheme
                   restore_env( env );
                   restore( unev );
                   auto val_as_env = down_cast<Env*>( guard(val, &Node::envp) );
-                  val = lookup( unev, val_as_env );   // unev=symbol, val=env
+                  val = lookup( unev, val_as_env );  // unev=symbol, val=env
                   next = cont;
                   break;
                }
@@ -722,8 +722,8 @@ namespace scheme
                //
                case EV_DEFINE:
                {
-                  Node* xcdr = cdr(exp);   // (<var> <exp>) possibly
-                  Node* xcadr = car(xcdr);  //  <var>        possibly
+                  Node* xcdr = cdr(exp);             // (<var> <exp>) possibly
+                  Node* xcadr = car(xcdr);           //  <var>        possibly
                   
                   if ( xcadr->symbolp() )
                   {
@@ -744,10 +744,10 @@ namespace scheme
                      save( env );
                      save( cont );
                      // perform accelerated lambda creation
-                     unev = cdr(xcadr);                      // pars: ([<param>...])
-                     exp = cdr(xcdr);                        // code: ([<exp>...])
-                     auto clo = Memory::closure( exp, env );      // <code> <benv>
-                     val = clo;                                   // protect
+                     unev = cdr(xcadr);                       // pars: ([<param>...])
+                     exp = cdr(xcdr);                         // code: ([<exp>...])
+                     auto clo = Memory::closure( exp, env );  // <code> <benv>
+                     val = clo;                               // protect
                      parse_formals( unev, clo->numv, clo->rargs, clo->vars );
                      next = EV_DEFINE_VALUE;
                   }
@@ -800,8 +800,7 @@ namespace scheme
                case EVCOND_PRED:
                {
                   if ( nullp(unev) )
-                  {
-                     restore( cont );
+                  {                     restore( cont );
                      val = nil;
                      next = cont;
                   }
@@ -972,7 +971,7 @@ namespace scheme
                   exp = cdr(exp);
                   unev = car(exp);                     // bindings; ((v1 e1) (v2 e2) ...)
                   exp = cdr(exp);                      // body: (<body>)
-                  save( exp );                          // save the body
+                  save( exp );                         // save the body
                   auto xenv = extend_env_vars( unev, env );
                   save( xenv );
                   if ( next == EV_LETREC )
@@ -984,7 +983,7 @@ namespace scheme
                
                case EV_LET_ARG_LOOP:
                {
-                  exp = car(unev);               // exp = (v e) | v
+                  exp = car(unev);                     // exp = (v e) | v
                   if ( exp->consp() )
                   {
                      // exp == (v e)
@@ -993,7 +992,7 @@ namespace scheme
                   else if ( exp->symbolp() )
                   {
                      // exp == v
-                     exp = nil;                       // ()
+                     exp = nil;                        // ()
                   }
                   else
                   {
@@ -1047,8 +1046,8 @@ namespace scheme
                
                case EV_LET_BODY:
                {
-                  restore_env( env );            // assign env (benign for letrec)
-                  restore( unev );           // restore (<body>)
+                  restore_env( env );           // assign env (benign for letrec)
+                  restore( unev );              // restore (<body>)
                   next = EVAL_SEQUENCE;
                   break;
                }

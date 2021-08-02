@@ -91,18 +91,21 @@ namespace scheme
 
       Node* make_module()
       {
-         // syntax: (%make-module)
-	 argstack.noargs();
+         // syntax: (%make-module [<base>]) -> <module>
+         ArgstackIterator iter;
+	 Env* base = Eval::the_global_env; 
+	 if ( iter.more() )
+	    base = down_cast<Env*>( guard(iter.getlast(), &Node::envp) );
          auto dict = Memory::dict();
          regstack.push( dict );
-	 auto mod = Memory::module( dict );
+	 auto mod = Memory::module( dict, base );
 	 regstack.pop();
 	 return mod;
       }
 
       Node* module_dict()
       {
-         // syntax: (module-dict <module>)
+         // syntax: (module-dict <module>) -> <dict>
          ArgstackIterator iter;
          auto mod = down_cast<Module*>( guard(iter.getlast(), &Node::modulep) );
 	 return mod->dict;

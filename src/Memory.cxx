@@ -137,10 +137,10 @@ namespace scheme
          return obj;
       }
       
-      Module* module( Dict* dict )
+      Module* module( Dict* dict, Env* base )
       {
          auto obj = alloc_module();
-         new (obj) Module( dict );
+         new (obj) Module( dict, base );
          return obj;
       }
       
