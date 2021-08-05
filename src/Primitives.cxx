@@ -263,7 +263,7 @@ namespace scheme
          { "inexact?",              []{ return predicate( inexactp ); } },
          { "promise?",              []{ return predicate( &Node::promisep ); } },
          { "dict?",                 []{ return predicate( &Node::dictp ); } },
-         { "module?",               []{ return predicate( &Node::modulep ); } },
+         { "assoc-env?",            []{ return predicate( &Node::assocenvp ); } },
          
          { "string-length",         string_length },
          { "string-ref",            string_ref },
@@ -397,8 +397,8 @@ namespace scheme
 	 { "dict-set!",  dict_set },
 	 { "dict-items", dict_items },
 
-	 { "%make-module", make_module },
-	 { "module-dict",  module_dict },
+	 { "%make-assoc-env", make_assocenv },
+	 { "%assoc-env-dict", assocenv_dict },
 
       };
          

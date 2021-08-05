@@ -25,7 +25,7 @@ SRCS	= \
 	$(SRCLOC)/Env.cxx \
 	$(SRCLOC)/GlobalEnv.cxx \
 	$(SRCLOC)/FrameEnv.cxx \
-	$(SRCLOC)/Module.cxx \
+	$(SRCLOC)/AssocEnv.cxx \
 	$(SRCLOC)/Prim.cxx \
 	$(SRCLOC)/Closure.cxx \
 	$(SRCLOC)/ByteVector.cxx \

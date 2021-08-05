@@ -13,8 +13,8 @@ namespace scheme
       Node* env_parent();
       Node* make_environment();
 
-      Node* make_module();
-      Node* module_dict();
+      Node* make_assocenv();
+      Node* assocenv_dict();
    }
 }
 

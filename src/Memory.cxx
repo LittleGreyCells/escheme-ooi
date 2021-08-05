@@ -33,7 +33,7 @@ namespace scheme
       TObjectPool< Continuation,  50 > pool_cont;
       TObjectPool< Promise,       20 > pool_prom;
       TObjectPool< Dict,          20 > pool_dict;
-      TObjectPool< Module,        20 > pool_module;
+      TObjectPool< AssocEnv,      20 > pool_aenv;
 
       void gc();
 
@@ -52,7 +52,7 @@ namespace scheme
       TObjectAlloc< Continuation, decltype(pool_cont  ) > alloc_cont  ( pool_cont,   gc );
       TObjectAlloc< Promise,      decltype(pool_prom  ) > alloc_prom  ( pool_prom,   gc );
       TObjectAlloc< Dict,         decltype(pool_dict  ) > alloc_dict  ( pool_dict,   gc );
-      TObjectAlloc< Module,       decltype(pool_module) > alloc_module( pool_module, gc );
+      TObjectAlloc< AssocEnv,     decltype(pool_aenv  ) > alloc_aenv  ( pool_aenv,   gc );
       
       long get_collections() { return collections; }
       
@@ -137,10 +137,10 @@ namespace scheme
          return obj;
       }
       
-      Module* module( Dict* dict, Env* base )
+      AssocEnv* assocenv( Dict* dict, Env* base )
       {
-         auto obj = alloc_module();
-         new (obj) Module( dict, base );
+         auto obj = alloc_aenv();
+         new (obj) AssocEnv( dict, base );
          return obj;
       }
       
@@ -221,7 +221,7 @@ namespace scheme
          pool_cont.sweep();
          pool_prom.sweep();
          pool_dict.sweep();
-         pool_module.sweep();
+         pool_aenv.sweep();
       }
       
       void gc()
@@ -256,7 +256,7 @@ namespace scheme
          stats.push_back( {"cont", pool_cont.count, pool_cont.free} );
          stats.push_back( {"promise", pool_prom.count, pool_prom.free} );
          stats.push_back( {"dict", pool_dict.count, pool_dict.free} );
-         stats.push_back( {"module", pool_module.count, pool_module.free} );
+         stats.push_back( {"aenv", pool_aenv.count, pool_aenv.free} );
 
          return stats;
       }

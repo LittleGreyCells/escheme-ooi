@@ -89,26 +89,26 @@ namespace scheme
          return regstack.pop();
       }
 
-      Node* make_module()
+      Node* make_assocenv()
       {
-         // syntax: (%make-module [<base>]) -> <module>
+         // syntax: (%make-assoc-env [<base>]) -> <assocenv>
          ArgstackIterator iter;
 	 Env* base = Eval::the_global_env; 
 	 if ( iter.more() )
 	    base = down_cast<Env*>( guard(iter.getlast(), &Node::envp) );
          auto dict = Memory::dict();
          regstack.push( dict );
-	 auto mod = Memory::module( dict, base );
+	 auto aenv = Memory::assocenv( dict, base );
 	 regstack.pop();
-	 return mod;
+	 return aenv;
       }
 
-      Node* module_dict()
+      Node* assocenv_dict()
       {
-         // syntax: (module-dict <module>) -> <dict>
+         // syntax: (%assoc-env-dict <assocenv>) -> <dict>
          ArgstackIterator iter;
-         auto mod = down_cast<Module*>( guard(iter.getlast(), &Node::modulep) );
-	 return mod->dict;
+         auto aenv = down_cast<AssocEnv*>( guard(iter.getlast(), &Node::assocenvp) );
+	 return aenv->dict;
       }
       
    }

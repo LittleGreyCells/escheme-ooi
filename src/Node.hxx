@@ -20,7 +20,7 @@ namespace scheme
    //   Env (abstract)
    //     GlobalEnv
    //     FrameEnv
-   //     Module
+   //     AssocEnv
    //   Prim
    //     PrimFunc
    //     EvalFunc
@@ -68,7 +68,7 @@ namespace scheme
       virtual bool contp() { return false; }
       virtual bool promisep() { return false; }
       virtual bool dictp() { return false; }
-      virtual bool modulep() { return false; }
+      virtual bool assocenvp() { return false; }
       
       virtual bool portp() { return false; }
       virtual bool inportp() { return false; }
