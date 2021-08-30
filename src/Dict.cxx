@@ -100,6 +100,38 @@ namespace scheme
       
       return regstack.pop();
    }
+
+   Node* Dict::rem( Node* key )
+   {
+      auto index = key->hash() % length;
+      auto items = data[index];
+      auto prev = nil;
+
+      while ( anyp(items) )
+      {
+	 auto item = items->getcar();
+	 
+	 if ( equal( item->getcar(), key ) )
+	 {
+	    if ( prev->nullp() )
+	       data[index] = items->getcdr();
+	    else
+	       prev->setcdr( items->getcdr() );
+	    
+	    return key;
+	 }
+      }
+      
+      return nil;
+   }
+   
+   Node* Dict::empty()
+   {
+      for ( int i = 0; i < length; ++i )
+	 data[i] = nil;
+
+      return this;
+   }
 }
 
 

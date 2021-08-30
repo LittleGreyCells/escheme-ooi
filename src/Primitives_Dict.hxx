@@ -12,6 +12,8 @@ namespace scheme
       Node* dict_ref();
       Node* dict_set();
       Node* dict_items();
+      Node* dict_rem();
+      Node* dict_empty();
    }
 }
 

@@ -130,10 +130,10 @@ namespace scheme
          return obj;
       }
       
-      Dict* dict()
+      Dict* dict( int size )
       {
          auto obj = alloc_dict();
-         new (obj) Dict( 64 );
+         new (obj) Dict( size );
          return obj;
       }
       

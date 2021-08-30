@@ -396,6 +396,8 @@ namespace scheme
 	 { "dict-ref",   dict_ref },
 	 { "dict-set!",  dict_set },
 	 { "dict-items", dict_items },
+	 { "dict-rem!",  dict_rem },
+	 { "dict-empty!", dict_empty },
 
 	 { "%make-assoc-env", make_assocenv },
 	 { "%assoc-env-dict", assocenv_dict },

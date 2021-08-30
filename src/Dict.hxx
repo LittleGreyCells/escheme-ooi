@@ -27,6 +27,8 @@ namespace scheme
       Node* ref( Node* key );
       Node* set( Node* key, Node* val );
       Node* items();
+      Node* rem( Node* key );
+      Node* empty();
 
    };
    

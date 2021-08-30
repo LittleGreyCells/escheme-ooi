@@ -11,8 +11,11 @@ namespace scheme
    {
       Node* make_dict()
       {
-	 argstack.noargs();
-         return Memory::dict();
+	 ArgstackIterator iter;
+         int size = iter.more() ? iter.getlast()->getfixnum() : 64;
+         if ( size < 0 )
+            throw SevereException("dictsize must be non-negative");
+         return Memory::dict( size );
       }
 
       Node* has_key()
@@ -46,5 +49,21 @@ namespace scheme
 	 auto dict = down_cast<Dict*>( guard( iter.getlast(), &Node::dictp ) );
          return dict->items();
       }   
+
+      Node* dict_rem()
+      {
+	 ArgstackIterator iter;
+	 auto dict = down_cast<Dict*>( guard( iter.getarg(), &Node::dictp ) );
+	 auto key = iter.getlast();
+         return dict->rem( key );
+      }
+
+      Node* dict_empty()
+      {
+	 ArgstackIterator iter;
+	 auto dict = down_cast<Dict*>( guard( iter.getlast(), &Node::dictp ) );
+         return dict->empty();
+      }
+
    }
 }

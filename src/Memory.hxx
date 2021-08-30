@@ -53,7 +53,7 @@ namespace scheme
       ByteVector* bvector( int length );
       Continuation* continuation( Vector* state );
       Promise* promise( Node* exp );
-      Dict* dict();
+      Dict* dict( int size = 64 );
       AssocEnv* assocenv( Dict* dict, Env* base );
 
       inline bool anyp( Node* n ) { return n != nil; }
