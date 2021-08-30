@@ -16,9 +16,9 @@ using a predominantly object-oriented approach for escheme object representation
 
 After some initial performance tuning, here are some comparisons:
 
-* speed of the interpreter is approximately 18% slower than that of the original discriminated union implementation.
+* speed of the interpreter is approximately 18% to 30% slower (depending on test) than that of the original discriminated union implementation.
 * executable size is 35% larger
-* SLOC is 14% smaller
+* SLOC is 6% smaller
 
 
 
