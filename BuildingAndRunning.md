@@ -10,23 +10,22 @@ In the root directory type 'make' to build the executable:
 
 ## Running
 
-To run the interpreter in the build directory invoke escheme. The banner is printed and the
+To run the interpreter in the build directory invoke escheme and the
 *terminal* prompt is displayed:
 ```
-   $ ./escheme-oops
-   escheme-oops <interpreter>
+   $ ./escheme
 
-   oops>
+   ece>
 ```
 
 Files can by loaded before the prompt if listed on the command line::
 ```
-   $ ./escheme-oops <file1> <file2> ... <filen>
+   $ ./escheme <file1> <file2> ... <filen>
 ```   
 
 To exit escheme, type ^D, ^C or exit function at the prompt:
 ```
-   oops> (exit)
+   ece> (exit)
 ```
 
 ## Installation and Removal
